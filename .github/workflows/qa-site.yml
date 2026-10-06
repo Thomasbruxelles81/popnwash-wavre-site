@@ -30,7 +30,7 @@ jobs:
       - name: Run full responsive QA
         run: |
           mkdir -p qa-screenshots
-          cat > /tmp/qa.mjs <<'EOF'
+          cat > qa.mjs <<'EOF'
           import { chromium } from 'playwright';
           const browser = await chromium.launch({headless:true});
           const cases = [
@@ -85,7 +85,7 @@ jobs:
           }
           console.log('QA PASS: 7 viewports, portrait + landscape, no horizontal overflow, core actions and Romanian language verified.');
           EOF
-          node /tmp/qa.mjs
+          node qa.mjs
 
       - name: Upload QA screenshots
         if: always()
