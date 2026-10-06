@@ -72,3 +72,45 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()=>showR
 
 const loyalty=document.getElementById('loyaltyModal');document.getElementById('loyaltyOpen').addEventListener('click',()=>loyalty.showModal());document.getElementById('loyaltyClose').addEventListener('click',()=>loyalty.close());loyalty.addEventListener('click',e=>{if(e.target===loyalty)loyalty.close()});
 document.getElementById('year').textContent=new Date().getFullYear();
+
+// Contact form: direct email delivery via FormSubmit AJAX.
+const contactForm=document.getElementById('contactForm');
+if(contactForm){
+  const status=document.getElementById('formStatus');
+  const firstName=document.getElementById('contactFirstName');
+  const subject=document.getElementById('contactSubject');
+  const proButton=document.getElementById('proContactButton');
+  if(proButton) proButton.addEventListener('click',()=>{
+    setTimeout(()=>{
+      if(subject) subject.value='Professionnel / tarifs';
+      if(firstName) firstName.focus({preventScroll:true});
+    },350);
+  });
+  contactForm.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!contactForm.reportValidity()) return;
+    const button=contactForm.querySelector('button[type="submit"]');
+    const buttonText=button.querySelector('span');
+    const original=buttonText.textContent;
+    button.disabled=true; buttonText.textContent='Envoi en cours…';
+    status.className='form-status'; status.textContent='';
+    const data=new FormData(contactForm);
+    data.append('_subject',"Nouveau message depuis le site POP'n WASH Wavre");
+    data.append('_template','table');
+    data.append('_captcha','false');
+    try{
+      const res=await fetch('https://formsubmit.co/ajax/ahb.lavoir@gmail.com',{method:'POST',headers:{'Accept':'application/json'},body:data});
+      const body=await res.json().catch(()=>({}));
+      if(!res.ok || body.success===false) throw new Error('send failed');
+      const name=(firstName && firstName.value ? firstName.value : '').trim();
+      status.className='form-status success';
+      status.textContent=name ? ('Merci '+name+' ! Votre message est bien parti. Nous revenons vers vous rapidement. À bientôt chez POP\'n WASH Wavre ✨') : 'Merci ! Votre message est bien parti. Nous revenons vers vous rapidement. À bientôt chez POP\'n WASH Wavre ✨';
+      contactForm.reset();
+    }catch(err){
+      status.className='form-status error';
+      status.innerHTML='L’envoi automatique n’a pas abouti. Vous pouvez nous écrire directement à <a href="mailto:ahb.lavoir@gmail.com">ahb.lavoir@gmail.com</a>.';
+    }finally{
+      button.disabled=false; buttonText.textContent=original;
+    }
+  });
+}
