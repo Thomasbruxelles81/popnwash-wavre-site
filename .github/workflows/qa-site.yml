@@ -79,12 +79,23 @@ jobs:
               wi: await page.locator('a[href*="status.wi-line.fr"]').count(),
               phone: await page.locator('a[href="tel:+32486999251"]').count(),
               mail: await page.locator('a[href="mailto:ahb.lavoir@gmail.com"]').count(),
+              facebook: await page.locator('a[href*="facebook.com/people/POPn-Wash-Wavre"]').count(),
+              instagram: await page.locator('a[href*="instagram.com/popnwashwavre"]').count(),
+              services: await page.locator('#services').count(),
+              pros: await page.locator('#pros').count(),
               pet7: await page.getByText('7 kg · 4,00 €', {exact:true}).count(),
               pet14: await page.getByText('14 kg · 7,00 €', {exact:true}).count(),
             };
             for(const [k,v] of Object.entries(checks)) if(!v) failures.push(`${name}: missing ${k}`);
-            const invoiceText = await page.locator('[data-i18n="invoiceText"]').first().textContent();
-            if(!invoiceText || !invoiceText.includes('4') || !invoiceText.includes('24')) failures.push(`${name}: invoice instructions incomplete`);
+            const pageText = await page.locator('body').innerText();
+            for (const product of ['Lessive Éco','Lessive Peaux sensibles','Lessive Premium','Assouplissant parfumé','Assouplissant peaux sensibles','Désinfectant','Détachant oxygéné']) {
+              if(!pageText.includes(product)) failures.push(`${name}: missing product ${product}`);
+            }
+            if(!pageText.includes('code valable 24 h') && !pageText.includes('valable 24 h')) failures.push(`${name}: invoice 24h instructions incomplete`);
+            const internal = await page.locator('a[href^="#"]').evaluateAll(as => as.map(a=>a.getAttribute('href')));
+            for (const href of internal) {
+              if(href !== '#' && !(await page.locator(href).count())) failures.push(`${name}: broken anchor ${href}`);
+            }
             await page.locator('#langButton').click();
             const langs = await page.locator('#langMenu button[data-lang]').count();
             if(langs !== 11) failures.push(`${name}: expected 11 languages, got ${langs}`);
@@ -99,7 +110,7 @@ jobs:
             console.error('QA FAIL\n'+failures.join('\n'));
             process.exit(1);
           }
-          console.log('QA PASS: 7 viewports, portrait + landscape, no horizontal overflow, core actions and Romanian language verified.');
+          console.log('QA PASS: 7 viewports, portrait + landscape, images, anchors, products, social links, WiLine and Romanian language verified.');
           EOF
           node qa.mjs
 
