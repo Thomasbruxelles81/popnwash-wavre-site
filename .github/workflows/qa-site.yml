@@ -1,0 +1,96 @@
+name: QA responsive POP'n WASH
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  responsive-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --save-dev playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Serve site
+        run: |
+          python3 -m http.server 4173 >/tmp/popnwash-http.log 2>&1 &
+          echo $! > /tmp/popnwash-http.pid
+          sleep 2
+
+      - name: Run full responsive QA
+        run: |
+          mkdir -p qa-screenshots
+          cat > /tmp/qa.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          const browser = await chromium.launch({headless:true});
+          const cases = [
+            ['phone-portrait-360',360,800],
+            ['phone-portrait-390',390,844],
+            ['phone-landscape',844,390],
+            ['tablet-portrait',768,1024],
+            ['tablet-landscape',1024,768],
+            ['laptop',1366,768],
+            ['desktop',1920,1080],
+          ];
+          const failures=[];
+          for (const [name,width,height] of cases) {
+            const page = await browser.newPage({viewport:{width,height}});
+            const consoleErrors=[];
+            page.on('pageerror', e => consoleErrors.push('pageerror: '+e.message));
+            page.on('console', m => { if(m.type()==='error') consoleErrors.push('console: '+m.text()); });
+            await page.goto('http://127.0.0.1:4173/', {waitUntil:'networkidle', timeout:45000});
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+            await page.waitForTimeout(300);
+            await page.evaluate(() => window.scrollTo(0,0));
+            const overflow = await page.evaluate(() => ({
+              sw: document.documentElement.scrollWidth,
+              cw: document.documentElement.clientWidth
+            }));
+            if (overflow.sw > overflow.cw + 2) failures.push(`${name}: horizontal overflow ${overflow.sw}>${overflow.cw}`);
+            const checks = {
+              h1: await page.locator('h1').count(),
+              lang: await page.locator('#langButton').count(),
+              wi: await page.locator('a[href*="status.wi-line.fr"]').count(),
+              phone: await page.locator('a[href="tel:+32486999251"]').count(),
+              mail: await page.locator('a[href="mailto:ahb.lavoir@gmail.com"]').count(),
+              pet7: await page.getByText('7 kg · 4,00 €', {exact:true}).count(),
+              pet14: await page.getByText('14 kg · 7,00 €', {exact:true}).count(),
+            };
+            for(const [k,v] of Object.entries(checks)) if(!v) failures.push(`${name}: missing ${k}`);
+            const invoiceText = await page.locator('[data-i18n="invoiceText"]').first().textContent();
+            if(!invoiceText || !invoiceText.includes('4') || !invoiceText.includes('24')) failures.push(`${name}: invoice instructions incomplete`);
+            await page.locator('#langButton').click();
+            const langs = await page.locator('#langMenu button[data-lang]').count();
+            if(langs !== 11) failures.push(`${name}: expected 11 languages, got ${langs}`);
+            await page.locator('#langMenu button[data-lang="ro"]').click();
+            if((await page.locator('#langCode').textContent()) !== 'RO') failures.push(`${name}: Romanian switch failed`);
+            if(consoleErrors.length) failures.push(`${name}: JS/console errors: ${consoleErrors.join(' | ')}`);
+            await page.screenshot({path:`qa-screenshots/${name}.png`, fullPage:true});
+            await page.close();
+          }
+          await browser.close();
+          if(failures.length){
+            console.error('QA FAIL\n'+failures.join('\n'));
+            process.exit(1);
+          }
+          console.log('QA PASS: 7 viewports, portrait + landscape, no horizontal overflow, core actions and Romanian language verified.');
+          EOF
+          node /tmp/qa.mjs
+
+      - name: Upload QA screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: responsive-qa-screenshots
+          path: qa-screenshots
+          retention-days: 7
