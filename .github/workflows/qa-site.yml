@@ -59,7 +59,19 @@ jobs:
             if (overflow.sw > overflow.cw + 2) failures.push(`${name}: horizontal overflow ${overflow.sw}>${overflow.cw}`);
             const weebly = await page.locator('img[src*="weebly.com"]').count();
             if(weebly) failures.push(`${name}: Weebly dependency still present`);
-            const localBroken = await page.locator('img').evaluateAll(imgs => imgs.filter(i => !i.complete || i.naturalWidth===0).map(i => i.getAttribute('src')));
+            const localBroken = await page.locator('img').evaluateAll(async imgs => {
+              for (const img of imgs) {
+                img.loading='eager';
+                img.scrollIntoView({block:'center'});
+                if (!img.complete) await new Promise(resolve => {
+                  const done=()=>resolve();
+                  img.addEventListener('load',done,{once:true});
+                  img.addEventListener('error',done,{once:true});
+                  setTimeout(done,2500);
+                });
+              }
+              return imgs.filter(i => !i.complete || i.naturalWidth===0).map(i => i.getAttribute('src'));
+            });
             if(localBroken.length) failures.push(`${name}: broken images ${localBroken.join(', ')}`);
             const checks = {
               h1: await page.locator('h1').count(),
