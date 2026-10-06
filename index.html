@@ -81,6 +81,15 @@ main>.section:not(.hero),.contact-section{content-visibility:auto;contain-intrin
 img[loading="lazy"]{content-visibility:auto}
 @media(max-width:900px){.site-header{backdrop-filter:blur(10px) saturate(125%)}}
 @media(prefers-reduced-motion:reduce){.hero-photo{transition:none!important}.visual-card img{transition:none!important}}
+/* final cohesion + form */
+.hero-trust{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px}.hero-trust span,.why-pills span,.equipment-pills span{font-size:11px;font-weight:800;padding:8px 11px;border-radius:999px;background:#fff;border:1px solid var(--line)}
+.service-pill{display:inline-flex;align-items:center;gap:8px;width:max-content;max-width:100%;padding:8px 11px;border-radius:999px;background:var(--softgreen);color:var(--green2);font-size:11px;font-weight:900;letter-spacing:.02em}.service-pill .ui-icon{width:18px;height:18px}.service-feature:nth-child(2) .service-pill,.products-card .service-pill{background:var(--softred);color:var(--red2)}
+.services-secondary-grid{align-items:stretch}.parcel-service{grid-column:1/-1;background:#fffdf8;border-radius:28px;padding:24px;display:grid;grid-template-columns:.75fr 1.25fr;gap:24px;align-items:center}.parcel-copy h3{font-size:clamp(28px,3.4vw,44px);letter-spacing:-.04em;line-height:1.04;margin:14px 0}.parcel-copy p{color:var(--muted);line-height:1.65}.parcel-photos{display:grid;grid-template-columns:1fr 1fr;gap:12px}.parcel-photos figure{margin:0;border-radius:18px;overflow:hidden;background:#f3efe5;position:relative;min-height:280px}.parcel-photos img{width:100%;height:100%;object-fit:contain;display:block;background:#fff;padding:8px}.parcel-photos figcaption{position:absolute;left:10px;bottom:10px;background:rgba(255,255,255,.92);padding:7px 10px;border-radius:10px;font-size:11px;font-weight:900}
+.payment-easy{margin:16px 0 0;background:linear-gradient(135deg,#fffdf8,#edf8e7);border-radius:26px;padding:24px;display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center}.payment-easy-icon{width:56px;height:56px;border-radius:18px;background:#fff;display:grid;place-items:center;color:var(--green2);box-shadow:0 10px 30px rgba(25,32,27,.08)}.payment-easy-copy h3{font-size:24px;margin:5px 0 6px;letter-spacing:-.03em}.payment-easy-copy p{margin:0;color:var(--muted);line-height:1.55}.payment-method-pills{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px;max-width:330px}.payment-method-pills span{font-size:10px;font-weight:900;padding:8px 10px;border-radius:999px;background:#fff}
+.equipment-highlight{display:grid;grid-template-columns:1.15fr .85fr;background:#fffdf8;border-radius:32px;overflow:hidden;box-shadow:0 16px 50px rgba(25,32,27,.07)}.equipment-photo{min-height:420px}.equipment-photo img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}.equipment-copy{padding:42px;display:flex;flex-direction:column;justify-content:center}.equipment-copy h2{font-size:clamp(34px,4vw,54px);line-height:1;letter-spacing:-.05em;margin:16px 0}.equipment-copy p{color:var(--muted);line-height:1.65}.equipment-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.why-pills{display:flex;flex-wrap:wrap;gap:9px}.why-pills span{font-size:12px;padding:10px 13px}.why-pills span:nth-child(2n){background:var(--softgreen)}.why-pills span:nth-child(3n){background:var(--softred)}
+.contact-section-v2{grid-template-columns:.9fr 1.1fr;align-items:stretch}.contact-info{display:grid;grid-template-rows:280px 1fr;gap:0}.contact-info .contact-photo{min-height:0;border-radius:27px 27px 0 0}.contact-info-copy{padding:28px;background:rgba(255,255,255,.06);border-radius:0 0 27px 27px}.contact-info-copy h2{font-size:clamp(34px,4vw,50px);line-height:1;letter-spacing:-.045em;margin:10px 0 16px}.contact-info-copy p{color:#cbd4ce;line-height:1.65}.contact-address{display:grid;gap:4px;margin:18px 0;color:#fff}.contact-address span{font-size:12px;color:#cbd4ce}.contact-mail{display:inline-block;margin-top:14px;color:#fff;font-weight:800;text-decoration:none}.contact-form-card{background:#fffdf8;color:var(--ink);border-radius:27px;padding:34px}.contact-form-card h3{font-size:clamp(30px,3.5vw,44px);line-height:1.05;letter-spacing:-.04em;margin:8px 0 24px}.contact-form-card form{display:grid;gap:14px}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.contact-form-card label{display:grid;gap:7px}.contact-form-card label>span{font-size:11px;font-weight:900}.contact-form-card input,.contact-form-card select,.contact-form-card textarea{width:100%;border:1px solid rgba(22,28,27,.14);border-radius:14px;background:#fff;padding:13px 14px;font:600 14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);outline:none;transition:.2s}.contact-form-card textarea{resize:vertical;min-height:130px}.contact-form-card input:focus,.contact-form-card select:focus,.contact-form-card textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(68,182,64,.12)}.form-privacy{font-size:10px!important;color:var(--muted)!important;margin:0!important}.form-honey{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0!important}.form-submit{justify-self:start;border:0;cursor:pointer}.form-submit[disabled]{opacity:.65;cursor:wait}.form-status{min-height:24px;font-size:12px;font-weight:800}.form-status.success{color:var(--green2);background:var(--softgreen);padding:12px 14px;border-radius:12px}.form-status.error{color:#b42318;background:#fff0ef;padding:12px 14px;border-radius:12px}
+@media(max-width:900px){.parcel-service,.equipment-highlight,.contact-section-v2{grid-template-columns:1fr}.payment-easy{grid-template-columns:auto 1fr}.payment-method-pills{grid-column:1/-1;justify-content:flex-start;max-width:none}.equipment-photo{min-height:340px}.contact-info{grid-template-rows:260px auto}.form-row{grid-template-columns:1fr}}
+@media(max-width:600px){.parcel-service{padding:18px}.parcel-photos{grid-template-columns:1fr 1fr}.parcel-photos figure{min-height:220px}.payment-easy{grid-template-columns:1fr;padding:20px}.payment-easy-icon{width:48px;height:48px}.equipment-copy{padding:28px 22px}.contact-form-card{padding:24px 20px}.contact-section-v2{padding:20px}.hero-trust{margin-bottom:18px}}
 </style>
 </head>
 <body>
@@ -132,11 +141,14 @@ img[loading="lazy"]{content-visibility:auto}
   <main>
     <section class="hero section-shell">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="pulse-dot"></span><span data-i18n="eyebrow">Laverie connectée • Wavre</span></div>
+        <div class="eyebrow"><span class="pulse-dot"></span><span data-i18n="eyebrow">Grande laverie connectée • Wavre</span></div>
         <h1 data-i18n="heroTitle">Votre linge propre,<br><em>vite et simplement.</em></h1>
         <p class="hero-sub" data-i18n="heroSub">19 machines, 16 séchoirs et tout ce qu'il faut pour une lessive plus simple.</p>
         <div class="hero-meta">
-          <span>7j/7</span><span>07h–22h</span><span>Rue de Namur 72</span>
+          <span>7j/7</span><span>07h–22h</span><span>Rue de Namur 72 · 1300 Wavre</span>
+        </div>
+        <div class="hero-trust" aria-label="Atouts POP'n WASH">
+          <span>Connectée</span><span>Simple</span><span>Propre</span><span>Équipe à l'écoute</span>
         </div>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#machines"><span data-i18n="seePrices">Voir les tarifs</span><b>↗</b></a>
@@ -194,6 +206,20 @@ img[loading="lazy"]{content-visibility:auto}
         <article class="tariff-card reveal" data-delay="180"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.2 15.5c1.8 1.2 4.3.9 5.6-.8"/></svg></span><div class="tariff-copy"><small data-i18n="dryer">Séchoir</small><strong data-i18n="drying">Séchage</strong></div><div class="tariff-price"><b>0,50 €</b><span>/ 5 min</span></div></article>
         <article class="tariff-card reveal" data-delay="240"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.5h18v8H3z"/><path d="M6 11.2h12M7 5.5h10v3H7zM5 19h14"/></svg></span><div class="tariff-copy"><small data-i18n="ironer">Calandre</small><strong data-i18n="ironing">Repassage</strong></div><div class="tariff-price"><b>2,00 €</b><span>/ 6 min</span></div></article>
       </div>
+      <article class="payment-easy reveal">
+        <div class="payment-easy-icon">
+          <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 7h8M8 11h8M8 15h3"/><path d="M15 15h2"/></svg>
+        </div>
+        <div class="payment-easy-copy">
+          <span class="section-kicker">Paiement facile</span>
+          <h3>Centrale intuitive : choisissez, payez, lancez.</h3>
+          <p>La centrale de paiement vous guide simplement pour sélectionner votre machine ou votre séchoir puis régler en quelques secondes.</p>
+        </div>
+        <div class="payment-method-pills">
+          <span>Pièces</span><span>Billets</span><span>Carte sans contact</span><span>Smartphone</span>
+        </div>
+      </article>
+
       <article class="pet-feature reveal">
         <div class="pet-copy"><span class="badge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="15.5" rx="4.5" ry="3.8"/><circle cx="7.2" cy="10" r="1.7"/><circle cx="16.8" cy="10" r="1.7"/><circle cx="10.1" cy="7.4" r="1.6"/><circle cx="13.9" cy="7.4" r="1.6"/></svg><span data-i18n="popular">Très apprécié</span></span><h3 data-i18n="petTitle">Des machines vraiment réservées au linge des animaux.</h3><p data-i18n="petText">Textiles de chevaux, chiens, chats, couvertures et paniers : utilisez les machines dédiées 7 kg et 14 kg, sans mélanger avec le linge courant.</p><div class="pet-pills"><span>7 kg · 4,00 €</span><span>14 kg · 7,00 €</span></div></div>
         <div class="pet-photo"><img src="assets/img_2239.webp" width="2048" height="1536" loading="lazy" decoding="async" alt="Machine réservée au linge des animaux chez POP'n WASH Wavre" /></div>
@@ -201,62 +227,77 @@ img[loading="lazy"]{content-visibility:auto}
     </section>
 
     <section class="section section-shell services-hub" id="services">
-  <div class="section-heading reveal">
-    <div><span class="section-kicker" data-i18n="servicesKicker">Services</span><h2>Tout pour une lessive plus simple.</h2></div>
-    <p>Suivi à distance, coworking, fidélité et produits : les services utiles sont regroupés ici.</p>
-  </div>
-
-  <div class="services-main-grid">
-    <article class="service-feature reveal">
-      <div class="service-feature-copy">
-        <span class="service-number">01</span>
-        <span class="section-kicker">Laverie connectée</span>
-        <h3>Suivez votre lessive à distance.</h3>
-        <p>Consultez l’occupation des machines, recevez une notification de fin de cycle et récupérez votre facture depuis WiLine.</p>
-        <div class="connected-links">
-          <a href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener"><span>Disponibilité des machines</span><b>↗</b></a>
-          <a href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener"><span>Notification de fin de cycle</span><b>↗</b></a>
-          <a href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener"><span>Facture · code valable 24 h</span><b>↗</b></a>
-        </div>
+      <div class="section-heading reveal">
+        <div><span class="section-kicker">Services</span><h2>Tout pour une lessive plus simple.</h2></div>
+        <p>Des services utiles, pensés pour vous faire gagner du temps et rendre votre passage plus agréable.</p>
       </div>
-      <div class="service-feature-media"><img src="assets/img_2221.webp" width="2048" height="1536" loading="lazy" decoding="async" alt="Machines POP'n WASH Wavre"></div>
-    </article>
 
-    <article class="service-feature reveal" data-delay="80">
-      <div class="service-feature-media cowork-media"><img src="assets/img_2254.webp" width="2048" height="1536" loading="lazy" decoding="async" alt="Espace coworking POP'n WASH Wavre"></div>
-      <div class="service-feature-copy">
-        <span class="service-number">02</span>
-        <span class="section-kicker">Coworking</span>
-        <h3>Travaillez pendant que votre linge tourne.</h3>
-        <p>Grande table, sièges et prises électriques : installez votre ordinateur ou avancez dans vos mails pendant le cycle.</p>
-        <a class="text-link" href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener">Activez la notification de fin de cycle ↗</a>
+      <div class="services-main-grid">
+        <article class="service-feature reveal">
+          <div class="service-feature-copy">
+            <span class="service-pill"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/><path d="M5.5 5.5 3.8 3.8M18.5 5.5l1.7-1.7"/></svg><span>Laverie connectée</span></span>
+            <h3>Suivez votre lessive à distance.</h3>
+            <p>Consultez l’occupation des machines, recevez une notification de fin de cycle et récupérez votre facture depuis WiLine.</p>
+            <div class="connected-links">
+              <a href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener"><span>Disponibilité des machines</span><b>↗</b></a>
+              <a href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener"><span>Notification de fin de cycle</span><b>↗</b></a>
+              <a href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener"><span>Facture · code valable 24 h</span><b>↗</b></a>
+            </div>
+          </div>
+          <div class="service-feature-media"><img src="assets/img_2221.webp" width="2048" height="1536" loading="lazy" decoding="async" alt="Machines POP'n WASH Wavre"></div>
+        </article>
+
+        <article class="service-feature reveal" data-delay="80">
+          <div class="service-feature-media cowork-media"><img src="assets/img_2254.webp" width="2048" height="1536" loading="lazy" decoding="async" alt="Espace coworking POP'n WASH Wavre"></div>
+          <div class="service-feature-copy">
+            <span class="service-pill"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v11H4zM8 21h8M12 17v4"/><path d="M8 10h8"/></svg><span>Coworking</span></span>
+            <h3>Travaillez pendant que votre linge tourne.</h3>
+            <p>Grande table, sièges et prises électriques : installez votre ordinateur ou avancez dans vos mails pendant le cycle.</p>
+            <a class="text-link" href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener">Activez la notification de fin de cycle ↗</a>
+          </div>
+        </article>
       </div>
-    </article>
-  </div>
 
-  <div class="services-secondary-grid">
-    <article class="loyalty-card reveal">
-      <div class="loyalty-art"><img src="assets/logo-popnwash.webp" width="1024" height="1024" loading="lazy" decoding="async" alt="" /></div>
-      <div class="loyalty-copy"><span class="section-kicker" data-i18n="loyaltyKicker">Carte fidélité</span><h3 data-i18n="loyaltyTitle">Plus vous l'utilisez, plus elle vous rapporte.</h3><p data-i18n="loyaltyShort">Première carte : 40 € payés = 40 € crédités, carte offerte + 1 sachet de lessive offert.</p><button class="text-link" id="loyaltyOpen"><span data-i18n="seeBenefits">Voir les avantages</span> →</button></div>
-    </article>
+      <div class="services-secondary-grid">
+        <article class="loyalty-card reveal">
+          <div class="loyalty-art"><img src="assets/logo-popnwash.webp" width="1024" height="1024" loading="lazy" decoding="async" alt="" /></div>
+          <div class="loyalty-copy">
+            <span class="service-pill"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 9h18M7 15h4"/></svg><span>Carte fidélité</span></span>
+            <h3>Plus vous l'utilisez, plus elle vous rapporte.</h3>
+            <p>Première carte : 40 € payés = 40 € crédités, carte offerte + 1 sachet de lessive offert.</p>
+            <button class="text-link" id="loyaltyOpen">Voir les avantages →</button>
+          </div>
+        </article>
 
-    <article class="products-card reveal" data-delay="80">
-      <span class="section-kicker">Distributeur</span>
-      <h3>Tout ce qu’il faut pour votre lessive, sur place.</h3>
-      <div class="product-chips product-chips-v2">
-        <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M18 7h12v7l5 5v21H13V19l5-5z"/><path d="M18 25h17"/><path d="M19 34c6-7 12-6 14-13-1 8-5 14-14 13z"/></svg><strong>Lessive Éco</strong></span>
-        <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M18 7h12v7l5 5v21H13V19l5-5z"/><path d="M24 32s-8-4.6-8-9.4a4.3 4.3 0 0 1 8-2.3 4.3 4.3 0 0 1 8 2.3c0 4.8-8 9.4-8 9.4z"/></svg><strong>Lessive Peaux sensibles</strong></span>
-        <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M18 7h12v7l5 5v21H13V19l5-5z"/><path d="m24 20 2.1 5.1 5.5.5-4.2 3.6 1.3 5.3-4.7-2.9-4.7 2.9 1.3-5.3-4.2-3.6 5.5-.5z"/></svg><strong>Lessive Premium</strong></span>
-        <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 39c8 0 13-5 13-12 0-6-5-15-13-15S11 21 11 27c0 7 5 12 13 12z"/><path d="M24 20v13M17.5 26.5h13"/><path d="M24 26c-5-7-10-1-7 3M24 26c5-7 10-1 7 3"/></svg><strong>Assouplissant parfumé</strong></span>
-        <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 39c8 0 13-5 13-12 0-6-5-15-13-15S11 21 11 27c0 7 5 12 13 12z"/><path d="M17 30c5 1 10-2 14-8-7-2-12 2-14 8z"/></svg><strong>Assouplissant peaux sensibles</strong></span>
-        <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 7 37 12v10c0 9-5 15-13 19-8-4-13-10-13-19V12z"/><path d="M24 17v14M17 24h14"/></svg><strong>Désinfectant</strong></span>
-        <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M15 12h18l4 8-4 20H15l-4-20z"/><circle cx="20" cy="26" r="3"/><circle cx="29" cy="31" r="2.5"/><circle cx="28.5" cy="21.5" r="2"/></svg><strong>Détachant oxygéné</strong></span>
+        <article class="products-card reveal" data-delay="80">
+          <span class="service-pill"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6v3l2 2v11.5A1.5 1.5 0 0 1 15.5 21h-7A1.5 1.5 0 0 1 7 19.5V8l2-2z"/><path d="M9 11h6M10 3v3h4V3"/></svg><span>Distributeur</span></span>
+          <h3>Tout ce qu’il faut pour votre lessive, sur place.</h3>
+          <div class="product-chips product-chips-v2">
+            <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M18 7h12v7l5 5v21H13V19l5-5z"/><path d="M18 25h17"/><path d="M19 34c6-7 12-6 14-13-1 8-5 14-14 13z"/></svg><strong>Lessive Éco</strong></span>
+            <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M18 7h12v7l5 5v21H13V19l5-5z"/><path d="M24 32s-8-4.6-8-9.4a4.3 4.3 0 0 1 8-2.3 4.3 4.3 0 0 1 8 2.3c0 4.8-8 9.4-8 9.4z"/></svg><strong>Lessive Peaux sensibles</strong></span>
+            <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M18 7h12v7l5 5v21H13V19l5-5z"/><path d="m24 20 2.1 5.1 5.5.5-4.2 3.6 1.3 5.3-4.7-2.9-4.7 2.9 1.3-5.3-4.2-3.6 5.5-.5z"/></svg><strong>Lessive Premium</strong></span>
+            <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 39c8 0 13-5 13-12 0-6-5-15-13-15S11 21 11 27c0 7 5 12 13 12z"/><path d="M24 20v13M17.5 26.5h13"/><path d="M24 26c-5-7-10-1-7 3M24 26c5-7 10-1 7 3"/></svg><strong>Assouplissant parfumé</strong></span>
+            <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 39c8 0 13-5 13-12 0-6-5-15-13-15S11 21 11 27c0 7 5 12 13 12z"/><path d="M17 30c5 1 10-2 14-8-7-2-12 2-14 8z"/></svg><strong>Assouplissant peaux sensibles</strong></span>
+            <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 7 37 12v10c0 9-5 15-13 19-8-4-13-10-13-19V12z"/><path d="M24 17v14M17 24h14"/></svg><strong>Désinfectant</strong></span>
+            <span><svg class="product-svg" viewBox="0 0 48 48" aria-hidden="true"><path d="M15 12h18l4 8-4 20H15l-4-20z"/><circle cx="20" cy="26" r="3"/><circle cx="29" cy="31" r="2.5"/><circle cx="28.5" cy="21.5" r="2"/></svg><strong>Détachant oxygéné</strong></span>
+          </div>
+        </article>
+
+        <article class="parcel-service reveal" data-delay="120">
+          <div class="parcel-copy">
+            <span class="service-pill"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4z"/><path d="M4 7v10l8 4 8-4V7M12 11v10"/></svg><span>bpost & Vinted Go</span></span>
+            <h3>Profitez de votre passage pour vos colis.</h3>
+            <p>Déposez ou récupérez vos colis directement à la laverie pendant que votre cycle tourne.</p>
+          </div>
+          <div class="parcel-photos">
+            <figure><img src="assets/img_2203.webp" width="1536" height="2048" loading="lazy" decoding="async" alt="Casier Vinted Go chez POP'n WASH Wavre"><figcaption>Vinted Go</figcaption></figure>
+            <figure><img src="assets/img_2098.webp" width="2048" height="1536" loading="lazy" decoding="async" alt="Casier bpost chez POP'n WASH Wavre"><figcaption>bpost / bbox</figcaption></figure>
+          </div>
+        </article>
       </div>
-    </article>
-  </div>
-</section>
+    </section>
 
-<section class="section section-shell pro-section" id="pros">
+    <section class="section section-shell pro-section" id="pros">
       <div class="pro-hero reveal"><div class="pro-copy"><span class="section-kicker" data-i18n="proKicker">Espace Pro</span><h2 data-i18n="proTitle">Des besoins réguliers ou de gros volumes ? Parlons-en.</h2><p data-i18n="proIntro">Indépendants, hébergements, restauration, cavaliers, salons, bien-être ou autres activités : POP'n WASH dispose des capacités et services utiles pour votre linge professionnel.</p><div class="pro-tags"><span>Cavaliers</span><span>Airbnb / gîtes</span><span>Coiffeurs</span><span>Horeca</span><span>Spa & bien-être</span><span data-i18n="otherPros">Autres professionnels</span></div></div><div class="pro-photo"><img src="assets/img_2221.webp" width="2048" height="1536" loading="lazy" decoding="async" alt="Machines grande capacité POP'n WASH pour professionnels"></div></div>
       <div class="pro-grid">
         <article class="pro-card reveal"><span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.1 14c1.1-1.2 2.1-.7 3 0s2 .9 2.9-.1"/></svg></span><strong data-i18n="proCapacityTitle">Capacités adaptées</strong><p data-i18n="proCapacityText">Lave-linge 7, 14 et 20 kg, 16 séchoirs et calandre professionnelle pour traiter aussi les grands volumes.</p></article>
@@ -264,12 +305,29 @@ img[loading="lazy"]{content-visibility:auto}
         <article class="pro-card reveal" data-delay="120"><span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 9h18M7 15h4"/></svg></span><strong data-i18n="proLoyaltyTitle">Fidélité & recharges</strong><p data-i18n="proLoyaltyText">Pour les passages réguliers, la carte fidélité permet de centraliser votre crédit et de bénéficier des bonus de recharge.</p></article>
         <article class="pro-card reveal" data-delay="180"><span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V4h6v3M3 12h18M10 12v2h4v-2"/></svg></span><strong data-i18n="proRatesTitle">Tarifs professionnels</strong><p data-i18n="proRatesText">Pour une utilisation régulière, des volumes importants ou un besoin spécifique, contactez-nous afin de trouver la formule la plus adaptée.</p></article>
       </div>
-      <div class="pro-contact reveal"><div><strong data-i18n="proContactTitle">Vous venez souvent ?</strong><span data-i18n="proContactText">Expliquez-nous votre activité et vos volumes.</span></div><div class="pro-buttons"><a class="btn btn-whatsapp" href="https://wa.me/32486999251" target="_blank" rel="noopener">WhatsApp</a><a class="btn btn-ghost" href="mailto:ahb.lavoir@gmail.com">ahb.lavoir@gmail.com</a></div></div>
+      <div class="pro-contact reveal"><div><strong>Vous venez souvent ?</strong><span>Expliquez-nous votre activité et vos volumes : nous vous répondons avec une proposition adaptée.</span></div><div class="pro-buttons"><a class="btn btn-primary" href="#contact" id="proContactButton">Demander un tarif pro</a><a class="btn btn-whatsapp" href="https://wa.me/32486999251" target="_blank" rel="noopener">WhatsApp</a></div></div>
     </section>
 
-    <section class="section section-shell"><div class="section-heading reveal"><div><span class="section-kicker" data-i18n="servicesKicker">Sur place</span><h2 data-i18n="servicesTitle">Plus qu'une laverie.</h2></div><p data-i18n="servicesIntro">Des services utiles pendant que vos machines tournent.</p></div>
-      <div class="visual-services"><article class="visual-card reveal"><img src="assets/img_2257.webp" width="2048" height="1536" loading="lazy" decoding="async" alt="Calandre professionnelle POP'n WASH"/><div><strong data-i18n="calandreService">Calandre professionnelle</strong><small data-i18n="calandreText">Pour le linge plat et les grandes pièces</small></div></article><article class="visual-card reveal" data-delay="70"><img src="assets/img_2203.webp" width="1536" height="2048" loading="lazy" decoding="async" alt="Casier VintedGo POP'n WASH"/><div><strong>VintedGo</strong><small data-i18n="parcelText">Dépôt et retrait de colis</small></div></article><article class="visual-card reveal" data-delay="140"><img src="assets/img_2098.webp" width="2048" height="1536" loading="lazy" decoding="async" alt="Casier bpost POP'n WASH"/><div><strong>bpost / bbox</strong><small data-i18n="parcelText">Dépôt et retrait de colis</small></div></article><article class="visual-card reveal" data-delay="210"><img src="assets/img_2212.webp" width="1536" height="2048" loading="lazy" decoding="async" alt="Vue intérieure POP'n WASH"/><div><strong data-i18n="comfortSpace">Espace agréable</strong><small data-i18n="comfortSpaceText">Attendre, travailler ou plier son linge confortablement</small></div></article></div>
-      <div class="utility-row reveal"><div><span class="utility-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s5 5.5 5 10a5 5 0 0 1-10 0c0-4.5 5-10 5-10z"/></svg></span><strong data-i18n="softWater">Eau adoucie</strong></div><div><span class="utility-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 9h18M7 15h4"/></svg></span><strong data-i18n="paymentTitle">Paiement flexible</strong><small data-i18n="paymentMethods">Pièces · billets · carte sans contact · smartphone</small></div><div><span class="utility-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1.5 11h-13zM8 9l2-5M16 9l-2-5"/><path d="M8 13v3M12 13v3M16 13v3"/></svg></span><strong data-i18n="baskets">Mannes à linge disponibles</strong></div></div>
+    <section class="section section-shell equipment-section">
+      <div class="equipment-highlight reveal">
+        <div class="equipment-photo"><img src="assets/img_2257.webp" width="2048" height="1536" loading="lazy" decoding="async" alt="Calandre professionnelle grande largeur POP'n WASH Wavre"></div>
+        <div class="equipment-copy">
+          <span class="service-pill"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v11H4zM8 21h8M12 17v4"/><path d="M8 10h8"/></svg><span>Équipement</span></span>
+          <h2>Calandre professionnelle grande largeur.</h2>
+          <p>Idéale pour le linge plat et les grandes pièces : un service pratique pour gagner du temps et obtenir une finition nette.</p>
+          <div class="equipment-pills"><span>Eau adoucie</span><span>Mannes à linge</span><span>19 lave-linge</span><span>16 séchoirs</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-shell why-section">
+      <div class="section-heading reveal">
+        <div><span class="section-kicker">Pourquoi POP'n WASH ?</span><h2>Une grande laverie pensée pour être simple.</h2></div>
+        <p>19 lave-linge et 16 séchoirs, au cœur de Wavre, avec des services modernes et une équipe disponible.</p>
+      </div>
+      <div class="why-pills reveal">
+        <span>Connectée</span><span>Simple & intuitive</span><span>Propre & agréable</span><span>Équipe à l'écoute</span><span>7j/7 · 7h–22h</span>
+      </div>
     </section>
 
     <section class="section section-shell parking-section">
@@ -303,24 +361,60 @@ img[loading="lazy"]{content-visibility:auto}
       </div>
     </section>
 
-    <section class="section-shell contact-section" id="contact">
-      <div class="contact-photo reveal"><img src="assets/img_1943.webp" width="1536" height="2048" loading="lazy" decoding="async" alt="Entrée POP'n WASH Wavre"/></div>
-      <div class="contact-copy reveal" data-delay="100">
-        <span class="section-kicker" data-i18n="contactKicker">On se retrouve à Wavre</span>
-        <h2>POP'n WASH<br>Rue de Namur 72</h2>
-        <p>1300 Wavre · Belgique<br><strong>7j/7 · 07h–22h</strong></p>
-        <div class="contact-buttons">
-          <a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&query=POP%27n%20WASH%20Wavre&query_place_id=ChIJ616yFqB9wUcRf55Cp9uBEM0" target="_blank" rel="noopener">📍 <span data-i18n="route">Itinéraire</span></a>
-          <a class="btn btn-ghost" href="tel:+32486999251">☎ <span data-i18n="call">Appeler</span></a>
-          <a class="btn btn-whatsapp" href="https://wa.me/32486999251" target="_blank" rel="noopener">WhatsApp</a>
-        </div>
-        <div class="contact-lines">
-          <a href="mailto:ahb.lavoir@gmail.com">ahb.lavoir@gmail.com</a>
+    <section class="section-shell contact-section contact-section-v2" id="contact">
+      <div class="contact-info reveal">
+        <div class="contact-photo"><img src="assets/img_1943.webp" width="1536" height="2048" loading="lazy" decoding="async" alt="Entrée POP'n WASH Wavre"/></div>
+        <div class="contact-info-copy">
+          <span class="section-kicker">Contact</span>
+          <h2>Une question ? Un besoin pro ?</h2>
+          <p>Notre équipe est à votre écoute. Envoyez-nous votre message et nous vous répondrons avec plaisir.</p>
+          <div class="contact-address">
+            <strong>POP'n WASH Wavre</strong>
+            <span>Rue de Namur, 72 · 1300 Wavre</span>
+            <span>7j/7 · 07h–22h</span>
+          </div>
+          <div class="contact-buttons">
+            <a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&query=POP%27n%20WASH%20Wavre&query_place_id=ChIJ616yFqB9wUcRf55Cp9uBEM0" target="_blank" rel="noopener">Itinéraire</a>
+            <a class="btn btn-ghost" href="tel:+32486999251">+32 486 999 251</a>
+            <a class="btn btn-whatsapp" href="https://wa.me/32486999251" target="_blank" rel="noopener">WhatsApp</a>
+          </div>
+          <a class="contact-mail" href="mailto:ahb.lavoir@gmail.com">ahb.lavoir@gmail.com</a>
           <div class="social-links">
             <a class="social-link facebook" href="https://www.facebook.com/people/POPn-Wash-Wavre/61577826217914/" target="_blank" rel="noopener" aria-label="Facebook POP'n WASH Wavre"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-8h2.8l.5-3h-3.3V8.1c0-.9.3-1.6 1.7-1.6H17V3.8c-.3 0-1.4-.1-2.6-.1-2.6 0-4.4 1.6-4.4 4.6V10H7v3h3v8z"/></svg><span>Facebook</span></a>
             <a class="social-link instagram" href="https://www.instagram.com/popnwashwavre/" target="_blank" rel="noopener" aria-label="Instagram POP'n WASH Wavre"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1"/></svg><span>Instagram</span></a>
           </div>
         </div>
+      </div>
+
+      <div class="contact-form-card reveal" data-delay="100">
+        <span class="section-kicker">Écrivez-nous</span>
+        <h3>Comment pouvons-nous vous aider ?</h3>
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <label><span>Prénom *</span><input id="contactFirstName" name="prenom" type="text" autocomplete="given-name" required></label>
+            <label><span>Nom</span><input name="nom" type="text" autocomplete="family-name"></label>
+          </div>
+          <div class="form-row">
+            <label><span>E-mail *</span><input name="email" type="email" autocomplete="email" required></label>
+            <label><span>Téléphone</span><input name="telephone" type="tel" autocomplete="tel"></label>
+          </div>
+          <label><span>Sujet *</span>
+            <select id="contactSubject" name="sujet" required>
+              <option value="">Choisir un sujet</option>
+              <option>Demande d'information</option>
+              <option value="Professionnel / tarifs">Professionnel / tarifs</option>
+              <option>Facture</option>
+              <option>Carte fidélité</option>
+              <option>Problème rencontré à la laverie</option>
+              <option>Autre</option>
+            </select>
+          </label>
+          <label><span>Votre message *</span><textarea name="message" rows="6" required placeholder="Expliquez-nous votre demande..."></textarea></label>
+          <input class="form-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <p class="form-privacy">Vos coordonnées sont utilisées uniquement pour répondre à votre demande.</p>
+          <button class="btn btn-primary form-submit" type="submit"><span>Envoyer mon message</span><b>↗</b></button>
+          <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+        </form>
       </div>
     </section>
   </main>
