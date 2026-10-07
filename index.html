@@ -1688,6 +1688,11 @@ html[data-theme="dark"] .lang-button{
   color:#161c1b!important;
   border-color:rgba(22,28,27,.12)!important
 }
+/* The global dark-theme strong rule must not turn the active language code white. */
+html[data-theme="dark"] .lang-button #langCode,
+html[data-theme="dark"] .lang-button .chev{
+  color:#161c1b!important;
+}
 html[data-theme="dark"] .theme-slider-shell{
   background:rgba(255,255,255,.84)!important;
   border-color:rgba(22,28,27,.12)!important;
