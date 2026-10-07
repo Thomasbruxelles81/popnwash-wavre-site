@@ -175,11 +175,11 @@ async function showReview(i,animate=true){
   if(reviewTransitioning)return;
   reviewTransitioning=true;
   try{
-    const fadeOut=card.animate([{opacity:1,transform:'translateY(0)'},{opacity:.12,transform:'translateY(5px)'}],{duration:300,easing:'ease-in',fill:'forwards'});
+    const fadeOut=card.animate([{opacity:1,transform:'translateY(0)'},{opacity:.12,transform:'translateY(5px)'}],{duration:500,easing:'ease-in-out',fill:'forwards'});
     await fadeOut.finished;
     fadeOut.cancel();
     renderReview(nextIndex);
-    const fadeIn=card.animate([{opacity:.12,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:520,easing:'cubic-bezier(.2,.8,.2,1)'});
+    const fadeIn=card.animate([{opacity:.12,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:500,easing:'ease-in-out'});
     await fadeIn.finished;
   }catch(e){}finally{reviewTransitioning=false}
 }
@@ -193,7 +193,7 @@ document.getElementById('year').textContent=new Date().getFullYear();
 const backToTopFloat=document.getElementById('backToTopFloat');
 function syncBackToTop(){
   if(!backToTopFloat)return;
-  backToTopFloat.classList.toggle('is-visible',window.scrollY>Math.max(420,window.innerHeight*.82));
+  backToTopFloat.classList.toggle('is-visible',window.scrollY>Math.min(220,window.innerHeight*.24));
 }
 window.addEventListener('scroll',syncBackToTop,{passive:true});
 window.addEventListener('resize',syncBackToTop,{passive:true});
