@@ -1217,6 +1217,260 @@ html[data-theme="dark"] .quick-item small{color:#c9d5ce!important}
   html[data-theme="dark"] .equipment-highlight:hover{box-shadow:0 0 0 2px rgba(125,225,119,.16),0 18px 38px rgba(0,0,0,.28)!important}
 }
 
+
+/* 2026-10-07 PRO DARK + RESPONSIVE QA V2 */
+/* The previous theme layer had a stale 3-position geometry while JS only exposed 2 states.
+   This final layer makes dark mode unmistakable and keeps the header/UI usable at real device widths. */
+html[data-theme="dark"]{
+  --cream:#0b1311;--cream2:#111c18;--ink:#f8f5ee;--muted:#bdc9c2;
+  --red:#ff5b76;--red2:#ff7087;--green:#64d761;--green2:#82e17d;
+  --softgreen:#173422;--softred:#3a1d26;--line:rgba(242,248,244,.14);
+  --card:#16211d;--surface:#16211d;--surface2:#1b2924;--header-bg:#0f1c18;
+}
+html[data-theme="dark"] body{background:radial-gradient(circle at 88% -10%,rgba(71,157,92,.12),transparent 30%),#0b1311!important;color:#f8f5ee!important}
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] button{color-scheme:dark}
+
+/* A genuinely dark header. Keep only the actual logo tile warm so the brand remains faithful. */
+html[data-theme="dark"] .site-header{
+  background:rgba(13,24,20,.96)!important;
+  border-color:rgba(244,249,246,.12)!important;
+  box-shadow:0 14px 36px rgba(0,0,0,.28)!important;
+}
+html[data-theme="dark"] .brand-lockup,
+html[data-theme="dark"] .brand-label{background:transparent!important}
+html[data-theme="dark"] .brand-label .brand-title{color:#f8f5ee!important}
+html[data-theme="dark"] .brand-logo-wrap,
+html[data-theme="dark"] .brand-logo-wrap img{background:#ffe6bc!important}
+html[data-theme="dark"] .desktop-nav{
+  background:rgba(255,255,255,.055)!important;
+  border-color:rgba(255,255,255,.08)!important
+}
+html[data-theme="dark"] .desktop-nav a{color:#f5f7f4!important}
+html[data-theme="dark"] .desktop-nav a:hover{background:#244033!important;color:#9bea8f!important}
+html[data-theme="dark"] .menu-button span{background:#f8f5ee!important}
+
+/* Explicit two-state theme control. */
+.theme-control{min-width:0;position:relative}
+.theme-slider-shell{
+  position:relative!important;width:168px!important;height:44px!important;border-radius:14px!important;
+  display:grid!important;grid-template-columns:1fr 1fr!important;align-items:center!important;
+  background:#fff!important;border:1px solid rgba(22,28,27,.12)!important;
+  box-shadow:0 5px 14px rgba(22,28,27,.08)!important;overflow:hidden!important
+}
+.theme-option-label{
+  position:relative;z-index:2;height:100%;display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:11px;font-weight:900;letter-spacing:.01em;color:#75817b;pointer-events:none;
+  transition:color .22s ease,transform .22s ease
+}
+.theme-option-label svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.theme-knob{
+  position:absolute!important;z-index:1!important;left:4px!important;top:4px!important;
+  width:calc(50% - 4px)!important;height:36px!important;border-radius:11px!important;
+  background:#ffe1aa!important;box-shadow:0 5px 12px rgba(22,28,27,.15)!important;
+  transform:translateX(0)!important;transition:transform .26s cubic-bezier(.2,.8,.2,1),background .26s ease!important
+}
+.theme-control[data-mode="dark"] .theme-knob{transform:translateX(100%)!important;background:#263a32!important}
+.theme-control[data-mode="light"] .theme-light-label{color:#151c19!important;transform:scale(1.02)}
+.theme-control[data-mode="dark"] .theme-dark-label{color:#fff!important;transform:scale(1.02)}
+.theme-slider{position:absolute!important;z-index:4!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;opacity:0!important;cursor:pointer!important}
+.theme-slider:focus-visible~.theme-knob{outline:3px solid rgba(100,215,97,.55)!important;outline-offset:-2px!important}
+html[data-theme="dark"] .theme-slider-shell{background:#101b17!important;border-color:rgba(255,255,255,.14)!important;box-shadow:0 6px 16px rgba(0,0,0,.24)!important}
+html[data-theme="dark"] .theme-control[data-mode="light"] .theme-light-label{color:#111a16!important}
+html[data-theme="dark"] .theme-control[data-mode="dark"] .theme-dark-label{color:#fff!important}
+
+/* Language picker: never clip, clearly show the active language and work in dark mode. */
+.lang-button{min-width:62px;justify-content:center;font-weight:850}
+.lang-menu{
+  width:230px!important;max-width:calc(100vw - 24px)!important;
+  max-height:min(440px,calc(100dvh - 104px))!important;
+  overflow:auto!important;overscroll-behavior:contain;scrollbar-gutter:stable;
+  padding:9px!important
+}
+.lang-menu button{min-height:42px!important;font-size:13px!important;white-space:nowrap!important}
+.lang-menu button[aria-current="true"]{background:var(--softgreen)!important;color:var(--green2)!important;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--green) 28%,transparent)}
+html[data-theme="dark"] .lang-button{background:#16241f!important;color:#f8f5ee!important;border-color:rgba(255,255,255,.14)!important}
+html[data-theme="dark"] .lang-menu{background:rgba(15,27,23,.985)!important;border-color:rgba(255,255,255,.13)!important;box-shadow:0 24px 60px rgba(0,0,0,.42)!important}
+html[data-theme="dark"] .lang-menu button{color:#eef4ef!important}
+html[data-theme="dark"] .lang-menu button:hover{background:#223c30!important;color:#9bea8f!important}
+html[data-theme="dark"] .lang-menu button[aria-current="true"]{background:#21422d!important;color:#9bea8f!important}
+
+/* Complete dark surfaces: no isolated white islands. */
+html[data-theme="dark"] :is(
+  .hero-meta span,.hero-trust span,.why-pills span,.equipment-pills span,.floating-card,.badge,.pet-pills span,
+  .feature-split,.feature-list>div,.feature-list>div>span,.utility-row>div,.review-nav,.modal-close,.bonus-grid span,
+  .photo-label,.payment-easy-icon,.payment-method-pills span,.first-visit-steps b,.idea-topics span,.quick-guide b,
+  .dryer-temp,.visit-icon,.back-to-top-float
+){background:#1a2923!important;color:#f5f8f5!important;border-color:rgba(255,255,255,.11)!important}
+html[data-theme="dark"] :is(
+  .quick-strip,.machine-card,.tariff-card,.service-feature,.pro-card,.parcel-service,.review-card,.faq-group,.faq-item,
+  .parking-card,.contact-form-card,.modal,.product-chips span,.payment-easy,.equipment-highlight
+){background:#16211d!important;color:#f8f5ee!important;border-color:rgba(255,255,255,.1)!important}
+html[data-theme="dark"] :is(.loyalty-card,.products-card,.pet-feature,.parking-hero){
+  background:linear-gradient(135deg,#17251f,#203128)!important;color:#f8f5ee!important;border-color:rgba(255,255,255,.1)!important
+}
+html[data-theme="dark"] .compact-card{background:linear-gradient(145deg,#17231f,#1f2d28)!important}
+html[data-theme="dark"] .compact-card:nth-child(5){background:linear-gradient(145deg,#1b2421,#342028)!important}
+html[data-theme="dark"] .hero-sub,
+html[data-theme="dark"] .section-heading p,
+html[data-theme="dark"] .feature-copy>p,
+html[data-theme="dark"] .service-feature p,
+html[data-theme="dark"] .pro-card p,
+html[data-theme="dark"] .contact-form-card p,
+html[data-theme="dark"] .faq-answer,
+html[data-theme="dark"] small{color:#bdc9c2!important}
+html[data-theme="dark"] .connected-links a{background:#1e3b2a!important;color:#f4f8f5!important}
+html[data-theme="dark"] .connected-links a:hover{background:#2a5538!important}
+html[data-theme="dark"] .faq-group>h3{background:linear-gradient(90deg,#351f26,transparent)!important}
+html[data-theme="dark"] .faq-warning,
+html[data-theme="dark"] .form-status.error{background:#351f25!important;color:#ffd7dd!important}
+html[data-theme="dark"] .contact-form-card input,
+html[data-theme="dark"] .contact-form-card select,
+html[data-theme="dark"] .contact-form-card textarea{background:#0d1714!important;color:#f8f5ee!important;border-color:rgba(255,255,255,.17)!important}
+html[data-theme="dark"] .contact-form-card input::placeholder,
+html[data-theme="dark"] .contact-form-card textarea::placeholder{color:#94a39b!important}
+html[data-theme="dark"] .social-link{border-color:rgba(255,255,255,.2)!important}
+html[data-theme="dark"] .back-to-top-float:hover{background:#31523f!important;color:#fff!important}
+
+/* Dark hover must be obvious, not a 2% shade shift. */
+@media(hover:hover){
+  html[data-theme="dark"] :is(
+    .machine-card,.tariff-card,.pet-feature,.service-feature,.loyalty-card,.products-card,.parcel-service,
+    .payment-easy,.feature-list>div,.equipment-highlight,.pro-card,.utility-row>div,.parking-card,.review-card,.faq-item
+  ):hover{
+    background:#284538!important;border-color:#76df73!important;
+    box-shadow:0 0 0 2px rgba(118,223,115,.18),0 18px 40px rgba(0,0,0,.34)!important;
+    transform:translateY(-5px)!important;filter:brightness(1.06)!important
+  }
+  html[data-theme="dark"] .pet-feature:hover{background:linear-gradient(125deg,#33272e,#254632 48%,#2d5a3d 100%)!important}
+  html[data-theme="dark"] .parking-hero:hover{background:linear-gradient(135deg,#244433,#2d5b3e)!important}
+}
+
+/* Typography safety: translations should wrap cleanly without tiny emergency text. */
+h1,h2,h3,.brand-title,.hero-route-copy strong,.btn,.lang-menu button{overflow-wrap:break-word;hyphens:auto}
+img{max-width:100%}
+.hero-copy,.hero-visual,.service-feature,.feature-copy,.pro-copy,.contact-copy,.contact-form-card{min-width:0}
+
+/* Tablet and mobile header: keep every control visible, never crop the brand. */
+@media(max-width:900px){
+  .site-header{
+    width:calc(100% - 20px)!important;top:7px!important;margin-top:7px!important;height:68px!important;
+    padding:7px 9px!important;gap:8px!important;overflow:visible!important
+  }
+  .brand-lockup{min-width:0!important;width:auto!important;max-width:280px!important;flex:1 1 auto!important;gap:8px!important}
+  .brand-logo-wrap,.brand-logo-wrap img{width:50px!important;height:50px!important;flex-basis:50px!important}
+  .brand-label{min-width:0!important;width:auto!important;height:50px!important;overflow:hidden!important}
+  .brand-label .brand-title{font-size:16px!important;transform:none!important;letter-spacing:-.01em!important}
+  .header-actions{flex:0 0 auto;gap:6px!important}
+  .mobile-menu{
+    top:82px!important;left:10px!important;right:10px!important;max-height:calc(100dvh - 94px)!important;
+    overflow:auto!important;overscroll-behavior:contain!important;border:1px solid var(--line)!important
+  }
+  html[data-theme="dark"] .mobile-menu{background:#13201b!important;color:#f8f5ee!important;box-shadow:0 22px 54px rgba(0,0,0,.42)!important}
+  html[data-theme="dark"] .mobile-menu a{color:#f8f5ee!important}
+  .hero{min-height:0!important}
+  .section{padding-top:72px!important}
+}
+
+/* Phones: compact header controls, two-column information density, readable type. */
+@media(max-width:600px){
+  body{font-size:15px}
+  .section-shell{width:calc(100% - 20px)!important}
+  .site-header{width:calc(100% - 14px)!important;padding-inline:7px!important}
+  .brand-lockup{max-width:156px!important;gap:6px!important}
+  .brand-logo-wrap,.brand-logo-wrap img{width:44px!important;height:44px!important;flex-basis:44px!important}
+  .brand-label{height:46px!important}
+  .brand-label .brand-title{display:flex!important;flex-direction:column!important;justify-content:center;line-height:1.02!important}
+  .brand-label .brand-main{font-size:13.5px!important}
+  .brand-label .brand-place{font-size:9px!important;letter-spacing:.12em!important;color:var(--red2)!important;margin-top:2px}
+  .header-actions{gap:4px!important}
+  .theme-slider-shell{width:72px!important;height:40px!important}
+  .theme-option-label{gap:0!important}
+  .theme-option-label span{display:none!important}
+  .theme-option-label svg{width:17px!important;height:17px!important}
+  .theme-knob{left:4px!important;top:4px!important;width:calc(50% - 4px)!important;height:32px!important;border-radius:10px!important}
+  .lang-button{height:40px!important;min-width:52px!important;padding:0 7px!important;gap:4px!important}
+  .lang-button .chev{font-size:15px!important}
+  .menu-button{width:40px!important;height:40px!important;padding:8px!important}
+  .lang-menu{right:-46px!important;width:224px!important;max-height:calc(100dvh - 88px)!important}
+  h1{font-size:clamp(37px,11.5vw,48px)!important;line-height:.98!important;letter-spacing:-.045em!important}
+  .hero-sub{font-size:16px!important;line-height:1.55!important}
+  .section-heading h2,.connected-copy h2,.loyalty-copy h2,.products-card h2,.parking-hero h2,.contact-copy h2,.modal h2{
+    font-size:clamp(30px,8.5vw,39px)!important
+  }
+  .section{padding-top:62px!important}
+  .quick-strip{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .quick-item{min-height:74px!important;padding:9px!important}
+  .quick-item strong{font-size:12px!important}.quick-item small{font-size:10px!important}
+  .tariff-grid,.machine-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .tariff-card,.machine-card{min-height:174px!important;padding:15px!important}
+  .tariff-card:last-child,.machine-card:nth-child(3){grid-column:auto!important}
+  .tariff-copy strong{font-size:22px!important}.tariff-price b{font-size:25px!important}
+  .pro-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  .pro-card{padding:15px!important;min-height:0!important}.pro-card p{font-size:11.5px!important;line-height:1.5!important}
+  .product-chips,.product-chips-v2{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .feature-copy,.pro-copy,.service-feature-copy{padding:24px 20px!important}
+  .feature-media,.pro-photo,.contact-photo{min-height:0!important;aspect-ratio:4/3!important}
+  .service-feature-media{aspect-ratio:4/3!important}
+  .review-card{min-height:330px!important;padding:26px 20px!important}
+  .review-card blockquote{font-size:clamp(20px,6.2vw,26px)!important}
+  .contact-section{margin-top:64px!important}
+  .faq-item summary{padding:15px 14px!important}
+  .faq-answer{font-size:13px!important;line-height:1.58!important}
+}
+
+/* Very narrow phones still keep two columns where possible instead of producing a very long page. */
+@media(max-width:380px){
+  .brand-lockup{max-width:126px!important}
+  .brand-logo-wrap,.brand-logo-wrap img{width:40px!important;height:40px!important;flex-basis:40px!important}
+  .brand-label .brand-main{font-size:11.8px!important}
+  .brand-label .brand-place{font-size:8px!important}
+  .theme-slider-shell{width:66px!important}
+  .lang-button{min-width:48px!important;padding:0 5px!important}
+  .menu-button{width:38px!important}
+  .tariff-card,.machine-card{padding:13px!important}
+}
+
+/* Landscape phones/tablets: use the available width to avoid endless vertical stacking. */
+@media(max-width:1000px) and (orientation:landscape) and (max-height:560px){
+  .site-header{height:62px!important}
+  .brand-logo-wrap,.brand-logo-wrap img{width:46px!important;height:46px!important;flex-basis:46px!important}
+  .brand-label{height:46px!important}
+  .mobile-menu{top:74px!important;max-height:calc(100dvh - 84px)!important}
+  .lang-menu{
+    width:min(430px,calc(100vw - 24px))!important;max-height:calc(100dvh - 84px)!important;
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:3px!important
+  }
+  .lang-menu[hidden]{display:none!important}
+  .section{padding-top:46px!important}
+  .hero{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;gap:18px!important;padding-top:18px!important}
+  .hero-copy{order:1!important}.hero-visual{order:2!important}
+  .hero-sub{font-size:14px!important;line-height:1.45!important}
+  h1{font-size:clamp(34px,5vw,44px)!important}
+  .hero-photo-stack{aspect-ratio:1.45/1!important}
+  .services-main-grid,.services-secondary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .feature-split,.fleet-showcase,.pro-hero,.contact-section{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .feature-media,.fleet-photo,.pro-photo,.contact-photo{min-height:250px!important;aspect-ratio:auto!important}
+  .pro-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .parking-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .review-card{min-height:280px!important}
+}
+
+/* Tablet portrait/landscape balance. */
+@media(min-width:601px) and (max-width:1024px){
+  .quick-strip{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .tariff-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .tariff-card:last-child{grid-column:auto!important}
+  .pro-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
+/* Touch devices should not inherit hover-only transforms that make cards jump under a finger. */
+@media(hover:none){
+  :is(.machine-card,.tariff-card,.service-feature,.pro-card,.parking-card,.faq-item):hover{transform:none!important;filter:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -1243,14 +1497,14 @@ html[data-theme="dark"] .quick-item small{color:#c9d5ce!important}
     <div class="header-actions">
       <div class="theme-control" id="themeControl" data-mode="light">
         <div class="theme-slider-shell">
-          <div class="theme-icons" aria-hidden="true">
-            <span class="theme-icon theme-icon-light">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.35 5.35l1.55 1.55M17.1 17.1l1.55 1.55M18.65 5.35 17.1 6.9M6.9 17.1l-1.55 1.55"/></svg>
-            </span>
-            <span class="theme-icon theme-icon-dark">
-              <svg viewBox="0 0 24 24"><path d="M19.4 15.2A7.7 7.7 0 0 1 8.8 4.6 8.1 8.1 0 1 0 19.4 15.2Z"/></svg>
-            </span>
-          </div>
+          <span class="theme-option-label theme-light-label" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.35 5.35l1.55 1.55M17.1 17.1l1.55 1.55M18.65 5.35 17.1 6.9M6.9 17.1l-1.55 1.55"/></svg>
+            <span id="themeLightText">Clair</span>
+          </span>
+          <span class="theme-option-label theme-dark-label" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M19.4 15.2A7.7 7.7 0 0 1 8.8 4.6 8.1 8.1 0 1 0 19.4 15.2Z"/></svg>
+            <span id="themeDarkText">Sombre</span>
+          </span>
           <span class="theme-knob" aria-hidden="true"></span>
           <input id="themeSlider" class="theme-slider" type="range" min="0" max="1" step="1" value="0" aria-label="Thème : clair" />
         </div>
