@@ -195,14 +195,33 @@ img[loading="lazy"]{content-visibility:auto}
 @media(max-width:900px){.brand-wordmark{min-width:148px;height:54px}.brand-wordmark .brand-name{font-size:20px}.brand-wordmark .brand-city{font-size:9px}.back-to-top-float{right:18px;bottom:82px;width:48px;height:48px}}
 @media(max-width:480px){.brand-wordmark{min-width:134px}.brand-wordmark .brand-name{font-size:18px}.brand-wordmark .brand-city{font-size:8.5px;letter-spacing:.2em}}
 
+
+/* October 2026 header logo correction + earlier top button */
+.brand-lockup{width:auto;min-width:214px;height:60px;padding:0 8px 0 0;border-radius:0;overflow:visible;background:transparent!important;box-shadow:none!important;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:10px;text-decoration:none}
+.brand-logo-wrap{width:58px;height:58px;flex:0 0 58px;display:grid;place-items:center;border-radius:14px;background:transparent}
+.brand-logo-wrap img{width:58px;height:58px;object-fit:contain;background:transparent!important;border-radius:0;padding:0;box-shadow:none}
+.brand-label{display:grid;gap:1px;line-height:1;white-space:nowrap}
+.brand-label strong{font-size:19px;line-height:1;font-weight:950;letter-spacing:-.045em;color:var(--ink)}
+.brand-label small{font-size:12px;line-height:1.1;font-weight:800;letter-spacing:.04em;color:var(--muted)}
+.brand-wordmark{display:none!important}
+.back-to-top-float{z-index:130}
+@media(max-width:1050px) and (min-width:901px){.brand-lockup{min-width:188px;gap:8px}.brand-logo-wrap,.brand-logo-wrap img{width:54px;height:54px;flex-basis:54px}.brand-label strong{font-size:17px}.brand-label small{font-size:11px}.desktop-nav a{padding:8px 9px;font-size:12px}}
+@media(max-width:900px){.brand-lockup{min-width:176px;height:54px;gap:8px}.brand-logo-wrap,.brand-logo-wrap img{width:52px;height:52px;flex-basis:52px}.brand-label strong{font-size:17px}.brand-label small{font-size:10px}}
+@media(max-width:480px){.brand-lockup{min-width:158px;gap:7px}.brand-logo-wrap,.brand-logo-wrap img{width:48px;height:48px;flex-basis:48px}.brand-label strong{font-size:15.5px}.brand-label small{font-size:9.5px}}
+
 </style>
 </head>
 <body>
   <div class="page-noise" aria-hidden="true"></div>
   <header class="site-header" id="top">
-    <a class="brand brand-wordmark" href="#top" aria-label="POP'n WASH Wavre">
-      <span class="brand-name">POP’n WASH</span>
-      <span class="brand-city">WAVRE</span>
+    <a class="brand brand-lockup" href="#top" aria-label="POP'n WASH Wavre">
+      <span class="brand-logo-wrap" aria-hidden="true">
+        <img src="assets/logo-popnwash.webp" width="1024" height="1024" alt="" />
+      </span>
+      <span class="brand-label">
+        <strong>POP’n WASH</strong>
+        <small>Wavre</small>
+      </span>
     </a>
 
     <nav class="desktop-nav" aria-label="Navigation principale">
