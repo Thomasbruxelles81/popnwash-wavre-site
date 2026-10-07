@@ -204,7 +204,8 @@ jobs:
                 if(visual.theme!==systemScheme) failures.push(engineName+' system '+systemScheme+': first visit theme '+visual.theme);
                 if(visual.source!=='system') failures.push(engineName+' system '+systemScheme+': source '+visual.source);
                 if(visual.slider!==(systemScheme==='dark'?'1':'0')) failures.push(engineName+' system '+systemScheme+': slider '+visual.slider);
-                if(systemScheme==='light' && visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': light header '+visual.headerBg);\n                if(systemScheme==='dark' && visual.headerBg==='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': dark header stayed beige');
+                if(systemScheme==='light' && visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': light header '+visual.headerBg);
+                if(systemScheme==='dark' && visual.headerBg==='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': dark header stayed beige');
                 if(!visual.logoVisible) failures.push(engineName+' system '+systemScheme+': logo hidden');
                 await p.close();
               }
