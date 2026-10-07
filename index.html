@@ -425,6 +425,139 @@ html[data-theme="dark"] .brand-logo-wrap img{background:#ffe6bc!important}
   .theme-knob,.faq-item,:is(.quick-item,.machine-card,.hero-wiline-card,.parking-card,.pro-card,.service-feature,.loyalty-card,.products-card,.parcel-service,.payment-easy,.connected-action,.product-chips span){transition:none!important}
 }
 
+
+/* 2026-10-07 dark readability + header/logo correction + WiLine hover */
+.brand-lockup{min-width:365px!important;height:60px!important;gap:12px!important;padding:0!important}
+.brand-logo-wrap{display:grid!important;place-items:center!important;width:60px!important;height:60px!important;flex:0 0 60px!important;overflow:hidden!important;background:#ffe6bc!important}
+.brand-logo-wrap img{display:block!important;width:60px!important;height:60px!important;object-fit:contain!important;opacity:1!important;visibility:visible!important;background:#ffe6bc!important}
+.brand-label{min-width:288px!important;height:58px!important}
+.brand-label .brand-title{font-size:20px!important;transform:scaleX(1.4)!important;transform-origin:left center!important;letter-spacing:.008em!important}
+.brand-nature{display:none!important}
+
+/* Machines en direct / Factures — animated accent inspired by Première visite */
+.hero-wiline-card{position:relative!important;isolation:isolate;overflow:hidden!important;transition:transform .26s cubic-bezier(.2,.8,.2,1),box-shadow .26s ease,border-color .26s ease,background .26s ease!important}
+.hero-wiline-card:before{content:"";position:absolute;left:14px;right:14px;top:0;height:3px;border-radius:0 0 99px 99px;background:linear-gradient(90deg,var(--green),var(--red));transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.2,.8,.2,1);z-index:3}
+.hero-wiline-card:hover{transform:translateY(-5px) scale(1.008)!important;box-shadow:0 18px 38px rgba(31,70,37,.15)!important;border-color:rgba(68,182,64,.36)!important}
+.hero-wiline-card:hover:before{transform:scaleX(1)}
+.hero-wiline-card:hover .hero-wiline-icon{transform:rotate(-5deg) scale(1.08)}
+.hero-wiline-card:hover>b{transform:translate(3px,-3px)}
+.hero-wiline-icon,.hero-wiline-card>b{transition:transform .26s cubic-bezier(.2,.8,.2,1),background .26s ease,color .26s ease}
+
+/* Dark theme: explicit contrast instead of relying on inverted variables. */
+html[data-theme="dark"]{
+  --ink:#f8f5ee!important;
+  --muted:#c8d2cc!important;
+  --card:#18231f!important;
+  --surface:#18231f!important;
+  --surface2:#1e2b26!important;
+  --line:rgba(255,255,255,.16)!important;
+}
+html[data-theme="dark"] body{background:#0e1815!important;color:#f8f5ee!important}
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] strong{color:#f8f5ee}
+html[data-theme="dark"] .hero-sub,
+html[data-theme="dark"] .section-heading p,
+html[data-theme="dark"] .loyalty-copy p,
+html[data-theme="dark"] .products-card p,
+html[data-theme="dark"] .equipment-copy p,
+html[data-theme="dark"] .parcel-copy p,
+html[data-theme="dark"] .faq-answer p,
+html[data-theme="dark"] .quick-item small,
+html[data-theme="dark"] .hero-wiline-copy small{color:#c8d2cc!important}
+
+/* Hero chips and badges: never white text on white pills. */
+html[data-theme="dark"] .hero-meta span{background:#26332e!important;border-color:rgba(255,255,255,.18)!important;color:#f8f5ee!important}
+html[data-theme="dark"] .hero-trust span,
+html[data-theme="dark"] .why-pills span,
+html[data-theme="dark"] .equipment-pills span,
+html[data-theme="dark"] .payment-method-pills span,
+html[data-theme="dark"] .idea-topics span{background:#1d2925!important;border-color:rgba(255,255,255,.15)!important;color:#f8f5ee!important}
+html[data-theme="dark"] .hero-trust span:first-child{background:#183a24!important;color:#80dd7b!important;border-color:rgba(88,201,86,.3)!important}
+
+/* WiLine cards: dark surfaces with very clear hierarchy. */
+html[data-theme="dark"] .hero-wiline-card,
+html[data-theme="dark"] .hero-wiline-card.invoice{background:linear-gradient(135deg,#17261f,#1d3026)!important;border-color:rgba(88,201,86,.28)!important;color:#f8f5ee!important;box-shadow:0 12px 30px rgba(0,0,0,.2)!important}
+html[data-theme="dark"] .hero-wiline-card:hover{background:linear-gradient(135deg,#1b3025,#233c2c)!important;border-color:rgba(88,201,86,.52)!important;box-shadow:0 20px 42px rgba(0,0,0,.28)!important}
+html[data-theme="dark"] .hero-wiline-card .hero-wiline-copy strong{color:#f8f5ee!important}
+html[data-theme="dark"] .hero-wiline-card .hero-wiline-copy small{color:#c9d4cd!important}
+html[data-theme="dark"] .hero-wiline-card .hero-wiline-icon{background:#f7faf7!important;color:#249d3b!important}
+html[data-theme="dark"] .hero-wiline-card>b{color:#f8f5ee!important}
+
+/* Cards and services: richer separation and readable secondary text. */
+html[data-theme="dark"] .machine-card,
+html[data-theme="dark"] .faq-group,
+html[data-theme="dark"] .faq-item,
+html[data-theme="dark"] .parking-card,
+html[data-theme="dark"] .service-feature,
+html[data-theme="dark"] .pro-card,
+html[data-theme="dark"] .parcel-service,
+html[data-theme="dark"] .payment-easy,
+html[data-theme="dark"] .review-card{background:#18231f!important;color:#f8f5ee!important;border-color:rgba(255,255,255,.11)!important;box-shadow:0 12px 30px rgba(0,0,0,.16)!important}
+html[data-theme="dark"] .compact-card,
+html[data-theme="dark"] .compact-card:nth-child(5){background:#1a2722!important}
+html[data-theme="dark"] .loyalty-card,
+html[data-theme="dark"] .products-card{background:linear-gradient(145deg,#192820,#20342a)!important;color:#f8f5ee!important;border:1px solid rgba(255,255,255,.09)!important}
+html[data-theme="dark"] .product-chips span{background:#121d19!important;color:#f8f5ee!important;border:1px solid rgba(255,255,255,.07)!important}
+html[data-theme="dark"] .product-chips b{color:#f8f5ee!important}
+html[data-theme="dark"] .text-link{color:#ff7187!important}
+html[data-theme="dark"] .service-pill{background:#173b25!important;color:#72d66d!important}
+html[data-theme="dark"] .products-card .service-pill,
+html[data-theme="dark"] .service-feature:nth-child(2) .service-pill{background:#41202a!important;color:#ff7187!important}
+
+/* Contact: keep both columns intentionally dark in dark mode, with clear text and controls. */
+html[data-theme="dark"] .contact-section{background:#111d19!important;color:#f8f5ee!important;border:1px solid rgba(255,255,255,.08)!important}
+html[data-theme="dark"] .contact-info-copy{background:#17241f!important;color:#f8f5ee!important}
+html[data-theme="dark"] .contact-info-copy h2,
+html[data-theme="dark"] .contact-address strong,
+html[data-theme="dark"] .contact-mail,
+html[data-theme="dark"] .social-link{color:#f8f5ee!important}
+html[data-theme="dark"] .contact-info-copy p,
+html[data-theme="dark"] .contact-address span{color:#c8d2cc!important}
+html[data-theme="dark"] .contact-info-copy .btn-ghost{background:#26332e!important;color:#f8f5ee!important;border-color:rgba(255,255,255,.18)!important}
+html[data-theme="dark"] .contact-form-card{background:#17241f!important;color:#f8f5ee!important;border:1px solid rgba(255,255,255,.09)!important}
+html[data-theme="dark"] .contact-form-card h3,
+html[data-theme="dark"] .contact-form-card label>span{color:#f8f5ee!important}
+html[data-theme="dark"] .contact-form-card input,
+html[data-theme="dark"] .contact-form-card select,
+html[data-theme="dark"] .contact-form-card textarea{background:#0d1714!important;color:#f8f5ee!important;border-color:rgba(255,255,255,.2)!important}
+html[data-theme="dark"] .contact-form-card input::placeholder,
+html[data-theme="dark"] .contact-form-card textarea::placeholder{color:#8fa098!important;opacity:1}
+html[data-theme="dark"] .idea-note{background:#183923!important;border-color:rgba(88,201,86,.28)!important}
+html[data-theme="dark"] .idea-note strong{color:#f8f5ee!important}
+html[data-theme="dark"] .idea-note span{color:#c8d2cc!important}
+html[data-theme="dark"] .form-privacy{color:#aebcb5!important}
+
+/* FAQ hover remains visible in dark mode. */
+html[data-theme="dark"] .faq-item:hover{background:linear-gradient(110deg,#1b2d24,#18231f 60%,#202a26)!important;border-color:rgba(88,201,86,.35)!important}
+html[data-theme="dark"] .faq-item:hover summary{background:rgba(88,201,86,.08)!important}
+
+/* Light mode keeps the WiLine hover elegant and readable. */
+html[data-theme="light"] .hero-wiline-card:hover{background:linear-gradient(135deg,#e5f7db,#f9fff5)!important}
+html[data-theme="light"] .hero-wiline-card.invoice:hover{background:linear-gradient(135deg,#e4f5dc,#effbe9)!important}
+
+@media(max-width:1280px) and (min-width:1121px){
+  .brand-lockup{min-width:320px!important}.brand-label{min-width:244px!important}
+  .brand-label .brand-title{font-size:18px!important;transform:scaleX(1.22)!important}
+}
+@media(max-width:1120px) and (min-width:901px){
+  .brand-lockup{min-width:275px!important}.brand-label{min-width:205px!important}
+  .brand-label .brand-title{font-size:16.5px!important;transform:scaleX(1.15)!important}
+}
+@media(max-width:900px){
+  .brand-lockup{min-width:205px!important}.brand-logo-wrap,.brand-logo-wrap img{width:50px!important;height:50px!important;flex-basis:50px!important}
+  .brand-label{min-width:145px!important;height:50px!important}.brand-label .brand-title{font-size:14px!important;transform:scaleX(1.08)!important}
+}
+@media(max-width:600px){
+  .brand-lockup{min-width:146px!important}.brand-logo-wrap,.brand-logo-wrap img{width:42px!important;height:42px!important;flex-basis:42px!important}
+  .brand-label{min-width:98px!important;height:42px!important}.brand-label .brand-title{font-size:10.5px!important;transform:none!important}
+}
+@media(hover:none){
+  .hero-wiline-card:hover{transform:none!important;box-shadow:inherit!important}.hero-wiline-card:hover:before{transform:scaleX(0)}
+}
+
 </style>
 </head>
 <body>
@@ -436,7 +569,6 @@ html[data-theme="dark"] .brand-logo-wrap img{background:#ffe6bc!important}
       </span>
       <span class="brand-label">
         <strong class="brand-title">POP’n WASH WAVRE</strong>
-        <span class="brand-nature" aria-hidden="true"><i></i><i></i></span>
       </span>
     </a>
 
@@ -450,7 +582,7 @@ html[data-theme="dark"] .brand-logo-wrap img{background:#ffe6bc!important}
     </nav>
 
     <div class="header-actions">
-      <div class="theme-control" id="themeControl" data-mode="light" title="Thème clair">
+      <div class="theme-control" id="themeControl" data-mode="light">
         <div class="theme-slider-shell">
           <div class="theme-icons" aria-hidden="true">
             <span class="theme-icon theme-icon-light">
