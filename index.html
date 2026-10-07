@@ -295,15 +295,15 @@ html[data-theme] .site-header{
   border-color:rgba(22,28,27,.08)!important;
 }
 html[data-theme] .brand-lockup,html[data-theme] .brand-logo-wrap,html[data-theme] .brand-logo-wrap img{background:#ffe6bc!important}
-.brand-lockup{min-width:410px!important;height:60px!important;gap:12px!important;padding:0!important}
+.brand-lockup{min-width:492px!important;height:60px!important;gap:12px!important;padding:0!important}
 .brand-logo-wrap,.brand-logo-wrap img{width:58px!important;height:58px!important;flex-basis:58px!important;border-radius:0!important;padding:0!important;box-shadow:none!important}
-.brand-label{position:relative;display:flex!important;align-items:center;min-width:334px!important;height:58px!important;overflow:visible!important;white-space:nowrap}
+.brand-label{position:relative;display:flex!important;align-items:center;min-width:416px!important;height:58px!important;overflow:visible!important;white-space:nowrap}
 .brand-label .brand-title{
   display:block;font-size:21px!important;line-height:1!important;font-weight:950!important;
   letter-spacing:.012em!important;color:#161c1b!important;white-space:nowrap;
-  transform:scaleX(1.52)!important;transform-origin:left center;
+  transform:scaleX(2)!important;transform-origin:left center;
 }
-.brand-nature{position:absolute;left:304px;top:19px;width:28px;height:20px;opacity:.9}
+.brand-nature{position:absolute;left:386px;top:19px;width:28px;height:20px;opacity:.9}
 .brand-nature i{position:absolute;display:block;width:13px;height:8px;background:#34a83e;border-radius:100% 0 100% 0;transform:rotate(-27deg)}
 .brand-nature i:first-child{left:1px;top:6px}.brand-nature i:last-child{right:1px;top:2px;transform:scaleX(-1) rotate(-23deg);background:#55bf4e}
 .desktop-nav{background:rgba(255,255,255,.62)!important;border:1px solid rgba(22,28,27,.07)!important}
@@ -382,6 +382,14 @@ html[data-theme="dark"] .brand-logo-wrap,
 html[data-theme="dark"] .brand-logo-wrap img{background:#ffe6bc!important}
 
 /* Responsive: preserve the wordmark but compact it enough for phone headers. */
+
+@media(max-width:1280px) and (min-width:1121px){
+  .brand-lockup{min-width:350px!important}.brand-label{min-width:276px!important}
+  .brand-label .brand-title{font-size:18px!important;transform:scaleX(1.42)!important}
+  .brand-nature{left:246px;top:20px}
+  .desktop-nav a{padding:8px 10px!important;font-size:12.5px!important}
+}
+
 @media(max-width:1120px) and (min-width:901px){
   .brand-lockup{min-width:300px!important}.brand-label{min-width:226px!important}
   .brand-label .brand-title{font-size:17px!important;transform:scaleX(1.28)!important}
