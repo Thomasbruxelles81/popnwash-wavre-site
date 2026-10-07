@@ -1537,6 +1537,19 @@ img{max-width:100%}
   }
 }
 
+
+/* 2026-10-07 MOBILE FLOW / NO PHANTOM SPACE */
+/* On phones and tablets, prefer a stable fully-rendered document flow over reserved
+   content-visibility placeholders. This prevents phantom vertical space and layout shifts. */
+@media(max-width:1024px){
+  main>.section,
+  main>.contact-section,
+  .section{
+    content-visibility:visible!important;
+    contain-intrinsic-size:auto!important
+  }
+}
+
 </style>
 </head>
 <body>
