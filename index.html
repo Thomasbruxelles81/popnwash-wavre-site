@@ -357,29 +357,29 @@ img[loading="lazy"]{content-visibility:auto}
 
     <section class="section section-shell faq-section" id="faq">
       <div class="section-heading reveal">
-        <div><span class="section-kicker">FAQ</span><h2>Besoin d’aide ? Voici l’essentiel.</h2></div>
-        <p>Des réponses courtes, étape par étape, pour utiliser facilement la laverie.</p>
+        <div><span class="section-kicker" data-i18n="faqKicker">FAQ</span><h2 data-i18n="faqTitle">Besoin d’aide ? Voici l’essentiel.</h2></div>
+        <p data-i18n="faqIntro">Des réponses courtes, étape par étape, pour utiliser facilement la laverie.</p>
       </div>
 
       <div class="quick-guide reveal" aria-label="Première visite">
-        <strong>Première visite ?</strong>
-        <span><b>1</b> Choisissez votre machine</span>
-        <span><b>2</b> Payez à la centrale</span>
-        <span><b>3</b> Suivez les indications</span>
+        <strong data-i18n="faqFirstVisit">Première visite ?</strong>
+        <span data-i18n="faqStep1"><b>1</b> Choisissez votre machine</span>
+        <span data-i18n="faqStep2"><b>2</b> Payez à la centrale</span>
+        <span data-i18n="faqStep3"><b>3</b> Suivez les indications</span>
       </div>
 
       <div class="faq-groups faq-groups-simple">
         <div class="faq-group reveal">
-          <h3>Laver, sécher, repasser</h3>
+          <h3 data-i18n="faqGroupUse">Laver, sécher, repasser</h3>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="washer">
             <summary><span>Comment lancer un lave-linge ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>1. Mettez votre linge dans la machine.<br>2. Ajoutez la lessive dans le lave-linge.<br>3. Choisissez le programme.<br>4. Payez à la centrale.<br><strong>Le lave-linge démarre automatiquement après paiement.</strong></p>
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="capacity">
             <summary><span>Comment choisir la bonne taille de machine ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>7 kg pour une petite lessive, 14 kg pour un plus gros volume, 20 kg pour les très gros volumes ou grandes pièces.</p>
@@ -388,7 +388,7 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="dryer">
             <summary><span>Comment lancer un séchoir ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>1. Mettez le linge dans le séchoir.<br>2. Payez le nombre de cycles souhaité à la centrale.<br>3. Sur le séchoir, appuyez sur la <strong>température adaptée à votre linge</strong>.<br>Chaque cycle = <strong>5 minutes pour 0,50 €</strong>.</p>
@@ -396,7 +396,7 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="dryerTemp">
             <summary><span>Quelle température choisir sur le séchoir ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p><strong>Nos séchoirs sont professionnels et chauffent efficacement :</strong> choisissez toujours la température en fonction du textile et vérifiez l’étiquette du vêtement.</p>
@@ -409,7 +409,7 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="dryerBall">
             <summary><span>Le linge s’est mis en boule pendant le séchage : que faire ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Vous pouvez <strong>ouvrir la porte pendant le cycle</strong> : le séchoir s’arrête. Défaites la boule et répartissez le linge dans le tambour, puis refermez la porte.</p>
@@ -418,7 +418,7 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="ironer">
             <summary><span>Comment utiliser la calandre ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Payez à la centrale, puis attendez environ <strong>3 à 4 minutes de chauffe</strong>. La calandre démarre automatiquement. Tarif : <strong>2,00 € / 6 min</strong>.</p>
@@ -427,7 +427,7 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="pets">
             <summary><span>Où laver le linge des animaux ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Repérez les machines clairement marquées <strong>ANIMAUX / PETS</strong>. Utilisez uniquement celles-ci pour les couvertures, paniers et autres textiles d’animaux. Elles existent en <strong>7 kg et 14 kg</strong>.</p>
@@ -436,9 +436,9 @@ img[loading="lazy"]{content-visibility:auto}
         </div>
 
         <div class="faq-group reveal" data-delay="60">
-          <h3>Paiement, WiLine & factures</h3>
+          <h3 data-i18n="faqGroupPay">Paiement, WiLine & factures</h3>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="pay">
             <summary><span>Comment payer ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>À la centrale : <strong>sélectionnez votre machine ou votre séchoir</strong>, puis payez par pièces, billets, carte sans contact ou smartphone. L’écran vous guide étape par étape.</p>
@@ -446,7 +446,7 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="code">
             <summary><span>À quoi sert le code affiché après paiement ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Un <strong>code de 4 caractères</strong> s’affiche pendant environ <strong>5 secondes</strong> juste après le paiement. Notez-le si vous voulez récupérer une facture. Il reste utilisable pendant <strong>24 heures</strong>.</p>
@@ -454,7 +454,7 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="availability">
             <summary><span>Comment voir si une machine est libre ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Ouvrez WiLine : vous voyez directement quelles machines sont libres ou en cours.</p>
@@ -462,7 +462,7 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="notify">
             <summary><span>Puis-je être averti quand mon cycle est terminé ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p><strong>Oui.</strong><br>1. Ouvrez WiLine.<br>2. Repérez votre machine.<br>3. Cliquez sur la <strong>petite cloche à droite de votre machine</strong>.<br>4. C’est tout : vous recevrez une notification quand le cycle sera terminé.</p>
@@ -470,7 +470,7 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="loyalty">
             <summary><span>Comment fonctionne la carte fidélité ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>La première carte est offerte : <strong>40 € payés = 40 € crédités</strong> + 1 sachet de lessive offert. Les recharges suivantes donnent du crédit supplémentaire selon le montant chargé.</p>
@@ -479,9 +479,9 @@ img[loading="lazy"]{content-visibility:auto}
         </div>
 
         <div class="faq-group reveal" data-delay="120">
-          <h3>Lessive & services sur place</h3>
+          <h3 data-i18n="faqGroupServices">Lessive & services sur place</h3>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="ownDetergent">
             <summary><span>Puis-je utiliser ma propre lessive ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p><strong>Oui, vous avez le choix.</strong> Apportez votre lessive si vous préférez votre marque, votre odeur ou votre parfum habituel. Sinon, vous trouverez directement à la laverie plusieurs produits : <strong>Lessive Éco, Peaux sensibles, Premium, assouplissants, désinfectant et détachant oxygéné.</strong></p>
@@ -489,28 +489,28 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="products">
             <summary><span>Quels produits sont disponibles ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p><strong>Lessives :</strong> Éco, Peaux sensibles et Premium.<br><strong>Assouplissants :</strong> parfumé ou peaux sensibles.<br><strong>Autres :</strong> désinfectant et détachant oxygéné.</p>
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="cowork">
             <summary><span>Puis-je travailler pendant mon cycle ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Oui. Une grande table, des sièges et des prises électriques sont disponibles. Activez la cloche WiLine et travaillez tranquillement jusqu’à la fin du cycle.</p>
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="parcels">
             <summary><span>Y a-t-il Vinted Go et bpost ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Oui. Vous pouvez déposer ou récupérer vos colis Vinted Go et bpost / bbox pendant votre passage.</p>
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="basketsWater">
             <summary><span>Y a-t-il des mannes à linge et de l’eau adoucie ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Oui. Des mannes sont disponibles sur place et la laverie utilise de l’eau adoucie.</p>
@@ -519,9 +519,9 @@ img[loading="lazy"]{content-visibility:auto}
         </div>
 
         <div class="faq-group reveal" data-delay="180">
-          <h3>Contact, pros & accès</h3>
+          <h3 data-i18n="faqGroupContact">Contact, pros & accès</h3>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="pro">
             <summary><span>Je suis professionnel, puis-je vous contacter ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Oui. Pour des passages réguliers, de gros volumes ou un besoin particulier, utilisez le formulaire et choisissez <strong>« Professionnel / tarifs »</strong>.</p>
@@ -529,14 +529,14 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="problem">
             <summary><span>J’ai un problème avec une machine, que faire ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Appelez ou envoyez un WhatsApp au <strong>+32 486 999 251</strong>, ou utilisez le formulaire de contact.</p>
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="suggestion">
             <summary><span>Je veux proposer une amélioration, comment faire ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Choisissez <strong>« Suggestion / idée d’amélioration »</strong> dans le formulaire, ou utilisez la boîte à idées présente dans la laverie. Toutes les idées sont les bienvenues.</p>
@@ -544,7 +544,7 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="hours">
             <summary><span>Quels sont les horaires et l’adresse ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p><strong>7j/7 · 07h–22h</strong><br>Rue de Namur, 72 · 1300 Wavre</p>
@@ -552,7 +552,7 @@ img[loading="lazy"]{content-visibility:auto}
             </div>
           </details>
 
-          <details class="faq-item">
+          <details class="faq-item" data-faq="parking">
             <summary><span>Où puis-je me garer ?</span><b>+</b></summary>
             <div class="faq-answer">
               <p>Vous avez 30 minutes gratuites en voirie après enregistrement de votre plaque, ainsi que plusieurs parkings à proximité.</p>
@@ -597,16 +597,16 @@ img[loading="lazy"]{content-visibility:auto}
       <div class="contact-info reveal">
         <div class="contact-photo"><img src="assets/img_1943.webp" width="1536" height="2048" loading="lazy" decoding="async" alt="Entrée POP'n WASH Wavre"/></div>
         <div class="contact-info-copy">
-          <span class="section-kicker">Contact</span>
-          <h2>Une question ? Un besoin pro ?</h2>
-          <p>Notre équipe est à votre écoute. Envoyez-nous votre message et nous vous répondrons avec plaisir.</p>
+          <span class="section-kicker" data-i18n="contactKicker2">Contact</span>
+          <h2 data-i18n="contactTitle2">Une question ? Un besoin pro ?</h2>
+          <p data-i18n="contactIntro2">Notre équipe est à votre écoute. Envoyez-nous votre message et nous vous répondrons avec plaisir.</p>
           <div class="contact-address">
             <strong>POP'n WASH Wavre</strong>
             <span>Rue de Namur, 72 · 1300 Wavre</span>
             <span>7j/7 · 07h–22h</span>
           </div>
           <div class="contact-buttons">
-            <a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&query=POP%27n%20WASH%20Wavre&query_place_id=ChIJ616yFqB9wUcRf55Cp9uBEM0" target="_blank" rel="noopener">Itinéraire</a>
+            <a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&query=POP%27n%20WASH%20Wavre&query_place_id=ChIJ616yFqB9wUcRf55Cp9uBEM0" target="_blank" rel="noopener" data-i18n="route">Itinéraire</a>
             <a class="btn btn-ghost" href="tel:+32486999251">+32 486 999 251</a>
             <a class="btn btn-whatsapp" href="https://wa.me/32486999251" target="_blank" rel="noopener">WhatsApp</a>
           </div>
@@ -619,18 +619,18 @@ img[loading="lazy"]{content-visibility:auto}
       </div>
 
       <div class="contact-form-card reveal" data-delay="100">
-        <span class="section-kicker">Écrivez-nous</span>
-        <h3>Comment pouvons-nous vous aider ?</h3>
+        <span class="section-kicker" data-i18n="writeUs">Écrivez-nous</span>
+        <h3 data-i18n="contactFormTitle">Comment pouvons-nous vous aider ?</h3>
         <form id="contactForm" novalidate>
           <div class="form-row">
-            <label><span>Prénom *</span><input id="contactFirstName" name="prenom" type="text" autocomplete="given-name" required></label>
-            <label><span>Nom</span><input name="nom" type="text" autocomplete="family-name"></label>
+            <label><span data-i18n="firstName">Prénom *</span><input id="contactFirstName" name="prenom" type="text" autocomplete="given-name" required></label>
+            <label><span data-i18n="lastName">Nom</span><input name="nom" type="text" autocomplete="family-name"></label>
           </div>
           <div class="form-row">
-            <label><span>E-mail *</span><input name="email" type="email" autocomplete="email" required></label>
-            <label><span>Téléphone</span><input name="telephone" type="tel" autocomplete="tel"></label>
+            <label><span data-i18n="emailLabel">E-mail *</span><input name="email" type="email" autocomplete="email" required></label>
+            <label><span data-i18n="phoneLabel">Téléphone</span><input name="telephone" type="tel" autocomplete="tel"></label>
           </div>
-          <label><span>Sujet *</span>
+          <label><span data-i18n="subjectLabel">Sujet *</span>
             <select id="contactSubject" name="sujet" required>
               <option value="">Choisir un sujet</option>
               <option>Demande d'information</option>
@@ -642,15 +642,15 @@ img[loading="lazy"]{content-visibility:auto}
               <option>Autre</option>
             </select>
           </label>
-          <label><span>Votre message *</span><textarea name="message" rows="6" required placeholder="Expliquez-nous votre demande, votre idée ou ce que vous aimeriez améliorer..."></textarea></label>
+          <label><span data-i18n="messageLabel">Votre message *</span><textarea name="message" rows="6" required placeholder="Expliquez-nous votre demande, votre idée ou ce que vous aimeriez améliorer..."></textarea></label>
           <input class="form-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="idea-note">
-            <strong>Une idée pour améliorer POP'n WASH ? Dites-nous tout.</strong>
-            <span>Machines, nouveaux produits, confort, coworking, paiement, fidélité, colis, horaires, propreté, services pros, accessibilité… ou une idée complètement nouvelle : vos souhaits nous intéressent. Vous pouvez aussi utiliser la boîte à idées présente dans la laverie.</span>
+            <strong data-i18n="ideaTitle">Une idée pour améliorer POP'n WASH ? Dites-nous tout.</strong>
+            <span data-i18n="ideaText">Machines, nouveaux produits, confort, coworking, paiement, fidélité, colis, horaires, propreté, services pros, accessibilité… ou une idée complètement nouvelle : vos souhaits nous intéressent. Vous pouvez aussi utiliser la boîte à idées présente dans la laverie.</span>
           </div>
           <div class="idea-topics" aria-label="Exemples de suggestions"><span>Machines</span><span>Produits</span><span>Confort</span><span>Paiement</span><span>Horaires</span><span>Services</span><span>Professionnels</span><span>Autre idée</span></div>
-          <p class="form-privacy">Vos coordonnées sont utilisées uniquement pour répondre à votre demande.</p>
-          <button class="btn btn-primary form-submit" type="submit"><span>Envoyer mon message</span><b>↗</b></button>
+          <p class="form-privacy" data-i18n="privacyText">Vos coordonnées sont utilisées uniquement pour répondre à votre demande.</p>
+          <button class="btn btn-primary form-submit" type="submit"><span data-i18n="sendMessage">Envoyer mon message</span><b>↗</b></button>
           <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
         </form>
       </div>
