@@ -19,7 +19,7 @@ jobs:
         run: |
           npm init -y >/dev/null 2>&1
           npm install --save-dev playwright@1.55.0
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium firefox webkit
 
       - name: Serve site
         run: |
@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir -p qa-screenshots
           cat > qa.mjs <<'EOF'
-          import { chromium } from 'playwright';
+          import { chromium, firefox, webkit } from 'playwright';
           const browser = await chromium.launch({headless:true});
           const cases = [
             ['phone-portrait-360',360,800],
@@ -150,6 +150,31 @@ jobs:
           }
 
           await browser.close();
+
+          // Cross-browser visual theme audit: Chromium (Chrome/Edge engine), Firefox and WebKit (Safari engine).
+          for (const [engineName,engine] of [['chromium',chromium],['firefox',firefox],['webkit',webkit]]) {
+            const b = await engine.launch({headless:true});
+            for (const scheme of ['light','dark']) {
+              const p = await b.newPage({viewport:{width:1366,height:900},colorScheme:scheme});
+              await p.addInitScript(() => localStorage.setItem('popnwash-lang','fr'));
+              await p.goto('http://127.0.0.1:4173/', {waitUntil:'networkidle', timeout:45000});
+              const visual = await p.evaluate(() => ({
+                bodyBg:getComputedStyle(document.body).backgroundColor,
+                bodyColor:getComputedStyle(document.body).color,
+                headerBg:getComputedStyle(document.querySelector('.site-header')).backgroundColor,
+                logoBg:getComputedStyle(document.querySelector('.brand-logo-wrap')).backgroundColor,
+                titleColor:getComputedStyle(document.querySelector('.brand-title')).color
+              }));
+              if(visual.bodyBg!=='rgb(247, 240, 223)') failures.push(engineName+' '+scheme+': body bg '+visual.bodyBg);
+              if(visual.bodyColor!=='rgb(22, 28, 27)') failures.push(engineName+' '+scheme+': body text '+visual.bodyColor);
+              if(visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' '+scheme+': header bg '+visual.headerBg);
+              if(visual.logoBg!=='rgb(255, 230, 188)') failures.push(engineName+' '+scheme+': logo bg '+visual.logoBg);
+              if(visual.titleColor!=='rgb(22, 28, 27)') failures.push(engineName+' '+scheme+': brand title '+visual.titleColor);
+              await p.close();
+            }
+            await b.close();
+          }
+
           if(failures.length){
             console.error('QA FAIL\n'+failures.join('\n'));
             process.exit(1);
