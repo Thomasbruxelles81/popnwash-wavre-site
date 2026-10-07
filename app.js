@@ -191,7 +191,7 @@ function applyTheme(mode,persist=true){
   if(themeSlider)themeSlider.value=themeMode==='light'?'0':themeMode==='auto'?'1':'2';
   if(themeControl)themeControl.dataset.mode=themeMode;
   const meta=document.querySelector('meta[name="theme-color"]');
-  if(meta)meta.setAttribute('content',effective==='dark'?'#0d1714':'#ffe6bc');
+  if(meta)meta.setAttribute('content','#ffe6bc');
   if(persist){
     try{localStorage.setItem('popnwash-theme',themeMode)}catch(e){}
   }
