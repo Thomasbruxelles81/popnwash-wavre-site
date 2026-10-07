@@ -558,6 +558,135 @@ html[data-theme="light"] .hero-wiline-card.invoice:hover{background:linear-gradi
   .hero-wiline-card:hover{transform:none!important;box-shadow:inherit!important}.hero-wiline-card:hover:before{transform:scaleX(0)}
 }
 
+
+/* 2026-10-07 nature identity + complete interaction feedback */
+:where(a[href],button,summary,.theme-slider){
+  -webkit-tap-highlight-color:transparent;
+}
+@media(hover:hover){
+  :where(a[href],button,summary,.theme-slider){
+    transition:color .22s ease,background-color .22s ease,border-color .22s ease,box-shadow .24s ease,transform .24s cubic-bezier(.2,.8,.2,1),opacity .22s ease,filter .22s ease;
+  }
+}
+:where(a[href],button,summary,.theme-slider):focus-visible{
+  outline:3px solid rgba(68,182,64,.45)!important;
+  outline-offset:3px!important;
+}
+
+/* Nature is part of the identity, but stays restrained. */
+.brand-lockup{position:relative!important}
+.brand-lockup:before,.brand-lockup:after{
+  content:"";position:absolute;z-index:4;width:11px;height:7px;border-radius:100% 0 100% 0;
+  pointer-events:none;opacity:.92
+}
+.brand-lockup:before{left:49px;top:1px;background:#2f9e3c;transform:rotate(-28deg)}
+.brand-lockup:after{left:58px;top:0;background:#65c85c;transform:scaleX(-1) rotate(-24deg)}
+.section-kicker:after,.eyebrow:after{
+  content:""!important;display:inline-block!important;width:19px!important;height:12px!important;margin-left:5px!important;
+  background:
+    radial-gradient(ellipse at center,#44b640 0 58%,transparent 62%) 0 6px/10px 6px no-repeat,
+    radial-gradient(ellipse at center,#6bcb61 0 58%,transparent 62%) 9px 1px/10px 6px no-repeat!important;
+  transform:rotate(-8deg)!important;box-shadow:none!important;opacity:.86!important;border-radius:0!important
+}
+.section-heading h2:after,.connected-copy h2:after,.parking-hero h2:after{
+  content:"";display:inline-block;width:18px;height:12px;margin-left:10px;vertical-align:.15em;
+  background:
+    radial-gradient(ellipse at center,var(--green) 0 58%,transparent 62%) 0 6px/10px 6px no-repeat,
+    radial-gradient(ellipse at center,color-mix(in srgb,var(--green) 72%,#b7df86) 0 58%,transparent 62%) 8px 0/10px 6px no-repeat;
+  opacity:.72;transform:rotate(-8deg)
+}
+.faq-group>h3:after{content:"";display:inline-block;width:9px;height:6px;margin-left:7px;border-radius:100% 0 100% 0;background:var(--green);transform:rotate(-28deg);opacity:.72}
+.service-pill{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--green) 11%,transparent)}
+.hero-trust span:first-child,.why-pills span:nth-child(2n){box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--green) 18%,transparent)}
+
+/* Brand/navigation: obvious but polished feedback. */
+@media(hover:hover){
+  .brand-lockup:hover{transform:translateY(-2px)}
+  .brand-lockup:hover .brand-logo-wrap{transform:rotate(-2deg) scale(1.04)}
+  .brand-lockup:hover .brand-title{color:#1c7d32!important}
+  .brand-logo-wrap{transition:transform .25s cubic-bezier(.2,.8,.2,1)!important}
+  html[data-theme="light"] .desktop-nav a:hover{background:#edf8e7!important;color:#176f2c!important;box-shadow:inset 0 -2px #44b640,0 5px 14px rgba(44,112,49,.08)}
+  html[data-theme="dark"] .desktop-nav a:hover{background:#dff2d8!important;color:#145d28!important;box-shadow:inset 0 -3px #2f9e3c,0 5px 16px rgba(22,84,37,.16)}
+  .lang-button:hover{transform:translateY(-2px);border-color:rgba(68,182,64,.35)!important;box-shadow:0 9px 22px rgba(29,88,37,.12)}
+  .theme-control:hover .theme-slider-shell{border-color:rgba(68,182,64,.38);box-shadow:0 9px 22px rgba(29,88,37,.12);transform:translateY(-2px)}
+  .theme-slider-shell{transition:transform .24s cubic-bezier(.2,.8,.2,1),border-color .22s ease,box-shadow .24s ease!important}
+  .menu-button:hover{background:#edf8e7!important;transform:translateY(-2px)}
+  .lang-menu button:hover{background:#eaf7df!important;color:#176f2c!important;transform:translateX(3px)}
+  .mobile-menu a:hover{background:#eaf7df!important;color:#176f2c!important;transform:translateX(4px)}
+}
+
+/* Generic button/link feedback remains readable in each theme. */
+@media(hover:hover){
+  html[data-theme="light"] .btn:hover{
+    transform:translateY(-4px)!important;box-shadow:0 14px 28px rgba(31,72,36,.14)!important;filter:saturate(1.04)
+  }
+  html[data-theme="dark"] .btn:hover{
+    transform:translateY(-4px)!important;box-shadow:0 0 0 2px rgba(114,214,109,.22),0 16px 32px rgba(0,0,0,.3)!important;filter:brightness(1.08)
+  }
+  html[data-theme="light"] :is(.faq-link,.text-link,.contact-mail,.footer a):hover{
+    color:#197d31!important;text-decoration-color:#44b640!important;text-decoration-thickness:2px!important;text-underline-offset:4px;transform:translateX(3px)
+  }
+  html[data-theme="dark"] :is(.faq-link,.text-link,.contact-mail,.footer a):hover{
+    color:#86e081!important;text-decoration-color:#72d66d!important;text-decoration-thickness:2px!important;text-underline-offset:4px;transform:translateX(3px);text-shadow:0 0 16px rgba(114,214,109,.18)
+  }
+  html[data-theme="light"] .visit-help-link:hover{background:#eaf7df!important;color:#176f2c!important;box-shadow:0 7px 16px rgba(37,111,43,.12)}
+  html[data-theme="dark"] .visit-help-link:hover{background:#244432!important;color:#a0ee9b!important;box-shadow:0 0 0 1px rgba(114,214,109,.32),0 8px 18px rgba(0,0,0,.2)}
+}
+
+/* WiLine links inside the services section. */
+.connected-links a{position:relative;overflow:hidden}
+.connected-links a:before{content:"";position:absolute;left:10px;right:10px;top:0;height:2px;border-radius:0 0 99px 99px;background:linear-gradient(90deg,var(--green),var(--red));transform:scaleX(0);transform-origin:left;transition:transform .28s ease}
+@media(hover:hover){
+  .connected-links a:hover{transform:translateY(-3px)!important}
+  .connected-links a:hover:before{transform:scaleX(1)}
+  .connected-links a:hover b{transform:translate(3px,-3px)}
+  .connected-links a b{transition:transform .22s ease}
+  html[data-theme="light"] .connected-links a:hover{background:#e8f7e2!important;color:#176f2c!important;box-shadow:0 10px 24px rgba(35,95,39,.11)}
+  html[data-theme="dark"] .connected-links a:hover{background:#244532!important;color:#9be796!important;box-shadow:0 0 0 1px rgba(114,214,109,.3),0 12px 26px rgba(0,0,0,.24)}
+}
+
+/* Facebook / Instagram: unmistakable active hover. */
+.social-link{position:relative;overflow:hidden;isolation:isolate}
+.social-link:after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:99px 99px 0 0;transform:scaleX(0);transform-origin:left;transition:transform .25s ease;background:#fff;opacity:.9}
+@media(hover:hover){
+  .social-link:hover{transform:translateY(-4px) scale(1.02);color:#fff!important}
+  .social-link:hover:after{transform:scaleX(1)}
+  .social-link:hover svg{transform:scale(1.12) rotate(-4deg)}
+  .social-link svg{transition:transform .24s cubic-bezier(.2,.8,.2,1)}
+  html[data-theme="light"] .social-link.facebook:hover{background:#1877f2!important;border-color:#75aef7!important;box-shadow:0 13px 27px rgba(24,119,242,.30)!important}
+  html[data-theme="light"] .social-link.instagram:hover{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)!important;border-color:#ff9c72!important;box-shadow:0 13px 27px rgba(206,43,112,.28)!important}
+  html[data-theme="dark"] .social-link.facebook:hover{background:#1f78df!important;border-color:rgba(255,255,255,.52)!important;box-shadow:0 0 0 2px rgba(255,255,255,.09),0 15px 30px rgba(24,119,242,.38)!important}
+  html[data-theme="dark"] .social-link.instagram:hover{background:linear-gradient(135deg,#9c45c7,#ed3152,#ef9d3e)!important;border-color:rgba(255,255,255,.52)!important;box-shadow:0 0 0 2px rgba(255,255,255,.09),0 15px 30px rgba(206,43,112,.36)!important}
+}
+
+/* Secondary controls and mobile actions. */
+@media(hover:hover){
+  .review-nav:hover{transform:translateY(-3px) scale(1.06);background:var(--green)!important;color:#fff!important;box-shadow:0 10px 24px rgba(44,140,55,.2)}
+  .modal-close:hover{transform:rotate(90deg) scale(1.04);background:var(--softred)!important;color:var(--red2)!important}
+  html[data-theme="dark"] .review-nav:hover{background:#65cf61!important;color:#102018!important;box-shadow:0 0 0 2px rgba(114,214,109,.24),0 12px 26px rgba(0,0,0,.28)}
+  html[data-theme="dark"] .modal-close:hover{background:#45212b!important;color:#ff8295!important}
+  .mobile-actionbar a:hover{transform:translateY(-3px);background:var(--softgreen)!important;color:var(--green2)!important}
+  html[data-theme="dark"] .mobile-actionbar a:hover{background:#244532!important;color:#9be796!important}
+  .back-to-top-float:hover span{transform:translateY(-4px)}
+  .back-to-top-float span{transition:transform .22s ease}
+}
+
+/* Clickable cards get a theme-aware halo in addition to their local animations. */
+@media(hover:hover){
+  html[data-theme="light"] :is(.hero-wiline-card,.parking-card,.hero-route-cta):hover{outline:1px solid rgba(68,182,64,.18);outline-offset:2px}
+  html[data-theme="dark"] :is(.hero-wiline-card,.parking-card,.hero-route-cta):hover{outline:2px solid rgba(114,214,109,.2);outline-offset:2px}
+}
+
+@media(max-width:600px){
+  .brand-lockup:before{left:33px;top:0}.brand-lockup:after{left:39px;top:0;width:9px;height:6px}
+}
+@media(hover:none){
+  .brand-lockup:before,.brand-lockup:after{opacity:.78}
+}
+@media(prefers-reduced-motion:reduce){
+  :where(a[href],button,summary,.theme-slider),.social-link svg,.theme-slider-shell,.brand-logo-wrap{transition:none!important}
+}
+
 </style>
 </head>
 <body>
