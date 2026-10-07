@@ -632,23 +632,23 @@ img[loading="lazy"]{content-visibility:auto}
           </div>
           <label><span data-i18n="subjectLabel">Sujet *</span>
             <select id="contactSubject" name="sujet" required>
-              <option value="">Choisir un sujet</option>
-              <option>Demande d'information</option>
-              <option value="Professionnel / tarifs">Professionnel / tarifs</option>
-              <option>Facture</option>
-              <option>Carte fidélité</option>
-              <option>Problème rencontré à la laverie</option>
-              <option value="Suggestion / idée d'amélioration">Suggestion / idée d'amélioration</option>
-              <option>Autre</option>
+              <option value="" data-i18n="subjectChoose">Choisir un sujet</option>
+              <option data-i18n="subjectInfo">Demande d'information</option>
+              <option value="Professionnel / tarifs" data-i18n="subjectPro">Professionnel / tarifs</option>
+              <option data-i18n="subjectInvoice">Facture</option>
+              <option data-i18n="subjectLoyalty">Carte fidélité</option>
+              <option data-i18n="subjectProblem">Problème rencontré à la laverie</option>
+              <option value="Suggestion / idée d'amélioration" data-i18n="subjectSuggestion">Suggestion / idée d'amélioration</option>
+              <option data-i18n="subjectOther">Autre</option>
             </select>
           </label>
-          <label><span data-i18n="messageLabel">Votre message *</span><textarea name="message" rows="6" required placeholder="Expliquez-nous votre demande, votre idée ou ce que vous aimeriez améliorer..."></textarea></label>
+          <label><span data-i18n="messageLabel">Votre message *</span><textarea name="message" rows="6" required data-i18n-placeholder="messagePlaceholder" placeholder="Expliquez-nous votre demande, votre idée ou ce que vous aimeriez améliorer..."></textarea></label>
           <input class="form-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="idea-note">
             <strong data-i18n="ideaTitle">Une idée pour améliorer POP'n WASH ? Dites-nous tout.</strong>
             <span data-i18n="ideaText">Machines, nouveaux produits, confort, coworking, paiement, fidélité, colis, horaires, propreté, services pros, accessibilité… ou une idée complètement nouvelle : vos souhaits nous intéressent. Vous pouvez aussi utiliser la boîte à idées présente dans la laverie.</span>
           </div>
-          <div class="idea-topics" aria-label="Exemples de suggestions"><span>Machines</span><span>Produits</span><span>Confort</span><span>Paiement</span><span>Horaires</span><span>Services</span><span>Professionnels</span><span>Autre idée</span></div>
+          <div class="idea-topics" aria-label="Exemples de suggestions"><span data-i18n="ideaMachines">Machines</span><span data-i18n="ideaProducts">Produits</span><span data-i18n="ideaComfort">Confort</span><span data-i18n="ideaPayment">Paiement</span><span data-i18n="ideaHours">Horaires</span><span data-i18n="ideaServices">Services</span><span data-i18n="ideaPros">Professionnels</span><span data-i18n="ideaOther">Autre idée</span></div>
           <p class="form-privacy" data-i18n="privacyText">Vos coordonnées sont utilisées uniquement pour répondre à votre demande.</p>
           <button class="btn btn-primary form-submit" type="submit"><span data-i18n="sendMessage">Envoyer mon message</span><b>↗</b></button>
           <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
