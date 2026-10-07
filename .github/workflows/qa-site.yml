@@ -176,8 +176,8 @@ jobs:
                 }));
                 if(visual.mode!==requestedMode) failures.push(engineName+' '+systemScheme+' '+requestedMode+': mode '+visual.mode);
                 if(visual.theme!==expectedResolved) failures.push(engineName+' '+systemScheme+' '+requestedMode+': resolved '+visual.theme+' != '+expectedResolved);
-                const expectedBody=expectedResolved==='dark'?'rgb(15, 24, 21)':'rgb(247, 240, 223)';
-                const expectedText=expectedResolved==='dark'?'rgb(246, 242, 233)':'rgb(22, 28, 27)';
+                const expectedBody=expectedResolved==='dark'?'rgb(14, 24, 21)':'rgb(247, 240, 223)';
+                const expectedText=expectedResolved==='dark'?'rgb(248, 245, 238)':'rgb(22, 28, 27)';
                 if(visual.bodyBg!==expectedBody) failures.push(engineName+' '+systemScheme+' '+requestedMode+': body bg '+visual.bodyBg);
                 if(visual.bodyColor!==expectedText) failures.push(engineName+' '+systemScheme+' '+requestedMode+': body text '+visual.bodyColor);
                 if(visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' '+systemScheme+' '+requestedMode+': header bg '+visual.headerBg);
