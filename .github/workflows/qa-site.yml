@@ -88,7 +88,7 @@ jobs:
               pet14: await page.getByText('14 kg · 7,00 €', {exact:true}).count(),
             };
             for(const [k,v] of Object.entries(checks)) if(!v) failures.push(`${name}: missing ${k}`);
-            const pageText = await page.locator('body').innerText();
+            const pageText = await page.locator('body').textContent();
             for (const product of ['Lessive Éco','Lessive Peaux sensibles','Lessive Premium','Assouplissant parfumé','Assouplissant peaux sensibles','Désinfectant','Détachant oxygéné']) {
               if(!pageText.includes(product)) failures.push(`${name}: missing product ${product}`);
             }
