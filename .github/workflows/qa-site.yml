@@ -105,12 +105,54 @@ jobs:
             await page.screenshot({path:`qa-screenshots/${name}.png`, fullPage:true});
             await page.close();
           }
+          // Full language audit: every language, current hero, FAQ, form and links.
+          {
+            const page = await browser.newPage({viewport:{width:1366,height:900}});
+            const consoleErrors=[];
+            page.on('pageerror', e => consoleErrors.push('pageerror: '+e.message));
+            page.on('console', m => { if(m.type()==='error') consoleErrors.push('console: '+m.text()); });
+            await page.goto('http://127.0.0.1:4173/', {waitUntil:'networkidle', timeout:45000});
+            const languages=['fr','nl','en','de','it','es','pt','ro','pl','uk','ru'];
+            const expectedCodes={fr:'FR',nl:'NL',en:'EN',de:'DE',it:'IT',es:'ES',pt:'PT',ro:'RO',pl:'PL',uk:'UA',ru:'RU'};
+            const frenchHero="Plus de machines.";
+            const frenchFaq="Comment lancer un lave-linge ?";
+            const frenchPlaceholder="Expliquez-nous votre demande, votre idée ou ce que vous aimeriez améliorer...";
+            for(const lang of languages){
+              await page.locator('#langButton').click();
+              await page.locator('#langMenu button[data-lang="'+lang+'"]').click();
+              await page.waitForTimeout(80);
+              const code=(await page.locator('#langCode').textContent())?.trim();
+              if(code!==expectedCodes[lang]) failures.push('lang '+lang+': code '+code+' != '+expectedCodes[lang]);
+              const hero=(await page.locator('h1').innerText()).trim();
+              const faqQ=(await page.locator('[data-faq="washer"] summary span').innerText()).trim();
+              const placeholder=await page.locator('[data-i18n-placeholder="messagePlaceholder"]').getAttribute('placeholder');
+              const faqCount=await page.locator('[data-faq]').count();
+              if(faqCount!==22) failures.push('lang '+lang+': expected 22 FAQ items, got '+faqCount);
+              if(lang!=='fr' && hero.includes(frenchHero)) failures.push('lang '+lang+': hero stayed French');
+              if(lang!=='fr' && faqQ===frenchFaq) failures.push('lang '+lang+': FAQ stayed French');
+              if(lang!=='fr' && placeholder===frenchPlaceholder) failures.push('lang '+lang+': form placeholder stayed French');
+              const subjectText=(await page.locator('#contactSubject option').first().textContent())?.trim();
+              if(lang!=='fr' && subjectText==='Choisir un sujet') failures.push('lang '+lang+': subject option stayed French');
+              const badFaqLinks=await page.locator('[data-faq] a').evaluateAll(as=>as.filter(a=>{
+                const h=a.getAttribute('href')||'';
+                return !(h==='#contact'||h.startsWith('https://status.wi-line.fr/')||h.startsWith('https://www.google.com/maps/'));
+              }).map(a=>a.getAttribute('href')));
+              if(badFaqLinks.length) failures.push('lang '+lang+': bad FAQ links '+badFaqLinks.join(','));
+              const internal=await page.locator('a[href^="#"]').evaluateAll(as=>[...new Set(as.map(a=>a.getAttribute('href')).filter(Boolean))]);
+              for(const href of internal){
+                if(href!=='#' && !(await page.locator(href).count())) failures.push('lang '+lang+': broken anchor '+href);
+              }
+            }
+            if(consoleErrors.length) failures.push('language audit JS errors: '+consoleErrors.join(' | '));
+            await page.close();
+          }
+
           await browser.close();
           if(failures.length){
             console.error('QA FAIL\n'+failures.join('\n'));
             process.exit(1);
           }
-          console.log('QA PASS: 7 viewports, portrait + landscape, images, anchors, products, social links, WiLine and Romanian language verified.');
+          console.log('QA PASS: 7 viewports + all 11 languages verified, including FAQ, form, anchors, WiLine and translated links.');
           EOF
           node qa.mjs
 
