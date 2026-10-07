@@ -149,6 +149,9 @@ const themeLabels={
   uk:{label:"Тема",light:"Світла",dark:"Темна"},
   ru:{label:"Тема",light:"Светлая",dark:"Тёмная"}
 };
+const languageLabels={
+  fr:"Langue",nl:"Taal",en:"Language",de:"Sprache",it:"Lingua",es:"Idioma",pt:"Idioma",ro:"Limbă",pl:"Język",uk:"Мова",ru:"Язык"
+};
 const themeModes=['light','dark'];
 const themeSlider=document.getElementById('themeSlider');
 const themeControl=document.getElementById('themeControl');
@@ -164,6 +167,12 @@ function syncThemeA11y(){
   const text=`${l.label} : ${modeLabel}`;
   themeSlider.setAttribute('aria-label',text);
   themeSlider.setAttribute('aria-valuetext',modeLabel);
+  themeSlider.setAttribute('title',text);
+  themeControl.setAttribute('data-theme-label',text);
+  const lightText=document.getElementById('themeLightText');
+  const darkText=document.getElementById('themeDarkText');
+  if(lightText)lightText.textContent=l.light;
+  if(darkText)darkText.textContent=l.dark;
 }
 function applyTheme(mode,persist=true){
   themeMode=themeModes.includes(mode)?mode:(systemTheme.matches?'dark':'light');
@@ -199,7 +208,24 @@ function applyLang(lang){
   const topFloat=document.getElementById('backToTopFloat');
   if(topFloat){const topLabel=(t.backTop||translations.fr.backTop||'Retour en haut').replace(/↑/g,'').trim();topFloat.setAttribute('aria-label',topLabel);topFloat.setAttribute('title',topLabel)}
   syncThemeA11y();
-  const [flag,code]=langMeta[currentLang];document.getElementById('langFlag').textContent=flag;document.getElementById('langCode').textContent=code;
+  const [flag,code]=langMeta[currentLang];
+  document.getElementById('langFlag').textContent=flag;
+  document.getElementById('langCode').textContent=code;
+  const langMenuEl=document.getElementById('langMenu');
+  const langButtonEl=document.getElementById('langButton');
+  const activeLanguageButton=langMenuEl?.querySelector('button[data-lang="'+currentLang+'"]');
+  const activeLanguageName=activeLanguageButton?.querySelector('span')?.textContent?.trim()||code;
+  const languageLabel=languageLabels[currentLang]||languageLabels.fr;
+  if(langButtonEl){
+    langButtonEl.setAttribute('aria-label',languageLabel+' : '+activeLanguageName);
+    langButtonEl.setAttribute('title',languageLabel+' : '+activeLanguageName);
+  }
+  langMenuEl?.querySelectorAll('button[data-lang]').forEach(btn=>{
+    const active=btn.dataset.lang===currentLang;
+    btn.setAttribute('aria-current',active?'true':'false');
+    btn.setAttribute('role','menuitemradio');
+    btn.setAttribute('aria-checked',active?'true':'false');
+  });
   try{localStorage.setItem('popnwash-lang',currentLang)}catch(e){}
 }
 let saved=null;try{saved=localStorage.getItem('popnwash-lang')}catch(e){}
@@ -209,6 +235,15 @@ applyLang(saved|| (translations[browser]?browser:'fr'));
 const langButton=document.getElementById('langButton'),langMenu=document.getElementById('langMenu');
 langButton.addEventListener('click',()=>{const open=langButton.getAttribute('aria-expanded')==='true';langButton.setAttribute('aria-expanded',String(!open));langMenu.hidden=open});
 langMenu.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{applyLang(btn.dataset.lang);langMenu.hidden=true;langButton.setAttribute('aria-expanded','false')}));
+langButton.addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();langButton.setAttribute('aria-expanded','true');langMenu.hidden=false;langMenu.querySelector('button[aria-current="true"]')?.focus()}});
+langMenu.addEventListener('keydown',e=>{
+  const items=[...langMenu.querySelectorAll('button[data-lang]')];
+  const i=items.indexOf(document.activeElement);
+  if(e.key==='Escape'){e.preventDefault();langMenu.hidden=true;langButton.setAttribute('aria-expanded','false');langButton.focus();return}
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+    e.preventDefault();const d=e.key==='ArrowDown'?1:-1;items[(i+d+items.length)%items.length]?.focus();
+  }
+});
 document.addEventListener('click',e=>{if(!e.target.closest('.lang-picker')){langMenu.hidden=true;langButton.setAttribute('aria-expanded','false')}});
 
 const menuButton=document.getElementById('menuButton'),mobileMenu=document.getElementById('mobileMenu');
