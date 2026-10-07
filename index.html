@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#f8f0df" />
+  <meta name="theme-color" content="#ffe6bc" />
+  <meta name="color-scheme" content="light" />
   <meta name="description" content="POP'n WASH Wavre — 19 lave-linge de 7 à 20 kg, 16 séchoirs professionnels, machines animaux dédiées, calandre grande largeur, produits sur place, coworking et services connectés." />
   <meta property="og:title" content="POP'n WASH Wavre" />
   <meta property="og:description" content="Plus de machines, moins d’attente : 19 lave-linge, 16 séchoirs pro et des services pratiques au cœur de Wavre." />
@@ -209,6 +210,52 @@ img[loading="lazy"]{content-visibility:auto}
 @media(max-width:900px){.brand-lockup{min-width:176px;height:54px;gap:8px}.brand-logo-wrap,.brand-logo-wrap img{width:52px;height:52px;flex-basis:52px}.brand-label strong{font-size:17px}.brand-label small{font-size:10px}}
 @media(max-width:480px){.brand-lockup{min-width:158px;gap:7px}.brand-logo-wrap,.brand-logo-wrap img{width:48px;height:48px;flex-basis:48px}.brand-label strong{font-size:15.5px}.brand-label small{font-size:9.5px}}
 
+
+/* October 2026 cross-browser light theme + unified hover language */
+:root{color-scheme:light;--header-bg:#ffe6bc}
+html{background:#f7f0df;color-scheme:light}
+body{background:#f7f0df;color:#161c1b}
+.site-header{background:#ffe6bc!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-color:rgba(22,28,27,.07)!important}
+.brand-lockup{min-width:340px;gap:12px;background:#ffe6bc!important}
+.brand-logo-wrap{width:58px;height:58px;flex:0 0 58px;background:#ffe6bc!important}
+.brand-logo-wrap img{width:58px;height:58px;object-fit:contain;background:#ffe6bc!important}
+.brand-label{display:flex;align-items:center;min-width:260px;height:58px;overflow:visible;white-space:nowrap}
+.brand-label .brand-title{display:block;font-size:22px;line-height:1;font-weight:950;letter-spacing:.015em;color:#161c1b;white-space:nowrap}
+input,select,textarea,button{color-scheme:light}
+@media(prefers-color-scheme:dark){
+  :root{--cream:#f7f0df;--cream2:#fffaf0;--ink:#161c1b;--muted:#64706a;--red:#ff3656;--red2:#ee2448;--green:#44b640;--green2:#19a039;--softgreen:#eaf7df;--softred:#ffe8e7;--line:rgba(22,28,27,.1);--card:#fffdf8;--header-bg:#ffe6bc;color-scheme:light}
+  html,body{background:#f7f0df!important;color:#161c1b!important}
+  .site-header{background:#ffe6bc!important}
+  .brand-lockup,.brand-logo-wrap,.brand-logo-wrap img{background:#ffe6bc!important}
+}
+.faq-item{position:relative;isolation:isolate;transition:transform .24s cubic-bezier(.2,.8,.2,1),box-shadow .24s ease,border-color .24s ease,background .24s ease}
+.faq-item:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--red),var(--green));transform:scaleY(0);transform-origin:center;transition:transform .24s ease;z-index:2}
+.faq-item summary{transition:background .24s ease,color .24s ease}
+.faq-item:hover{transform:translateY(-3px);border-color:rgba(225,33,59,.18);background:linear-gradient(110deg,#fff8f6 0%,#fffdf8 55%,#f1faed 100%);box-shadow:0 12px 26px rgba(22,28,27,.08)}
+.faq-item:hover:before,.faq-item[open]:before{transform:scaleY(1)}
+.faq-item:hover summary{background:rgba(255,255,255,.32)}
+.faq-item:hover summary b{transform:rotate(90deg) scale(1.06);background:var(--softred);color:var(--red2)}
+.faq-item[open]{border-color:rgba(225,33,59,.2);box-shadow:0 12px 28px rgba(22,28,27,.075)}
+.faq-item[open] summary b{transform:rotate(45deg) scale(1.04)}
+.pro-card,.service-feature,.loyalty-card,.products-card,.parcel-service,.payment-easy,.faq-firstvisit-grid>div,.first-visit-tips span{transition:transform .24s cubic-bezier(.2,.8,.2,1),box-shadow .24s ease,border-color .24s ease,filter .24s ease}
+.pro-card:hover,.service-feature:hover,.loyalty-card:hover,.products-card:hover,.parcel-service:hover,.payment-easy:hover{transform:translateY(-4px);box-shadow:0 18px 36px rgba(22,28,27,.09)}
+.faq-firstvisit-grid>div:hover,.first-visit-tips span:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.16);filter:brightness(1.06)}
+@media(hover:none){
+  .faq-item:hover,.pro-card:hover,.service-feature:hover,.loyalty-card:hover,.products-card:hover,.parcel-service:hover,.payment-easy:hover,.faq-firstvisit-grid>div:hover,.first-visit-tips span:hover{transform:none;box-shadow:initial;filter:none}
+  .faq-item:hover:before{transform:scaleY(0)}.faq-item[open]:before{transform:scaleY(1)}
+  .faq-item:hover summary b{transform:none;background:var(--softgreen);color:var(--green2)}
+  .faq-item[open] summary b{transform:rotate(45deg) scale(1.04);background:var(--softred);color:var(--red2)}
+}
+@media(max-width:1050px) and (min-width:901px){
+  .brand-lockup{min-width:280px;gap:9px}.brand-label{min-width:215px}.brand-label .brand-title{font-size:18px;letter-spacing:0}
+}
+@media(max-width:900px){
+  .brand-lockup{min-width:230px;gap:8px}.brand-label{min-width:168px;height:52px}.brand-label .brand-title{font-size:16px;letter-spacing:0}
+}
+@media(max-width:520px){
+  .brand-lockup{min-width:192px;gap:6px}.brand-logo-wrap,.brand-logo-wrap img{width:46px;height:46px;flex-basis:46px}.brand-label{min-width:138px;height:46px}.brand-label .brand-title{font-size:13.5px;letter-spacing:-.01em}
+}
+
 </style>
 </head>
 <body>
@@ -219,8 +266,7 @@ img[loading="lazy"]{content-visibility:auto}
         <img src="assets/logo-popnwash.webp" width="1024" height="1024" alt="" />
       </span>
       <span class="brand-label">
-        <strong>POP’n WASH</strong>
-        <small>Wavre</small>
+        <strong class="brand-title">POP’n WASH WAVRE</strong>
       </span>
     </a>
 
