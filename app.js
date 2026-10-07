@@ -142,6 +142,8 @@ function applyLang(lang){
   document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;const v=t[k]!==undefined?t[k]:translations.fr[k];if(v!==undefined)el.innerHTML=v});
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const k=el.dataset.i18nPlaceholder;const v=t[k]!==undefined?t[k]:translations.fr[k];if(v!==undefined)el.setAttribute('placeholder',v)});
   applyFaqLang(currentLang);
+  const topFloat=document.getElementById('backToTopFloat');
+  if(topFloat){const topLabel=(t.backTop||translations.fr.backTop||'Retour en haut').replace(/↑/g,'').trim();topFloat.setAttribute('aria-label',topLabel);topFloat.setAttribute('title',topLabel)}
   const [flag,code]=langMeta[currentLang];document.getElementById('langFlag').textContent=flag;document.getElementById('langCode').textContent=code;
   try{localStorage.setItem('popnwash-lang',currentLang)}catch(e){}
 }
@@ -164,15 +166,38 @@ document.querySelectorAll('.reveal').forEach(el=>{el.style.setProperty('--delay'
 let heroIndex=0;const heroPhotos=[...document.querySelectorAll('.hero-photo')];
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()=>{heroPhotos[heroIndex].classList.remove('active');heroIndex=(heroIndex+1)%heroPhotos.length;heroPhotos[heroIndex].classList.add('active')},5500);
 
-let reviewIndex=0;const card=document.getElementById('reviewCard'),reviewText=document.getElementById('reviewText'),reviewName=document.getElementById('reviewName'),reviewInitial=document.getElementById('reviewInitial'),dots=document.getElementById('reviewDots');
+let reviewIndex=0,reviewTransitioning=false;const card=document.getElementById('reviewCard'),reviewText=document.getElementById('reviewText'),reviewName=document.getElementById('reviewName'),reviewInitial=document.getElementById('reviewInitial'),dots=document.getElementById('reviewDots');
 reviews.forEach((_,i)=>{const b=document.createElement('button');b.setAttribute('aria-label',`Avis ${i+1}`);b.setAttribute('type','button');b.addEventListener('click',()=>showReview(i));dots.appendChild(b)});
-function showReview(i){reviewIndex=(i+reviews.length)%reviews.length;card.animate([{opacity:.35,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:280,easing:'ease-out'});const r=reviews[reviewIndex];reviewText.textContent=r.text;reviewName.textContent=r.name;reviewInitial.textContent=r.name.charAt(0);[...dots.children].forEach((d,j)=>d.classList.toggle('active',j===reviewIndex))}
-showReview(0);document.getElementById('reviewPrev').addEventListener('click',()=>showReview(reviewIndex-1));document.getElementById('reviewNext').addEventListener('click',()=>showReview(reviewIndex+1));
+function renderReview(i){reviewIndex=(i+reviews.length)%reviews.length;const r=reviews[reviewIndex];reviewText.textContent=r.text;reviewName.textContent=r.name;reviewInitial.textContent=r.name.charAt(0);[...dots.children].forEach((d,j)=>d.classList.toggle('active',j===reviewIndex))}
+async function showReview(i,animate=true){
+  const nextIndex=(i+reviews.length)%reviews.length;
+  if(!animate||matchMedia('(prefers-reduced-motion: reduce)').matches){renderReview(nextIndex);return}
+  if(reviewTransitioning)return;
+  reviewTransitioning=true;
+  try{
+    const fadeOut=card.animate([{opacity:1,transform:'translateY(0)'},{opacity:.12,transform:'translateY(5px)'}],{duration:300,easing:'ease-in',fill:'forwards'});
+    await fadeOut.finished;
+    fadeOut.cancel();
+    renderReview(nextIndex);
+    const fadeIn=card.animate([{opacity:.12,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:520,easing:'cubic-bezier(.2,.8,.2,1)'});
+    await fadeIn.finished;
+  }catch(e){}finally{reviewTransitioning=false}
+}
+showReview(0,false);document.getElementById('reviewPrev').addEventListener('click',()=>showReview(reviewIndex-1));document.getElementById('reviewNext').addEventListener('click',()=>showReview(reviewIndex+1));
 let touchX=null;document.getElementById('reviewStage').addEventListener('pointerdown',e=>touchX=e.clientX);document.getElementById('reviewStage').addEventListener('pointerup',e=>{if(touchX===null)return;const dx=e.clientX-touchX;if(Math.abs(dx)>45)showReview(reviewIndex+(dx<0?1:-1));touchX=null});
-if(!matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()=>showReview(reviewIndex+1),2000);
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()=>showReview(reviewIndex+1),3000);
 
 const loyalty=document.getElementById('loyaltyModal');document.getElementById('loyaltyOpen').addEventListener('click',()=>loyalty.showModal());document.getElementById('loyaltyClose').addEventListener('click',()=>loyalty.close());loyalty.addEventListener('click',e=>{if(e.target===loyalty)loyalty.close()});
 document.getElementById('year').textContent=new Date().getFullYear();
+
+const backToTopFloat=document.getElementById('backToTopFloat');
+function syncBackToTop(){
+  if(!backToTopFloat)return;
+  backToTopFloat.classList.toggle('is-visible',window.scrollY>Math.max(420,window.innerHeight*.82));
+}
+window.addEventListener('scroll',syncBackToTop,{passive:true});
+window.addEventListener('resize',syncBackToTop,{passive:true});
+syncBackToTop();
 
 const formMessages={
 fr:{sending:"Envoi en cours…",success:"Merci{name} ! Votre message est bien parti. Nous revenons vers vous rapidement. À bientôt chez POP'n WASH Wavre ✨",error:"L’envoi automatique n’a pas abouti. Vous pouvez nous écrire directement à"},
