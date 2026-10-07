@@ -56,12 +56,28 @@ const reviews=[
 {name:'Jessica B.',text:"Lavoir au top ! Le propriétaire des lieux est disponible et très sympathique. Je le remercie d’avoir pu m’aider à plusieurs reprises. Je recommande cet endroit 😊"}
 ];
 
+const faqOriginal={};
+document.querySelectorAll('[data-faq]').forEach(el=>{
+  faqOriginal[el.dataset.faq]={q:el.querySelector('summary span').innerHTML,a:el.querySelector('.faq-answer').innerHTML};
+});
+const faqTranslations={};
+function applyFaqLang(lang){
+  const set=lang==='fr'?faqOriginal:(faqTranslations[lang]||faqOriginal);
+  document.querySelectorAll('[data-faq]').forEach(el=>{
+    const item=set[el.dataset.faq]||faqOriginal[el.dataset.faq];
+    if(!item)return;
+    el.querySelector('summary span').innerHTML=item.q;
+    el.querySelector('.faq-answer').innerHTML=item.a;
+  });
+}
 let currentLang='fr';
 function applyLang(lang){
   currentLang=translations[lang]?lang:'fr';
   const t=translations[currentLang];
   document.documentElement.lang=currentLang;
   document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;const v=t[k]!==undefined?t[k]:translations.fr[k];if(v!==undefined)el.innerHTML=v});
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const k=el.dataset.i18nPlaceholder;const v=t[k]!==undefined?t[k]:translations.fr[k];if(v!==undefined)el.setAttribute('placeholder',v)});
+  applyFaqLang(currentLang);
   const [flag,code]=langMeta[currentLang];document.getElementById('langFlag').textContent=flag;document.getElementById('langCode').textContent=code;
   try{localStorage.setItem('popnwash-lang',currentLang)}catch(e){}
 }
