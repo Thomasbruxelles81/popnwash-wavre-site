@@ -79,6 +79,19 @@ jobs:
               return imgs.filter(i => !i.complete || i.naturalWidth===0).map(i => i.getAttribute('src'));
             });
             if(localBroken.length) failures.push(`${name}: broken images ${localBroken.join(', ')}`);
+            // A cover image is only acceptable when its rendered ratio matches its natural ratio closely.
+            // This catches visually cropped photos even when there is no CSS overflow.
+            const cropRisks=await page.locator('img').evaluateAll(imgs=>imgs.flatMap(img=>{
+              if(!img.complete||!img.naturalWidth||!img.naturalHeight)return [];
+              const cs=getComputedStyle(img),r=img.getBoundingClientRect();
+              if(r.width<2||r.height<2||cs.display==='none'||cs.visibility==='hidden')return [];
+              if(cs.objectFit!=='cover')return [];
+              const natural=img.naturalWidth/img.naturalHeight;
+              const rendered=r.width/r.height;
+              const mismatch=Math.abs(natural-rendered)/natural;
+              return mismatch>.045?[((img.getAttribute('src')||'image')+' natural='+natural.toFixed(3)+' rendered='+rendered.toFixed(3))]:[];
+            }));
+            if(cropRisks.length) failures.push(`${name}: image crop risk ${cropRisks.join(' | ')}`);
             const checks = {
               h1: await page.locator('h1').count(),
               lang: await page.locator('#langButton').count(),
@@ -428,7 +441,7 @@ jobs:
             console.error('QA FAIL\n'+failures.join('\n'));
             process.exit(1);
           }
-          console.log('QA PASS: 12 viewports + light/dark responsive passes + all 11 languages verified, including FAQ, form, anchors, WiLine and translated links.');
+          console.log('QA PASS: 12 viewports + light/dark responsive passes + no-crop image checks + all 11 languages verified, including FAQ, form, anchors, WiLine and translated links.');
           EOF
           node qa.mjs
 
