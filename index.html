@@ -143,7 +143,7 @@ img[loading="lazy"]{content-visibility:auto}
 @media(max-width:1000px){.visit-card-grid{grid-template-columns:1fr 1fr}.first-visit-head{grid-template-columns:1fr}.first-visit-showcase{margin-top:14px}.desktop-nav{gap:2px}.desktop-nav a{padding:8px 9px;font-size:12px}}
 @media(max-width:700px){.visit-card-grid,.faq-firstvisit-grid{grid-template-columns:1fr}.first-visit-showcase{padding:18px 14px;border-radius:22px}.visit-card summary{min-height:72px}.faq-firstvisit-head{display:grid;gap:5px}.brand{width:58px;height:54px}.brand img{width:48px;height:48px}.desktop-nav{display:none}}
 @media(hover:none){.visit-card:hover{transform:none;background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.1);box-shadow:none}.visit-card:hover .visit-card-body{grid-template-rows:0fr;opacity:0}.visit-card[open] .visit-card-body{grid-template-rows:1fr;opacity:1}.visit-card[open]{transform:none;background:rgba(255,255,255,.085);border-color:rgba(255,255,255,.18)}}
-</style>
+.first-visit-tips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.first-visit-tips span{padding:9px 11px;border-radius:12px;background:rgba(255,255,255,.045);color:#bac6bf;font-size:9px;line-height:1.45}.first-visit-tips b{color:#fff}@media(max-width:800px){.first-visit-tips{grid-template-columns:1fr}}</style>
 </head>
 <body>
   <div class="page-noise" aria-hidden="true"></div>
@@ -292,6 +292,11 @@ img[loading="lazy"]{content-visibility:auto}
             </summary>
             <div class="visit-card-body"><div class="visit-card-inner" data-i18n="visitProductsBody"><ol><li>À la centrale : choisissez Produits.</li><li>Sélectionnez votre lessive, assouplissant ou autre produit.</li><li>Payez.</li></ol><strong class="visit-result">→ Récupérez votre produit au distributeur</strong></div></div>
           </details>
+        </div>
+        <div class="first-visit-tips" aria-label="Bon à savoir">
+          <span data-i18n="firstVisitTipInvoice"><b>Facture :</b> notez le code à 4 caractères affiché environ 5 secondes après le paiement.</span>
+          <span data-i18n="firstVisitTipWiLine"><b>WiLine :</b> vérifiez les machines disponibles et activez la cloche pour être averti en fin de cycle.</span>
+          <span data-i18n="firstVisitTipPets"><b>Linge des animaux :</b> utilisez uniquement les machines ANIMAUX / PETS.</span>
         </div>
         <p class="visit-help" data-i18n="firstVisitHelp">Un doute ? Ouvrez une carte ou consultez la FAQ plus bas : toutes les étapes y sont détaillées.</p>
       </div>
