@@ -177,7 +177,7 @@ jobs:
                 if(visual.mode!==requestedMode) failures.push(engineName+' '+systemScheme+' '+requestedMode+': mode '+visual.mode);
                 if(visual.theme!==expectedResolved) failures.push(engineName+' '+systemScheme+' '+requestedMode+': resolved '+visual.theme+' != '+expectedResolved);
                 const expectedBody=expectedResolved==='dark'?'rgb(14, 24, 21)':'rgb(247, 240, 223)';
-                const expectedText=expectedResolved==='dark'?'rgb(248, 245, 238)':'rgb(22, 28, 27)';
+                const expectedText=expectedResolved==='dark'?'rgb(250, 247, 240)':'rgb(22, 28, 27)';
                 if(visual.bodyBg!==expectedBody) failures.push(engineName+' '+systemScheme+' '+requestedMode+': body bg '+visual.bodyBg);
                 if(visual.bodyColor!==expectedText) failures.push(engineName+' '+systemScheme+' '+requestedMode+': body text '+visual.bodyColor);
                 if(visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' '+systemScheme+' '+requestedMode+': header bg '+visual.headerBg);
@@ -210,15 +210,15 @@ jobs:
               logoDisplay:getComputedStyle(document.querySelector('.brand-logo-wrap img')).display,
               logoOpacity:getComputedStyle(document.querySelector('.brand-logo-wrap img')).opacity
             }));
-            if(dark.wiTitle!=='rgb(248, 245, 238)') failures.push('dark readability: WiLine title '+dark.wiTitle);
-            if(dark.wiSmall!=='rgb(201, 212, 205)') failures.push('dark readability: WiLine secondary '+dark.wiSmall);
+            if(dark.wiTitle!=='rgb(255, 255, 255)') failures.push('dark readability: WiLine title '+dark.wiTitle);
+            if(dark.wiSmall!=='rgb(211, 221, 215)') failures.push('dark readability: WiLine secondary '+dark.wiSmall);
             if(dark.heroTrustBg==='rgb(255, 255, 255)') failures.push('dark readability: hero trust stayed white');
-            if(dark.heroTrustColor!=='rgb(248, 245, 238)') failures.push('dark readability: hero trust text '+dark.heroTrustColor);
-            if(dark.contactBg!=='rgb(17, 29, 25)') failures.push('dark readability: contact bg '+dark.contactBg);
-            if(dark.contactInfoBg!=='rgb(23, 36, 31)') failures.push('dark readability: contact info bg '+dark.contactInfoBg);
-            if(dark.contactH2!=='rgb(248, 245, 238)') failures.push('dark readability: contact h2 '+dark.contactH2);
-            if(dark.formBg!=='rgb(23, 36, 31)') failures.push('dark readability: form bg '+dark.formBg);
-            if(dark.inputBg!=='rgb(13, 23, 20)'||dark.inputColor!=='rgb(248, 245, 238)') failures.push('dark readability: input contrast '+JSON.stringify(dark));
+            if(dark.heroTrustColor!=='rgb(246, 244, 237)') failures.push('dark readability: hero trust text '+dark.heroTrustColor);
+            if(dark.contactBg!=='rgb(16, 29, 24)') failures.push('dark readability: contact bg '+dark.contactBg);
+            if(dark.contactInfoBg!=='rgb(24, 39, 32)') failures.push('dark readability: contact info bg '+dark.contactInfoBg);
+            if(dark.contactH2!=='rgb(255, 255, 255)') failures.push('dark readability: contact h2 '+dark.contactH2);
+            if(dark.formBg!=='rgb(24, 39, 32)') failures.push('dark readability: form bg '+dark.formBg);
+            if(dark.inputBg!=='rgb(13, 23, 20)'||dark.inputColor!=='rgb(255, 255, 255)') failures.push('dark readability: input contrast '+JSON.stringify(dark));
             if(dark.logoDisplay==='none'||dark.logoOpacity==='0') failures.push('header logo hidden');
             await b.close();
           }
