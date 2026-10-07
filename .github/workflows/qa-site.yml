@@ -34,11 +34,16 @@ jobs:
           import { chromium, firefox, webkit } from 'playwright';
           const browser = await chromium.launch({headless:true});
           const cases = [
+            ['phone-small-320',320,568],
             ['phone-portrait-360',360,800],
             ['phone-portrait-390',390,844],
+            ['phone-large-430',430,932],
             ['phone-landscape',844,390],
+            ['phone-landscape-large',915,412],
             ['tablet-portrait',768,1024],
+            ['tablet-portrait-large',820,1180],
             ['tablet-landscape',1024,768],
+            ['compact-laptop',1280,800],
             ['laptop',1366,768],
             ['desktop',1920,1080],
           ];
@@ -101,10 +106,32 @@ jobs:
             await page.locator('#langButton').click();
             const langs = await page.locator('#langMenu button[data-lang]').count();
             if(langs !== 11) failures.push(`${name}: expected 11 languages, got ${langs}`);
+            const menuBox=await page.locator('#langMenu').boundingBox();
+            if(menuBox && (menuBox.x < -1 || menuBox.y < -1 || menuBox.x+menuBox.width > width+1 || menuBox.y+menuBox.height > height+1)){
+              failures.push(`${name}: language menu clipped/outside viewport ${JSON.stringify(menuBox)}`);
+            }
             await page.locator('#langMenu button[data-lang="ro"]').click();
             if((await page.locator('#langCode').textContent()) !== 'RO') failures.push(`${name}: Romanian switch failed`);
             if(consoleErrors.length) failures.push(`${name}: JS/console errors: ${consoleErrors.join(' | ')}`);
-            await page.screenshot({path:`qa-screenshots/${name}.png`, fullPage:true});
+
+            // Dark-mode responsive pass on every viewport.
+            await page.locator('#themeSlider').evaluate(el=>{el.value='1';el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))});
+            await page.waitForTimeout(100);
+            const darkVisual=await page.evaluate(()=>({
+              theme:document.documentElement.dataset.theme,
+              bodyBg:getComputedStyle(document.body).backgroundColor,
+              headerBg:getComputedStyle(document.querySelector('.site-header')).backgroundColor,
+              sw:document.documentElement.scrollWidth,
+              cw:document.documentElement.clientWidth,
+              lightText:document.querySelector('#themeLightText')?.textContent?.trim(),
+              darkText:document.querySelector('#themeDarkText')?.textContent?.trim()
+            }));
+            if(darkVisual.theme!=='dark') failures.push(`${name}: dark theme did not activate`);
+            if(darkVisual.bodyBg==='rgb(247, 240, 223)') failures.push(`${name}: dark body still light`);
+            if(darkVisual.headerBg==='rgb(255, 230, 188)') failures.push(`${name}: dark header still beige/light`);
+            if(darkVisual.sw > darkVisual.cw + 2) failures.push(`${name}: dark horizontal overflow ${darkVisual.sw}>${darkVisual.cw}`);
+            if(!darkVisual.lightText || !darkVisual.darkText) failures.push(`${name}: visible theme labels missing`);
+            await page.screenshot({path:`qa-screenshots/${name}-dark.png`, fullPage:true});
             await page.close();
           }
           // Full language audit: every language, current hero, FAQ, form and links.
@@ -136,6 +163,11 @@ jobs:
               if(lang!=='fr' && placeholder===frenchPlaceholder) failures.push('lang '+lang+': form placeholder stayed French');
               const subjectText=(await page.locator('#contactSubject option').first().textContent())?.trim();
               if(lang!=='fr' && subjectText==='Choisir un sujet') failures.push('lang '+lang+': subject option stayed French');
+              const lightThemeText=(await page.locator('#themeLightText').textContent())?.trim();
+              const darkThemeText=(await page.locator('#themeDarkText').textContent())?.trim();
+              if(!lightThemeText || !darkThemeText) failures.push('lang '+lang+': theme labels missing');
+              const activeLang=await page.locator('#langMenu button[data-lang="'+lang+'"]').getAttribute('aria-current');
+              if(activeLang!=='true') failures.push('lang '+lang+': active language state missing');
               const badFaqLinks=await page.locator('[data-faq] a').evaluateAll(as=>as.filter(a=>{
                 const h=a.getAttribute('href')||'';
                 return !(h==='#contact'||h.startsWith('https://status.wi-line.fr/')||h.startsWith('https://www.google.com/maps/'));
@@ -172,7 +204,7 @@ jobs:
                 if(visual.theme!==systemScheme) failures.push(engineName+' system '+systemScheme+': first visit theme '+visual.theme);
                 if(visual.source!=='system') failures.push(engineName+' system '+systemScheme+': source '+visual.source);
                 if(visual.slider!==(systemScheme==='dark'?'1':'0')) failures.push(engineName+' system '+systemScheme+': slider '+visual.slider);
-                if(visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': header '+visual.headerBg);
+                if(systemScheme==='light' && visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': light header '+visual.headerBg);\n                if(systemScheme==='dark' && visual.headerBg==='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': dark header stayed beige');
                 if(!visual.logoVisible) failures.push(engineName+' system '+systemScheme+': logo hidden');
                 await p.close();
               }
