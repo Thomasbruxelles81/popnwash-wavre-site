@@ -44,6 +44,17 @@ Object.assign(translations.ru,{navFaq:"FAQ",navPros:"Для бизнеса",eyeb
 
 
 
+Object.assign(translations.fr,{openDaily:"7j/7",hoursShort:"07h–22h",hoursContact:"7j/7 · 07h–22h"});
+Object.assign(translations.nl,{openDaily:"7/7",hoursShort:"07u–22u",hoursContact:"7/7 · 07u–22u"});
+Object.assign(translations.en,{openDaily:"7 days/week",hoursShort:"07:00–22:00",hoursContact:"7 days/week · 07:00–22:00"});
+Object.assign(translations.de,{openDaily:"7 Tage/Woche",hoursShort:"07–22 Uhr",hoursContact:"7 Tage/Woche · 07–22 Uhr"});
+Object.assign(translations.it,{openDaily:"7 giorni su 7",hoursShort:"07:00–22:00",hoursContact:"7 giorni su 7 · 07:00–22:00"});
+Object.assign(translations.es,{openDaily:"7 días/7",hoursShort:"07:00–22:00",hoursContact:"7 días/7 · 07:00–22:00"});
+Object.assign(translations.pt,{openDaily:"7 dias/7",hoursShort:"07:00–22:00",hoursContact:"7 dias/7 · 07:00–22:00"});
+Object.assign(translations.ro,{openDaily:"7 zile/7",hoursShort:"07:00–22:00",hoursContact:"7 zile/7 · 07:00–22:00"});
+Object.assign(translations.pl,{openDaily:"7 dni w tygodniu",hoursShort:"07:00–22:00",hoursContact:"7 dni w tygodniu · 07:00–22:00"});
+Object.assign(translations.uk,{openDaily:"7 днів/тиждень",hoursShort:"07:00–22:00",hoursContact:"7 днів/тиждень · 07:00–22:00"});
+Object.assign(translations.ru,{openDaily:"7 дней в неделю",hoursShort:"07:00–22:00",hoursContact:"7 дней в неделю · 07:00–22:00"});
 const langMeta={fr:['🇫🇷','FR'],nl:['🇳🇱','NL'],en:['🇬🇧','EN'],de:['🇩🇪','DE'],it:['🇮🇹','IT'],es:['🇪🇸','ES'],pt:['🇵🇹','PT'],ro:['🇷🇴','RO'],pl:['🇵🇱','PL'],uk:['🇺🇦','UA'],ru:['🇷🇺','RU']};
 const reviews=[
 {name:'Cristiane O.',text:"Cette laverie a fait peau neuve. C'est un vrai plaisir d'y être client : c'est propre, fini les machines sales et malodorantes. Je le recommande vivement. Il y a toujours quelqu'un pour vous aider en cas de problème. Félicitations !"},
