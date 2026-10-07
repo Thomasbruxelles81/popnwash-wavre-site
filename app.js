@@ -135,6 +135,55 @@ function applyFaqLang(lang){
   });
 }
 let currentLang='fr';
+
+const themeLabels={
+  fr:{label:"Thème",light:"Clair",auto:"Automatique",dark:"Sombre"},
+  nl:{label:"Thema",light:"Licht",auto:"Automatisch",dark:"Donker"},
+  en:{label:"Theme",light:"Light",auto:"Automatic",dark:"Dark"},
+  de:{label:"Design",light:"Hell",auto:"Automatisch",dark:"Dunkel"},
+  it:{label:"Tema",light:"Chiaro",auto:"Automatico",dark:"Scuro"},
+  es:{label:"Tema",light:"Claro",auto:"Automático",dark:"Oscuro"},
+  pt:{label:"Tema",light:"Claro",auto:"Automático",dark:"Escuro"},
+  ro:{label:"Temă",light:"Luminos",auto:"Automat",dark:"Întunecat"},
+  pl:{label:"Motyw",light:"Jasny",auto:"Automatyczny",dark:"Ciemny"},
+  uk:{label:"Тема",light:"Світла",auto:"Автоматично",dark:"Темна"},
+  ru:{label:"Тема",light:"Светлая",auto:"Автоматически",dark:"Тёмная"}
+};
+const themeModes=['light','auto','dark'];
+const themeSlider=document.getElementById('themeSlider');
+const themeControl=document.getElementById('themeControl');
+const systemTheme=matchMedia('(prefers-color-scheme: dark)');
+let themeMode='light';
+try{const savedTheme=localStorage.getItem('popnwash-theme');if(themeModes.includes(savedTheme))themeMode=savedTheme}catch(e){}
+function resolvedTheme(mode){return mode==='auto'?(systemTheme.matches?'dark':'light'):mode}
+function syncThemeA11y(){
+  if(!themeSlider||!themeControl)return;
+  const l=themeLabels[currentLang]||themeLabels.fr;
+  const modeLabel=l[themeMode]||l.light;
+  const text=`${l.label} : ${modeLabel}`;
+  themeSlider.setAttribute('aria-label',text);
+  themeControl.setAttribute('title',text);
+}
+function applyTheme(mode,persist=true){
+  themeMode=themeModes.includes(mode)?mode:'light';
+  const resolved=resolvedTheme(themeMode);
+  document.documentElement.dataset.theme=resolved;
+  document.documentElement.dataset.themeMode=themeMode;
+  if(themeSlider)themeSlider.value=String(themeModes.indexOf(themeMode));
+  if(themeControl)themeControl.dataset.mode=themeMode;
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.setAttribute('content',resolved==='dark'?'#0f1815':'#ffe6bc');
+  if(persist){try{localStorage.setItem('popnwash-theme',themeMode)}catch(e){}}
+  syncThemeA11y();
+}
+if(themeSlider){
+  themeSlider.addEventListener('input',()=>applyTheme(themeModes[Number(themeSlider.value)]||'light'));
+  themeSlider.addEventListener('change',()=>applyTheme(themeModes[Number(themeSlider.value)]||'light'));
+}
+if(systemTheme.addEventListener)systemTheme.addEventListener('change',()=>{if(themeMode==='auto')applyTheme('auto',false)});
+else if(systemTheme.addListener)systemTheme.addListener(()=>{if(themeMode==='auto')applyTheme('auto',false)});
+applyTheme(themeMode,false);
+
 function applyLang(lang){
   currentLang=translations[lang]?lang:'fr';
   const t=translations[currentLang];
@@ -144,6 +193,7 @@ function applyLang(lang){
   applyFaqLang(currentLang);
   const topFloat=document.getElementById('backToTopFloat');
   if(topFloat){const topLabel=(t.backTop||translations.fr.backTop||'Retour en haut').replace(/↑/g,'').trim();topFloat.setAttribute('aria-label',topLabel);topFloat.setAttribute('title',topLabel)}
+  syncThemeA11y();
   const [flag,code]=langMeta[currentLang];document.getElementById('langFlag').textContent=flag;document.getElementById('langCode').textContent=code;
   try{localStorage.setItem('popnwash-lang',currentLang)}catch(e){}
 }
