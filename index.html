@@ -176,13 +176,33 @@ img[loading="lazy"]{content-visibility:auto}
 @media(max-width:700px){.hero-route-cta{width:100%;margin-bottom:20px;padding:13px 14px}.hero-route-icon{width:40px;height:40px}.hero-route-copy strong{font-size:13px}.hero-route-copy small{font-size:9.5px}.parking-hero{padding:26px 22px}.parking-badge{width:125px;height:125px}.parking-badge strong{font-size:48px}}
 @media(hover:none){.visit-card:hover{transform:none;background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.1);box-shadow:none}.visit-card:hover:before{opacity:0}.visit-card:hover:after{transform:scaleX(0)}.visit-card:hover .visit-icon{transform:none}.visit-card:hover .visit-plus{transform:none;background:rgba(255,255,255,.09)}.visit-card[open]{transform:none;background:rgba(255,255,255,.095);border-color:rgba(255,255,255,.25)}.visit-card[open]:before{opacity:1}.visit-card[open]:after{transform:scaleX(1)}.visit-card[open] .visit-icon{transform:scale(1.06)}.visit-card[open] .visit-plus{transform:rotate(45deg);background:rgba(255,255,255,.2)}}
 
+
+/* October 2026 header sobriety + floating back-to-top */
+.site-header{height:76px}
+.brand-wordmark{width:auto;min-width:168px;height:60px;padding:0 8px 0 2px;border-radius:0;overflow:visible;background:transparent!important;box-shadow:none!important;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;text-decoration:none}
+.brand-wordmark .brand-name{font-size:22px;line-height:1;font-weight:950;letter-spacing:-.055em;color:var(--ink);white-space:nowrap}
+.brand-wordmark .brand-city{font-size:10px;line-height:1.1;font-weight:850;letter-spacing:.22em;color:var(--red2);padding-left:1px}
+.desktop-nav{background:rgba(255,255,255,.58);border:1px solid rgba(22,28,27,.07);box-shadow:none}
+.desktop-nav:after{display:none!important}
+.desktop-nav a{transition:background .2s ease,color .2s ease,transform .2s ease}
+.desktop-nav a:hover{background:#f4f2ed!important;color:var(--red2);transform:translateY(-1px)}
+.footer{justify-content:space-between;padding-top:34px}
+.footer .footer-brand{display:none!important}
+.back-to-top-float{position:fixed;right:24px;bottom:24px;z-index:92;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--ink);text-decoration:none;border:1px solid rgba(22,28,27,.09);box-shadow:0 12px 30px rgba(22,28,27,.16);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(12px) scale(.94);transition:opacity .25s ease,transform .25s ease,visibility .25s ease,background .2s ease,color .2s ease}
+.back-to-top-float span{font-size:25px;line-height:1;font-weight:700;transform:translateY(-1px)}
+.back-to-top-float.is-visible{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.back-to-top-float:hover{background:var(--ink);color:#fff;transform:translateY(-3px)}
+@media(max-width:900px){.brand-wordmark{min-width:148px;height:54px}.brand-wordmark .brand-name{font-size:20px}.brand-wordmark .brand-city{font-size:9px}.back-to-top-float{right:18px;bottom:82px;width:48px;height:48px}}
+@media(max-width:480px){.brand-wordmark{min-width:134px}.brand-wordmark .brand-name{font-size:18px}.brand-wordmark .brand-city{font-size:8.5px;letter-spacing:.2em}}
+
 </style>
 </head>
 <body>
   <div class="page-noise" aria-hidden="true"></div>
   <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="POP'n WASH Wavre">
-      <img src="assets/logo-popnwash.webp" width="1024" height="1024" alt="Logo POP'n WASH Wavre" />
+    <a class="brand brand-wordmark" href="#top" aria-label="POP'n WASH Wavre">
+      <span class="brand-name">POP’n WASH</span>
+      <span class="brand-city">WAVRE</span>
     </a>
 
     <nav class="desktop-nav" aria-label="Navigation principale">
@@ -811,12 +831,13 @@ img[loading="lazy"]{content-visibility:auto}
   </main>
 
   <footer class="footer section-shell">
-    <a class="brand footer-brand" href="#top" aria-label="POP'n WASH Wavre">
-      <img src="assets/logo-popnwash.webp" width="1024" height="1024" alt="Logo POP'n WASH Wavre" />
-    </a>
     <p>© <span id="year"></span> POP'n WASH Wavre</p>
     <a href="#top" data-i18n="backTop">Retour en haut ↑</a>
   </footer>
+
+  <a class="back-to-top-float" id="backToTopFloat" href="#top" aria-label="Retour en haut" title="Retour en haut">
+    <span aria-hidden="true">↑</span>
+  </a>
 
   <div class="mobile-actionbar" aria-label="Actions rapides">
     <a href="https://www.google.com/maps/search/?api=1&query=POP%27n%20WASH%20Wavre&query_place_id=ChIJ616yFqB9wUcRf55Cp9uBEM0" target="_blank" rel="noopener"><span>📍</span><small data-i18n="route">Itinéraire</small></a>
