@@ -4,17 +4,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#ffe6bc" />
-  <meta name="color-scheme" content="light" />
+  <meta name="color-scheme" content="light dark" />
   <script>
   (()=>{try{
     const saved=localStorage.getItem('popnwash-theme');
-    const mode=['light','auto','dark'].includes(saved)?saved:'light';
-    const dark=mode==='dark'||(mode==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
-    document.documentElement.dataset.theme=dark?'dark':'light';
+    const systemDark=matchMedia('(prefers-color-scheme: dark)').matches;
+    const mode=(saved==='light'||saved==='dark')?saved:(systemDark?'dark':'light');
+    document.documentElement.dataset.theme=mode;
     document.documentElement.dataset.themeMode=mode;
+    document.documentElement.dataset.themeSource=(saved==='light'||saved==='dark')?'user':'system';
   }catch(e){
-    document.documentElement.dataset.theme='light';
-    document.documentElement.dataset.themeMode='light';
+    const mode=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+    document.documentElement.dataset.theme=mode;
+    document.documentElement.dataset.themeMode=mode;
+    document.documentElement.dataset.themeSource='system';
   }})();
   </script>
   <meta name="description" content="POP'n WASH Wavre — 19 lave-linge de 7 à 20 kg, 16 séchoirs professionnels, machines animaux dédiées, calandre grande largeur, produits sur place, coworking et services connectés." />
@@ -918,6 +921,132 @@ html[data-theme="dark"] .review-nav:hover{
   background:#72d66d!important;color:#102018!important;box-shadow:0 0 0 3px rgba(114,214,109,.18),0 13px 28px rgba(0,0,0,.3)!important
 }
 
+
+/* FINAL THEME + BRAND PASS 2026-10-07 */
+.brand-lockup:before,.brand-lockup:after{display:none!important;content:none!important}
+.brand-title{
+  display:flex!important;align-items:baseline!important;justify-content:center!important;gap:8px!important;
+  transform:none!important;text-align:center!important;white-space:nowrap!important;
+  font-family:"Trebuchet MS","Avenir Next","Segoe UI",system-ui,sans-serif!important;
+  font-weight:900!important;color:#161c1b!important;letter-spacing:0!important
+}
+.brand-main{font-size:20px;letter-spacing:-.035em}
+.brand-place{font-size:12px;letter-spacing:.15em;color:#2f8f3e;font-weight:900}
+@media(max-width:1120px){.brand-main{font-size:17px}.brand-place{font-size:10px;letter-spacing:.12em}}
+@media(max-width:900px){.brand-main{font-size:14px}.brand-place{font-size:8.5px;letter-spacing:.08em}}
+@media(max-width:600px){.brand-title{gap:5px!important}.brand-main{font-size:11px}.brand-place{font-size:7px}}
+
+/* Two-position theme control: system preference is used automatically on first visit. */
+.theme-slider-shell{width:78px!important;height:42px!important}
+.theme-icons{inset:0 6px!important;grid-template-columns:repeat(2,1fr)!important}
+.theme-knob{left:5px!important;top:5px!important;width:31px!important;height:31px!important}
+.theme-control[data-mode="light"] .theme-knob{transform:translateX(0)!important;background:#ffe0a7!important}
+.theme-control[data-mode="dark"] .theme-knob{transform:translateX(36px)!important;background:#dfe4e2!important}
+.theme-control[data-mode="light"] .theme-icon-light,.theme-control[data-mode="dark"] .theme-icon-dark{color:#161c1b!important;transform:scale(1.08)}
+.theme-control[data-mode="light"] .theme-icon-dark,.theme-control[data-mode="dark"] .theme-icon-light{color:#87918c!important;transform:none}
+@media(max-width:600px){.theme-slider-shell{width:70px!important;height:38px!important}.theme-knob{width:28px!important;height:28px!important;top:4px!important}.theme-control[data-mode="dark"] .theme-knob{transform:translateX(34px)!important}}
+
+/* Dark mode: no pale cards, no washed-out text. */
+html[data-theme="dark"] .tariff-card{
+  background:#18251f!important;border-color:rgba(255,255,255,.12)!important;color:#faf7f0!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.18)!important
+}
+html[data-theme="dark"] .tariff-copy strong{color:#fff!important}
+html[data-theme="dark"] .tariff-copy small,
+html[data-theme="dark"] .tariff-price span{color:#c7d2cc!important}
+html[data-theme="dark"] .tariff-price b{color:#ff6d86!important}
+html[data-theme="dark"] .tariff-icon{background:#21452f!important;color:#8be584!important}
+html[data-theme="dark"] .tariff-card:nth-child(even) .tariff-icon{background:#47242d!important;color:#ff8195!important}
+
+html[data-theme="dark"] .pet-feature{
+  background:linear-gradient(125deg,#201d20 0%,#17251f 48%,#1e3428 100%)!important;
+  border-color:rgba(255,255,255,.11)!important;color:#faf7f0!important
+}
+html[data-theme="dark"] .pet-copy h3{color:#fff!important}
+html[data-theme="dark"] .pet-copy p{color:#cbd6d0!important}
+html[data-theme="dark"] .pet-feature .badge{background:#44222b!important;color:#ff8296!important;border:1px solid rgba(255,130,150,.18)!important}
+html[data-theme="dark"] .pet-pills span{background:#20362a!important;color:#f7f5ef!important;border:1px solid rgba(114,214,109,.14)!important}
+
+html[data-theme="dark"] .feature-split{background:#17241f!important;color:#faf7f0!important;box-shadow:0 18px 54px rgba(0,0,0,.2)!important}
+html[data-theme="dark"] .feature-copy h2{color:#fff!important}
+html[data-theme="dark"] .feature-copy>p{color:#cad5cf!important}
+html[data-theme="dark"] .feature-list>div{background:#203029!important;border:1px solid rgba(255,255,255,.08)!important}
+html[data-theme="dark"] .feature-list>div>span{background:#294537!important;color:#8be584!important}
+html[data-theme="dark"] .feature-list strong{color:#fff!important}
+html[data-theme="dark"] .feature-list small{color:#c5d1ca!important}
+
+html[data-theme="dark"] .utility-row>div{background:#18251f!important;color:#faf7f0!important;border:1px solid rgba(255,255,255,.1)!important}
+html[data-theme="dark"] .utility-row strong{color:#fff!important}
+html[data-theme="dark"] .utility-row small{color:#c6d2cb!important}
+
+html[data-theme="dark"] .pro-card{background:#18251f!important;color:#faf7f0!important;border:1px solid rgba(255,255,255,.1)!important}
+html[data-theme="dark"] .pro-card strong{color:#fff!important}
+html[data-theme="dark"] .pro-card p{color:#cad5cf!important}
+html[data-theme="dark"] .pro-contact{background:#1c3527!important;color:#faf7f0!important;border:1px solid rgba(114,214,109,.14)!important}
+html[data-theme="dark"] .pro-contact strong{color:#fff!important}
+html[data-theme="dark"] .pro-contact span{color:#c9d5ce!important}
+
+html[data-theme="dark"] .review-card{background:#18251f!important;color:#faf7f0!important;border:1px solid rgba(255,255,255,.1)!important;box-shadow:0 18px 54px rgba(0,0,0,.22)!important}
+html[data-theme="dark"] .review-card blockquote,
+html[data-theme="dark"] .review-card footer strong{color:#fff!important}
+html[data-theme="dark"] .review-card footer small{color:#c6d2cb!important}
+html[data-theme="dark"] .review-card:after{color:#213b2a!important}
+html[data-theme="dark"] .review-nav{background:#22332c!important;color:#fff!important;border:1px solid rgba(255,255,255,.12)!important}
+
+html[data-theme="dark"] .parking-hero{background:linear-gradient(135deg,#1a2922,#213a2b)!important;color:#faf7f0!important;border:1px solid rgba(255,255,255,.1)!important}
+html[data-theme="dark"] .parking-hero h2{color:#fff!important}
+html[data-theme="dark"] .parking-hero p{color:#cad5cf!important}
+html[data-theme="dark"] .parking-card{background:#18251f!important;color:#faf7f0!important;border:1px solid rgba(255,255,255,.1)!important}
+html[data-theme="dark"] .parking-card strong{color:#fff!important}
+html[data-theme="dark"] .parking-card small{color:#c6d2cb!important}
+
+html[data-theme="dark"] .service-feature{background:#18251f!important;color:#faf7f0!important;border:1px solid rgba(255,255,255,.1)!important}
+html[data-theme="dark"] .service-feature h3{color:#fff!important}
+html[data-theme="dark"] .service-feature p{color:#cad5cf!important}
+html[data-theme="dark"] .service-feature-media{background:#101916!important}
+
+html[data-theme="dark"] .faq-group{background:#14211c!important}
+html[data-theme="dark"] .faq-item{background:#1a2922!important;color:#faf7f0!important}
+html[data-theme="dark"] .faq-item summary span{color:#fff!important}
+html[data-theme="dark"] .faq-warning{background:#3b2b20!important;color:#ffd7b9!important;border-color:rgba(255,181,116,.18)!important}
+html[data-theme="dark"] .idea-topics span{background:#24342d!important;color:#f5f6f3!important;border-color:rgba(255,255,255,.11)!important}
+
+html[data-theme="dark"] .modal{background:#17241f!important;color:#faf7f0!important}
+html[data-theme="dark"] .modal h2{color:#fff!important}
+html[data-theme="dark"] .modal p{color:#cad5cf!important}
+html[data-theme="dark"] .bonus-grid span{background:#203129!important;color:#f8f6ef!important}
+html[data-theme="dark"] .modal-close{background:#273a31!important;color:#fff!important}
+
+/* Important card hovers: lighter surface + accent line = obvious in dark mode. */
+:is(.tariff-card,.pet-feature,.service-feature,.loyalty-card,.products-card,.pro-card,.feature-list>div,.utility-row>div){
+  position:relative;overflow:hidden
+}
+:is(.tariff-card,.pet-feature,.service-feature,.loyalty-card,.products-card,.pro-card,.feature-list>div,.utility-row>div):before{
+  content:"";position:absolute;left:14px;right:14px;top:0;height:3px;border-radius:0 0 99px 99px;
+  background:linear-gradient(90deg,#44b640,#ff3656);transform:scaleX(0);transform-origin:left;
+  transition:transform .28s cubic-bezier(.2,.8,.2,1);z-index:4;pointer-events:none
+}
+@media(hover:hover){
+  :is(.tariff-card,.pet-feature,.service-feature,.loyalty-card,.products-card,.pro-card,.feature-list>div,.utility-row>div):hover:before{transform:scaleX(1)}
+  html[data-theme="light"] :is(.tariff-card,.pet-feature,.service-feature,.loyalty-card,.products-card,.pro-card,.feature-list>div,.utility-row>div):hover{
+    border-color:rgba(68,182,64,.28)!important;box-shadow:0 16px 34px rgba(34,98,40,.11)!important
+  }
+  html[data-theme="dark"] :is(.tariff-card,.pet-feature,.service-feature,.loyalty-card,.products-card,.pro-card,.feature-list>div,.utility-row>div):hover{
+    background-color:#294536!important;border-color:#72d66d!important;
+    box-shadow:0 0 0 2px rgba(114,214,109,.18),0 16px 34px rgba(0,0,0,.28)!important;
+    filter:brightness(1.05)!important
+  }
+  html[data-theme="dark"] .pet-feature:hover{background:linear-gradient(125deg,#2f2930,#21402f 48%,#2a5339 100%)!important}
+}
+
+/* Header nav hover is deliberately brighter in dark mode. */
+@media(hover:hover){
+  html[data-theme="dark"] .desktop-nav a:hover{
+    background:#367a47!important;color:#fff!important;border-color:#8be584!important;
+    box-shadow:0 0 0 2px rgba(139,229,132,.2),0 11px 24px rgba(0,0,0,.22)!important
+  }
+}
+
 </style>
 </head>
 <body>
@@ -928,7 +1057,7 @@ html[data-theme="dark"] .review-nav:hover{
         <img src="assets/logo-popnwash-header.webp" width="127" height="128" alt="" />
       </span>
       <span class="brand-label">
-        <strong class="brand-title">POP’n WASH WAVRE</strong>
+        <strong class="brand-title"><span class="brand-main">POP’n WASH</span><span class="brand-place">WAVRE</span></strong>
       </span>
     </a>
 
@@ -948,15 +1077,12 @@ html[data-theme="dark"] .review-nav:hover{
             <span class="theme-icon theme-icon-light">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.35 5.35l1.55 1.55M17.1 17.1l1.55 1.55M18.65 5.35 17.1 6.9M6.9 17.1l-1.55 1.55"/></svg>
             </span>
-            <span class="theme-icon theme-icon-auto">
-              <svg viewBox="0 0 24 24"><path d="M12 3.2a8.8 8.8 0 1 0 0 17.6V3.2Z"/><path d="M12 3.2a8.8 8.8 0 0 1 0 17.6"/></svg>
-            </span>
             <span class="theme-icon theme-icon-dark">
               <svg viewBox="0 0 24 24"><path d="M19.4 15.2A7.7 7.7 0 0 1 8.8 4.6 8.1 8.1 0 1 0 19.4 15.2Z"/></svg>
             </span>
           </div>
           <span class="theme-knob" aria-hidden="true"></span>
-          <input id="themeSlider" class="theme-slider" type="range" min="0" max="2" step="1" value="0" aria-label="Thème : clair" />
+          <input id="themeSlider" class="theme-slider" type="range" min="0" max="1" step="1" value="0" aria-label="Thème : clair" />
         </div>
       </div>
       <div class="lang-picker">
