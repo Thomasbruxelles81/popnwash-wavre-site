@@ -209,9 +209,9 @@ jobs:
               const subjectText=(await page.locator('#contactSubject option').first().textContent())?.trim();
               if(lang!=='fr' && subjectText==='Choisir un sujet') failures.push('lang '+lang+': subject option stayed French');
               const lightThemeText=(await page.locator('#themeLightText').textContent())?.trim();
-              const autoThemeText=(await page.locator('#themeAutoText').textContent())?.trim();
               const darkThemeText=(await page.locator('#themeDarkText').textContent())?.trim();
-              if(!lightThemeText || !autoThemeText || !darkThemeText) failures.push('lang '+lang+': theme labels missing');
+              if(!lightThemeText || !darkThemeText) failures.push('lang '+lang+': theme labels missing');
+              if(await page.locator('#themeAutoText').count()) failures.push('lang '+lang+': hidden Auto theme option is still rendered');
               const activeLang=await page.locator('#langMenu button[data-lang="'+lang+'"]').getAttribute('aria-current');
               if(activeLang!=='true') failures.push('lang '+lang+': active language state missing');
               const badFaqLinks=await page.locator('[data-faq] a').evaluateAll(as=>as.filter(a=>{
@@ -230,11 +230,12 @@ jobs:
 
           await browser.close();
 
-          // Cross-browser theme audit: Auto follows system preference; explicit light/dark choices override it.
+          // Cross-browser theme audit: first visit follows the device/OS preference.
+          // Only Light/Dark are visible; a user choice overrides the system afterwards.
           for (const [engineName,engine] of [['chromium',chromium],['firefox',firefox],['webkit',webkit]]) {
             const b = await engine.launch({headless:true});
             for (const systemScheme of ['light','dark']) {
-              // First visit: no saved theme => follow operating-system preference.
+              // First visit: no saved theme => follow operating-system preference invisibly.
               {
                 const p = await b.newPage({viewport:{width:1366,height:900},colorScheme:systemScheme});
                 await p.addInitScript(()=>{localStorage.setItem('popnwash-lang','fr');localStorage.removeItem('popnwash-theme')});
@@ -243,19 +244,33 @@ jobs:
                   theme:document.documentElement.dataset.theme,
                   source:document.documentElement.dataset.themeSource,
                   slider:document.querySelector('#themeSlider').value,
+                  autoCount:document.querySelectorAll('#themeAutoText,.theme-auto-label').length,
                   bodyBg:getComputedStyle(document.body).backgroundColor,
+                  bodyColor:getComputedStyle(document.body).color,
                   headerBg:getComputedStyle(document.querySelector('.site-header')).backgroundColor,
+                  titleColor:getComputedStyle(document.querySelector('.brand-title')).color,
                   logoVisible:getComputedStyle(document.querySelector('.brand-logo-wrap img')).display!=='none' && document.querySelector('.brand-logo-wrap img').naturalWidth>0
                 }));
                 if(visual.theme!==systemScheme) failures.push(engineName+' system '+systemScheme+': first visit theme '+visual.theme);
                 if(visual.source!=='system') failures.push(engineName+' system '+systemScheme+': source '+visual.source);
-                if(visual.slider!=='1') failures.push(engineName+' system '+systemScheme+': auto slider '+visual.slider);
-                if(systemScheme==='light' && visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': light header '+visual.headerBg);
-                if(systemScheme==='dark' && visual.headerBg==='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': dark header stayed beige');
+                const expectedSlider=systemScheme==='dark'?'1':'0';
+                if(visual.slider!==expectedSlider) failures.push(engineName+' system '+systemScheme+': slider '+visual.slider);
+                if(visual.autoCount!==0) failures.push(engineName+' system '+systemScheme+': Auto option still visible/rendered');
+                if(visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': header '+visual.headerBg);
+                if(visual.titleColor!=='rgb(22, 28, 27)') failures.push(engineName+' system '+systemScheme+': brand '+visual.titleColor);
+                if(systemScheme==='light'){
+                  if(visual.bodyBg!=='rgb(247, 240, 223)') failures.push(engineName+' system light: body '+visual.bodyBg);
+                  if(visual.bodyColor!=='rgb(22, 28, 27)') failures.push(engineName+' system light: text '+visual.bodyColor);
+                }else{
+                  const rgbSum=v=>{const m=v.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);return m?(+m[1]+ +m[2]+ +m[3]):999};
+                  if(visual.bodyBg==='rgb(247, 240, 223)'||rgbSum(visual.bodyBg)>260) failures.push(engineName+' system dark: body '+visual.bodyBg);
+                  if(rgbSum(visual.bodyColor)<570) failures.push(engineName+' system dark: text '+visual.bodyColor);
+                }
                 if(!visual.logoVisible) failures.push(engineName+' system '+systemScheme+': logo hidden');
                 await p.close();
               }
-              // Explicit user choices must override the system.
+
+              // Explicit Light/Dark user choices must override the device preference.
               for(const requestedMode of ['light','dark']){
                 const p=await b.newPage({viewport:{width:1366,height:900},colorScheme:systemScheme});
                 await p.addInitScript(({mode})=>{localStorage.setItem('popnwash-lang','fr');localStorage.setItem('popnwash-theme',mode)},{mode:requestedMode});
@@ -263,23 +278,24 @@ jobs:
                 const visual=await p.evaluate(()=>({
                   theme:document.documentElement.dataset.theme,
                   source:document.documentElement.dataset.themeSource,
+                  slider:document.querySelector('#themeSlider').value,
                   bodyBg:getComputedStyle(document.body).backgroundColor,
                   bodyColor:getComputedStyle(document.body).color,
                   headerBg:getComputedStyle(document.querySelector('.site-header')).backgroundColor,
                   titleColor:getComputedStyle(document.querySelector('.brand-title')).color
                 }));
                 if(visual.theme!==requestedMode) failures.push(engineName+' '+systemScheme+' saved '+requestedMode+': theme '+visual.theme);
+                if(visual.source!=='user') failures.push(engineName+' '+systemScheme+' saved '+requestedMode+': source '+visual.source);
+                if(visual.slider!==(requestedMode==='dark'?'1':'0')) failures.push(engineName+' '+systemScheme+' saved '+requestedMode+': slider '+visual.slider);
+                if(visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' '+requestedMode+': header '+visual.headerBg);
+                if(visual.titleColor!=='rgb(22, 28, 27)') failures.push(engineName+' '+requestedMode+': brand '+visual.titleColor);
                 if(requestedMode==='light'){
                   if(visual.bodyBg!=='rgb(247, 240, 223)') failures.push(engineName+' light: body '+visual.bodyBg);
                   if(visual.bodyColor!=='rgb(22, 28, 27)') failures.push(engineName+' light: text '+visual.bodyColor);
-                  if(visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' light: header '+visual.headerBg);
-                  if(visual.titleColor!=='rgb(22, 28, 27)') failures.push(engineName+' light: brand '+visual.titleColor);
                 }else{
-                  const rgbSum=s=>{const m=s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);return m?(+m[1]+ +m[2]+ +m[3]):999};
+                  const rgbSum=v=>{const m=v.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);return m?(+m[1]+ +m[2]+ +m[3]):999};
                   if(visual.bodyBg==='rgb(247, 240, 223)'||rgbSum(visual.bodyBg)>260) failures.push(engineName+' dark: body '+visual.bodyBg);
                   if(rgbSum(visual.bodyColor)<570) failures.push(engineName+' dark: text '+visual.bodyColor);
-                  if(visual.headerBg==='rgb(255, 230, 188)'||rgbSum(visual.headerBg)>300) failures.push(engineName+' dark: header '+visual.headerBg);
-                  if(rgbSum(visual.titleColor)<570) failures.push(engineName+' dark: brand '+visual.titleColor);
                 }
                 await p.close();
               }
