@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#ffe6bc" />
   <meta name="color-scheme" content="light" />
+  <script>
+  (()=>{try{
+    const saved=localStorage.getItem('popnwash-theme');
+    const mode=['light','auto','dark'].includes(saved)?saved:'light';
+    const dark=mode==='dark'||(mode==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.dataset.theme=dark?'dark':'light';
+    document.documentElement.dataset.themeMode=mode;
+  }catch(e){
+    document.documentElement.dataset.theme='light';
+    document.documentElement.dataset.themeMode='light';
+  }})();
+  </script>
   <meta name="description" content="POP'n WASH Wavre — 19 lave-linge de 7 à 20 kg, 16 séchoirs professionnels, machines animaux dédiées, calandre grande largeur, produits sur place, coworking et services connectés." />
   <meta property="og:title" content="POP'n WASH Wavre" />
   <meta property="og:description" content="Plus de machines, moins d’attente : 19 lave-linge, 16 séchoirs pro et des services pratiques au cœur de Wavre." />
@@ -256,6 +268,155 @@ input,select,textarea,button{color-scheme:light}
   .brand-lockup{min-width:192px;gap:6px}.brand-logo-wrap,.brand-logo-wrap img{width:46px;height:46px;flex-basis:46px}.brand-label{min-width:138px;height:46px}.brand-label .brand-title{font-size:13.5px;letter-spacing:-.01em}
 }
 
+
+/* FINAL 2026-10-07 visual system: brand, themes, nature, unified interactions */
+html[data-theme="light"]{
+  color-scheme:light;
+  --cream:#f7f0df;--cream2:#fffaf0;--ink:#161c1b;--muted:#64706a;
+  --red:#ff3656;--red2:#ee2448;--green:#44b640;--green2:#19963a;
+  --softgreen:#eaf7df;--softred:#ffe8e7;--line:rgba(22,28,27,.1);
+  --card:#fffdf8;--surface:#fffdf8;--surface2:#fffaf0;--header-bg:#ffe6bc;
+  background:#f7f0df;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --cream:#0f1815;--cream2:#151f1c;--ink:#f6f2e9;--muted:#a9b5ae;
+  --red:#ff4b68;--red2:#ff6780;--green:#58c956;--green2:#72d66d;
+  --softgreen:#183623;--softred:#3a1d25;--line:rgba(239,245,240,.12);
+  --card:#17211e;--surface:#17211e;--surface2:#1c2824;--header-bg:#ffe6bc;
+  background:#0f1815;
+}
+html[data-theme="light"] body{background:#f7f0df!important;color:#161c1b!important}
+html[data-theme="dark"] body{background:#0f1815!important;color:#f6f2e9!important}
+html[data-theme] body{transition:background-color .32s ease,color .32s ease}
+html[data-theme] .site-header{
+  background:#ffe6bc!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+  border-color:rgba(22,28,27,.08)!important;
+}
+html[data-theme] .brand-lockup,html[data-theme] .brand-logo-wrap,html[data-theme] .brand-logo-wrap img{background:#ffe6bc!important}
+.brand-lockup{min-width:410px!important;height:60px!important;gap:12px!important;padding:0!important}
+.brand-logo-wrap,.brand-logo-wrap img{width:58px!important;height:58px!important;flex-basis:58px!important;border-radius:0!important;padding:0!important;box-shadow:none!important}
+.brand-label{position:relative;display:flex!important;align-items:center;min-width:334px!important;height:58px!important;overflow:visible!important;white-space:nowrap}
+.brand-label .brand-title{
+  display:block;font-size:21px!important;line-height:1!important;font-weight:950!important;
+  letter-spacing:.012em!important;color:#161c1b!important;white-space:nowrap;
+  transform:scaleX(1.52)!important;transform-origin:left center;
+}
+.brand-nature{position:absolute;left:304px;top:19px;width:28px;height:20px;opacity:.9}
+.brand-nature i{position:absolute;display:block;width:13px;height:8px;background:#34a83e;border-radius:100% 0 100% 0;transform:rotate(-27deg)}
+.brand-nature i:first-child{left:1px;top:6px}.brand-nature i:last-child{right:1px;top:2px;transform:scaleX(-1) rotate(-23deg);background:#55bf4e}
+.desktop-nav{background:rgba(255,255,255,.62)!important;border:1px solid rgba(22,28,27,.07)!important}
+.desktop-nav a{color:#161c1b!important}
+.desktop-nav a:hover{background:rgba(255,255,255,.68)!important;color:#cf233d!important}
+
+/* One control, three positions: light / automatic / dark */
+.theme-control{display:flex;align-items:center;justify-content:center}
+.theme-slider-shell{position:relative;width:102px;height:42px;border-radius:14px;background:#fff;border:1px solid rgba(22,28,27,.1);box-shadow:0 4px 12px rgba(22,28,27,.06);overflow:hidden}
+.theme-icons{position:absolute;inset:0 5px;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;pointer-events:none;z-index:2}
+.theme-icon{display:grid;place-items:center;color:#7d8782;transition:color .2s ease,transform .2s ease}
+.theme-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.theme-control[data-mode="light"] .theme-icon-light,
+.theme-control[data-mode="auto"] .theme-icon-auto,
+.theme-control[data-mode="dark"] .theme-icon-dark{color:#161c1b;transform:scale(1.05)}
+.theme-knob{position:absolute;z-index:1;left:5px;top:5px;width:30px;height:30px;border-radius:10px;background:#ffe6bc;box-shadow:0 5px 12px rgba(22,28,27,.14);transition:transform .25s cubic-bezier(.2,.8,.2,1),background .25s ease}
+.theme-control[data-mode="light"] .theme-knob{transform:translateX(0)}
+.theme-control[data-mode="auto"] .theme-knob{transform:translateX(31px);background:#eaf7df}
+.theme-control[data-mode="dark"] .theme-knob{transform:translateX(62px);background:#dfe4e2}
+.theme-slider{position:absolute;z-index:4;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:grab;-webkit-appearance:none;appearance:none}
+.theme-slider:active{cursor:grabbing}
+.theme-slider:focus-visible+.theme-knob{outline:3px solid rgba(68,182,64,.32);outline-offset:-1px}
+
+/* Subtle natural signature throughout the light/dark site */
+.section-kicker{display:inline-flex;align-items:center;gap:8px}
+.section-kicker:after{content:"";display:inline-block;width:12px;height:7px;border-radius:100% 0 100% 0;background:var(--green);transform:rotate(-28deg);box-shadow:8px 3px 0 -1px color-mix(in srgb,var(--green) 68%,transparent);opacity:.78}
+.eyebrow{position:relative}
+.eyebrow:after{content:"";width:11px;height:6px;border-radius:100% 0 100% 0;background:var(--green);transform:rotate(-28deg);opacity:.78;margin-left:3px}
+
+/* FAQ: same visual language as the top “Première visite” cards */
+.faq-item{position:relative!important;isolation:isolate;overflow:hidden!important;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease,border-color .25s ease,background .25s ease!important}
+.faq-item:before{content:""!important;position:absolute!important;left:13px!important;right:13px!important;top:0!important;bottom:auto!important;width:auto!important;height:3px!important;border-radius:0 0 99px 99px;background:linear-gradient(90deg,var(--green),var(--red))!important;transform:scaleX(0)!important;transform-origin:left!important;transition:transform .28s ease!important;z-index:3}
+.faq-item:hover{transform:translateY(-4px) scale(1.006)!important;border-color:color-mix(in srgb,var(--green) 24%,transparent)!important;box-shadow:0 16px 30px rgba(22,28,27,.1)!important}
+.faq-item:hover:before,.faq-item[open]:before{transform:scaleX(1)!important}
+.faq-item summary{transition:background .22s ease,color .22s ease!important}
+.faq-item:hover summary{background:color-mix(in srgb,var(--softgreen) 58%,transparent)!important}
+.faq-item:hover summary b{transform:rotate(90deg) scale(1.08)!important;background:var(--softred)!important;color:var(--red2)!important}
+.faq-item[open]{transform:translateY(-2px);border-color:color-mix(in srgb,var(--red) 22%,transparent)!important;box-shadow:0 14px 28px rgba(22,28,27,.085)!important}
+.faq-item[open] summary b{transform:rotate(45deg) scale(1.05)!important}
+
+/* A consistent, restrained hover language across interactive cards */
+:is(.quick-item,.machine-card,.hero-wiline-card,.parking-card,.pro-card,.service-feature,.loyalty-card,.products-card,.parcel-service,.payment-easy,.connected-action,.product-chips span){
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease,border-color .25s ease,filter .25s ease!important;
+}
+:is(.quick-item,.machine-card,.hero-wiline-card,.parking-card,.pro-card,.service-feature,.loyalty-card,.products-card,.parcel-service,.payment-easy,.connected-action,.product-chips span):hover{
+  transform:translateY(-4px)!important;
+  box-shadow:0 16px 34px rgba(22,28,27,.1)!important;
+  filter:saturate(1.025);
+}
+
+/* Intentional dark theme — charcoal/forest, never browser-generated brown */
+html[data-theme="dark"] :is(.quick-strip,.machine-card,.service-feature,.pro-card,.parcel-service,.review-card,.faq-group,.faq-item,.parking-card,.contact-form-card,.modal,.product-chips span,.payment-easy){
+  background:#17211e!important;color:#f6f2e9!important;border-color:rgba(239,245,240,.1)!important;
+}
+html[data-theme="dark"] :is(.loyalty-card,.products-card,.pet-feature,.parking-hero){
+  background:linear-gradient(135deg,#18251f,#1d2b25)!important;color:#f6f2e9!important;border-color:rgba(239,245,240,.1)!important;
+}
+html[data-theme="dark"] :is(.machine-card,.service-feature,.pro-card,.parcel-service,.review-card,.faq-group,.faq-item,.parking-card,.contact-form-card,.payment-easy) p,
+html[data-theme="dark"] :is(.machine-card,.service-feature,.pro-card,.parcel-service,.review-card,.faq-group,.faq-item,.parking-card,.contact-form-card,.payment-easy) small{color:#a9b5ae!important}
+html[data-theme="dark"] .faq-item:hover{background:linear-gradient(110deg,#19251f,#17211e 55%,#18261e)!important}
+html[data-theme="dark"] .faq-item:hover summary{background:rgba(88,201,86,.08)!important}
+html[data-theme="dark"] .quick-item{background:#17211e!important}
+html[data-theme="dark"] .connected-links a{background:#1c3425!important;color:#f6f2e9!important}
+html[data-theme="dark"] .parking-hero h2{color:#f6f2e9!important}
+html[data-theme="dark"] .review-card:after{color:#1d3526!important}
+html[data-theme="dark"] .contact-form-card input,
+html[data-theme="dark"] .contact-form-card select,
+html[data-theme="dark"] .contact-form-card textarea{background:#101816!important;color:#f6f2e9!important;border-color:rgba(239,245,240,.16)!important}
+html[data-theme="dark"] .footer a{color:#f6f2e9!important}
+html[data-theme="dark"] .back-to-top-float{background:#202d28!important;color:#f6f2e9!important;border-color:rgba(239,245,240,.14)!important}
+
+/* Header stays brand-beige in both themes so the logo square disappears completely. */
+html[data-theme="dark"] .site-header,
+html[data-theme="dark"] .brand-lockup,
+html[data-theme="dark"] .brand-logo-wrap,
+html[data-theme="dark"] .brand-logo-wrap img{background:#ffe6bc!important}
+
+/* Responsive: preserve the wordmark but compact it enough for phone headers. */
+@media(max-width:1120px) and (min-width:901px){
+  .brand-lockup{min-width:300px!important}.brand-label{min-width:226px!important}
+  .brand-label .brand-title{font-size:17px!important;transform:scaleX(1.28)!important}
+  .brand-nature{left:205px;top:20px}.theme-slider-shell{width:92px}.theme-control[data-mode="auto"] .theme-knob{transform:translateX(26px)}.theme-control[data-mode="dark"] .theme-knob{transform:translateX(52px)}
+  .desktop-nav a{padding:8px 9px!important;font-size:12px!important}
+}
+@media(max-width:900px){
+  .brand-lockup{min-width:225px!important}.brand-logo-wrap,.brand-logo-wrap img{width:50px!important;height:50px!important;flex-basis:50px!important}
+  .brand-label{min-width:164px!important;height:50px!important}.brand-label .brand-title{font-size:14.5px!important;transform:scaleX(1.18)!important}
+  .brand-nature{display:none}.theme-slider-shell{width:90px;height:40px}.theme-knob{top:5px;width:28px;height:28px}
+  .theme-control[data-mode="auto"] .theme-knob{transform:translateX(26px)}.theme-control[data-mode="dark"] .theme-knob{transform:translateX(52px)}
+}
+@media(max-width:600px){
+  .site-header{gap:4px!important}.header-actions{gap:5px!important}
+  .brand-lockup{min-width:154px!important;gap:6px!important}.brand-logo-wrap,.brand-logo-wrap img{width:42px!important;height:42px!important;flex-basis:42px!important}
+  .brand-label{min-width:106px!important;height:42px!important}.brand-label .brand-title{font-size:11px!important;transform:scaleX(1.08)!important}
+  .theme-slider-shell{width:76px;height:38px}.theme-icons{inset:0 3px}.theme-icon svg{width:14px;height:14px}
+  .theme-knob{left:3px;top:4px;width:28px;height:28px;border-radius:9px}
+  .theme-control[data-mode="auto"] .theme-knob{transform:translateX(21px)}.theme-control[data-mode="dark"] .theme-knob{transform:translateX(42px)}
+  .lang-button{padding:0 8px!important}.lang-button .chev{display:none}
+}
+@media(max-width:390px){
+  .brand-lockup{min-width:144px!important}.brand-label{min-width:96px!important}.brand-label .brand-title{font-size:10px!important}
+  .theme-slider-shell{width:70px}.theme-control[data-mode="auto"] .theme-knob{transform:translateX(18px)}.theme-control[data-mode="dark"] .theme-knob{transform:translateX(36px)}
+}
+@media(hover:none){
+  :is(.quick-item,.machine-card,.hero-wiline-card,.parking-card,.pro-card,.service-feature,.loyalty-card,.products-card,.parcel-service,.payment-easy,.connected-action,.product-chips span):hover{transform:none!important;box-shadow:inherit!important;filter:none!important}
+  .faq-item:hover{transform:none!important;box-shadow:inherit!important}.faq-item:hover:before{transform:scaleX(0)!important}.faq-item[open]:before{transform:scaleX(1)!important}
+  .faq-item:hover summary{background:transparent!important}.faq-item:hover summary b{transform:none!important;background:var(--softgreen)!important;color:var(--green2)!important}
+  .faq-item[open] summary b{transform:rotate(45deg) scale(1.05)!important;background:var(--softred)!important;color:var(--red2)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .theme-knob,.faq-item,:is(.quick-item,.machine-card,.hero-wiline-card,.parking-card,.pro-card,.service-feature,.loyalty-card,.products-card,.parcel-service,.payment-easy,.connected-action,.product-chips span){transition:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -267,6 +428,7 @@ input,select,textarea,button{color-scheme:light}
       </span>
       <span class="brand-label">
         <strong class="brand-title">POP’n WASH WAVRE</strong>
+        <span class="brand-nature" aria-hidden="true"><i></i><i></i></span>
       </span>
     </a>
 
@@ -280,6 +442,23 @@ input,select,textarea,button{color-scheme:light}
     </nav>
 
     <div class="header-actions">
+      <div class="theme-control" id="themeControl" data-mode="light" title="Thème clair">
+        <div class="theme-slider-shell">
+          <div class="theme-icons" aria-hidden="true">
+            <span class="theme-icon theme-icon-light">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.35 5.35l1.55 1.55M17.1 17.1l1.55 1.55M18.65 5.35 17.1 6.9M6.9 17.1l-1.55 1.55"/></svg>
+            </span>
+            <span class="theme-icon theme-icon-auto">
+              <svg viewBox="0 0 24 24"><path d="M12 3.2a8.8 8.8 0 1 0 0 17.6V3.2Z"/><path d="M12 3.2a8.8 8.8 0 0 1 0 17.6"/></svg>
+            </span>
+            <span class="theme-icon theme-icon-dark">
+              <svg viewBox="0 0 24 24"><path d="M19.4 15.2A7.7 7.7 0 0 1 8.8 4.6 8.1 8.1 0 1 0 19.4 15.2Z"/></svg>
+            </span>
+          </div>
+          <span class="theme-knob" aria-hidden="true"></span>
+          <input id="themeSlider" class="theme-slider" type="range" min="0" max="2" step="1" value="0" aria-label="Thème : clair" />
+        </div>
+      </div>
       <div class="lang-picker">
         <button id="langButton" class="lang-button" aria-haspopup="true" aria-expanded="false">
           <span id="langFlag">🇫🇷</span><strong id="langCode">FR</strong><span class="chev">⌄</span>
