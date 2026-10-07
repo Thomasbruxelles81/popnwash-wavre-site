@@ -92,6 +92,20 @@ jobs:
               return mismatch>.045?[((img.getAttribute('src')||'image')+' natural='+natural.toFixed(3)+' rendered='+rendered.toFixed(3))]:[];
             }));
             if(cropRisks.length) failures.push(`${name}: image crop risk ${cropRisks.join(' | ')}`);
+            const verticalGaps=await page.evaluate(()=>{
+              const sections=[...document.querySelectorAll('main>section')].filter(el=>{
+                const cs=getComputedStyle(el);
+                return el.offsetHeight>1&&cs.display!=='none'&&cs.visibility!=='hidden';
+              }).map(el=>({id:el.id||String(el.className),top:el.offsetTop,bottom:el.offsetTop+el.offsetHeight}))
+                .sort((a,b)=>a.top-b.top);
+              const out=[];
+              for(let i=1;i<sections.length;i++){
+                const gap=sections[i].top-sections[i-1].bottom;
+                if(gap>220) out.push(sections[i-1].id+' -> '+sections[i].id+' gap='+Math.round(gap));
+              }
+              return out;
+            });
+            if(verticalGaps.length) failures.push(`${name}: excessive vertical gaps ${verticalGaps.join(' | ')}`);
             const checks = {
               h1: await page.locator('h1').count(),
               lang: await page.locator('#langButton').count(),
@@ -441,7 +455,7 @@ jobs:
             console.error('QA FAIL\n'+failures.join('\n'));
             process.exit(1);
           }
-          console.log('QA PASS: 12 viewports + light/dark responsive passes + no-crop image checks + all 11 languages verified, including FAQ, form, anchors, WiLine and translated links.');
+          console.log('QA PASS: 12 viewports + light/dark responsive passes + no-crop/no-phantom-space checks + all 11 languages verified, including FAQ, form, anchors, WiLine and translated links.');
           EOF
           node qa.mjs
 
