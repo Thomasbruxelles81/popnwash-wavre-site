@@ -9,15 +9,15 @@
   (()=>{try{
     const saved=localStorage.getItem('popnwash-theme');
     const systemDark=matchMedia('(prefers-color-scheme: dark)').matches;
-    const preference=(saved==='light'||saved==='auto'||saved==='dark')?saved:'auto';
-    const effective=preference==='auto'?(systemDark?'dark':'light'):preference;
+    const savedChoice=(saved==='light'||saved==='dark')?saved:null;
+    const effective=savedChoice||(systemDark?'dark':'light');
     document.documentElement.dataset.theme=effective;
-    document.documentElement.dataset.themeMode=preference;
-    document.documentElement.dataset.themeSource=preference==='auto'?'system':'user';
+    document.documentElement.dataset.themeMode=effective;
+    document.documentElement.dataset.themeSource=savedChoice?'user':'system';
   }catch(e){
     const effective=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
     document.documentElement.dataset.theme=effective;
-    document.documentElement.dataset.themeMode='auto';
+    document.documentElement.dataset.themeMode=effective;
     document.documentElement.dataset.themeSource='system';
   }})();
   </script>
@@ -1626,17 +1626,16 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 *,*:before,*:after{min-width:0}
 img,svg,video{max-width:100%}
 
-/* Three explicit theme states: light / automatic / dark. */
+/* Two visible theme choices. On first visit the current device/system preference
+   selects light or dark automatically; there is no visible “Auto” option. */
 .theme-slider-shell{
-  width:210px!important;height:44px!important;display:grid!important;
-  grid-template-columns:repeat(3,1fr)!important;background:#fff!important
+  width:168px!important;height:44px!important;display:grid!important;
+  grid-template-columns:repeat(2,1fr)!important;background:#fff!important
 }
-.theme-option-label{font-size:10.5px!important;gap:5px!important}
-.theme-knob{left:4px!important;top:4px!important;width:calc(33.333% - 3px)!important;height:36px!important;transform:translateX(0)!important}
-.theme-control[data-mode="auto"] .theme-knob{transform:translateX(100%)!important;background:#dff3d7!important}
-.theme-control[data-mode="dark"] .theme-knob{transform:translateX(200%)!important;background:#294139!important}
-.theme-control[data-mode="light"] .theme-light-label,
-.theme-control[data-mode="auto"] .theme-auto-label{color:#16201c!important;transform:scale(1.02)}
+.theme-option-label{font-size:11px!important;gap:6px!important}
+.theme-knob{left:4px!important;top:4px!important;width:calc(50% - 4px)!important;height:36px!important;transform:translateX(0)!important}
+.theme-control[data-mode="dark"] .theme-knob{transform:translateX(100%)!important;background:#294139!important}
+.theme-control[data-mode="light"] .theme-light-label{color:#16201c!important;transform:scale(1.02)}
 .theme-control[data-mode="dark"] .theme-dark-label{color:#fff!important;transform:scale(1.02)}
 html[data-theme="dark"] .theme-slider-shell{
   background:rgba(255,255,255,.84)!important;
@@ -1644,7 +1643,6 @@ html[data-theme="dark"] .theme-slider-shell{
   box-shadow:0 5px 14px rgba(22,28,27,.08)!important;
 }
 html[data-theme="dark"] .theme-option-label{color:#69756f!important}
-html[data-theme="dark"] .theme-control[data-mode="auto"] .theme-auto-label{color:#16201c!important}
 
 /* Dark means genuinely dark: eliminate residual pale panels and keep readable contrast. */
 html[data-theme="dark"] body,
@@ -1835,16 +1833,12 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.35 5.35l1.55 1.55M17.1 17.1l1.55 1.55M18.65 5.35 17.1 6.9M6.9 17.1l-1.55 1.55"/></svg>
             <span id="themeLightText">Clair</span>
           </span>
-          <span class="theme-option-label theme-auto-label" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/></svg>
-            <span id="themeAutoText">Auto</span>
-          </span>
           <span class="theme-option-label theme-dark-label" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M19.4 15.2A7.7 7.7 0 0 1 8.8 4.6 8.1 8.1 0 1 0 19.4 15.2Z"/></svg>
             <span id="themeDarkText">Sombre</span>
           </span>
           <span class="theme-knob" aria-hidden="true"></span>
-          <input id="themeSlider" class="theme-slider" type="range" min="0" max="2" step="1" value="0" aria-label="Thème : clair" />
+          <input id="themeSlider" class="theme-slider" type="range" min="0" max="1" step="1" value="0" aria-label="Thème : clair" />
         </div>
       </div>
       <div class="lang-picker">
