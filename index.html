@@ -1047,6 +1047,176 @@ html[data-theme="dark"] .modal-close{background:#273a31!important;color:#fff!imp
   }
 }
 
+
+/* AUTHORITATIVE DARK/LIGHT SURFACE PASS — 2026-10-07 */
+.brand-lockup:before,.brand-lockup:after{display:none!important;content:none!important}
+.brand-title{
+  font-family:"Arial Rounded MT Bold","Trebuchet MS","Avenir Next Rounded","Segoe UI",system-ui,sans-serif!important;
+  font-weight:900!important;letter-spacing:-.02em!important;transform:none!important
+}
+.brand-main{font-size:20px!important;color:#161c1b!important}
+.brand-place{font-size:12px!important;color:#2e8d3d!important;letter-spacing:.11em!important;font-weight:900!important}
+@media(max-width:1120px){.brand-main{font-size:17px!important}.brand-place{font-size:10px!important}}
+@media(max-width:900px){.brand-main{font-size:14px!important}.brand-place{font-size:8.5px!important}}
+@media(max-width:600px){.brand-main{font-size:11px!important}.brand-place{font-size:7px!important}}
+
+/* Every major surface receives an explicit dark counterpart. */
+html[data-theme="dark"] :is(
+  .floating-card,.quick-strip,.machine-card,.compact-card,.tariff-card,.pet-feature,
+  .service-feature,.loyalty-card,.products-card,.parcel-service,.payment-easy,
+  .feature-split,.equipment-highlight,.pro-card,.pro-contact,.utility-row>div,
+  .parking-hero,.parking-card,.review-card,.faq-group,.faq-item,
+  .contact-info-copy,.contact-form-card,.modal
+){
+  background:#18251f!important;
+  background-image:none!important;
+  color:#faf7f0!important;
+  border-color:rgba(255,255,255,.12)!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.20)!important;
+}
+html[data-theme="dark"] :is(.pet-feature,.loyalty-card,.products-card,.parking-hero){
+  background:linear-gradient(135deg,#192820 0%,#20372a 100%)!important
+}
+html[data-theme="dark"] .payment-easy{
+  background:linear-gradient(135deg,#18251f,#20372a)!important
+}
+html[data-theme="dark"] .feature-split,
+html[data-theme="dark"] .equipment-highlight{
+  background:#17241f!important
+}
+
+/* Text hierarchy across all dark surfaces. */
+html[data-theme="dark"] :is(
+  .floating-card,.quick-strip,.machine-card,.tariff-card,.pet-feature,.service-feature,
+  .loyalty-card,.products-card,.parcel-service,.payment-easy,.feature-split,
+  .equipment-highlight,.pro-card,.pro-contact,.utility-row>div,.parking-hero,
+  .parking-card,.review-card,.faq-group,.faq-item,.contact-info-copy,.contact-form-card,.modal
+) :is(h1,h2,h3,h4,strong,b){
+  color:#fff!important
+}
+html[data-theme="dark"] :is(
+  .floating-card,.quick-strip,.machine-card,.tariff-card,.pet-feature,.service-feature,
+  .loyalty-card,.products-card,.parcel-service,.payment-easy,.feature-split,
+  .equipment-highlight,.pro-card,.pro-contact,.utility-row>div,.parking-hero,
+  .parking-card,.review-card,.faq-group,.faq-item,.contact-info-copy,.contact-form-card,.modal
+) :is(p,small){
+  color:#c9d5ce!important
+}
+
+/* Machines / tariffs. */
+html[data-theme="dark"] .machine-card{border-color:rgba(255,255,255,.12)!important}
+html[data-theme="dark"] .machine-card small{color:#c9d5ce!important}
+html[data-theme="dark"] .compact-card{background:#1b2a24!important}
+html[data-theme="dark"] .simple-symbol{background:#0f1815!important;color:#fff!important;border:1px solid rgba(255,255,255,.13)}
+html[data-theme="dark"] .tariff-copy small,
+html[data-theme="dark"] .tariff-price span{color:#c9d5ce!important}
+html[data-theme="dark"] .tariff-price b{color:#ff7890!important}
+html[data-theme="dark"] .tariff-icon{background:#21472f!important;color:#91e88b!important}
+html[data-theme="dark"] .tariff-card:nth-child(even) .tariff-icon{background:#492530!important;color:#ff8aa0!important}
+
+/* Animals. */
+html[data-theme="dark"] .pet-copy h3{color:#fff!important}
+html[data-theme="dark"] .pet-copy p{color:#cbd6d0!important}
+html[data-theme="dark"] .pet-feature .badge{background:#47242e!important;color:#ff8aa0!important;border:1px solid rgba(255,138,160,.2)!important}
+html[data-theme="dark"] .pet-pills span{background:#233b2e!important;color:#fff!important;border:1px solid rgba(114,214,109,.18)!important}
+
+/* Services, parcels, payment. */
+html[data-theme="dark"] .service-feature-copy h3,
+html[data-theme="dark"] .parcel-copy h3,
+html[data-theme="dark"] .payment-easy-copy h3{color:#fff!important}
+html[data-theme="dark"] .service-feature-copy p,
+html[data-theme="dark"] .parcel-copy p,
+html[data-theme="dark"] .payment-easy-copy p{color:#c9d5ce!important}
+html[data-theme="dark"] .product-chips span,
+html[data-theme="dark"] .product-picto,
+html[data-theme="dark"] .payment-method-pills span{
+  background:#111d19!important;color:#fff!important;border:1px solid rgba(255,255,255,.1)!important
+}
+html[data-theme="dark"] .product-picto{color:#8de487!important}
+html[data-theme="dark"] .payment-easy-icon{background:#294938!important;color:#91e88b!important;box-shadow:none!important}
+html[data-theme="dark"] .parcel-photos figure{background:#15211c!important}
+html[data-theme="dark"] .parcel-photos figcaption{background:#26392f!important;color:#fff!important}
+html[data-theme="dark"] .parcel-photos img{background:#15211c!important}
+
+/* Equipment blocks. */
+html[data-theme="dark"] .feature-copy h2,
+html[data-theme="dark"] .equipment-copy h2{color:#fff!important}
+html[data-theme="dark"] .feature-copy>p,
+html[data-theme="dark"] .equipment-copy p{color:#c9d5ce!important}
+html[data-theme="dark"] .feature-list>div{background:#20322a!important;border:1px solid rgba(255,255,255,.09)!important}
+html[data-theme="dark"] .feature-list>div>span{background:#294b38!important;color:#91e88b!important}
+html[data-theme="dark"] .feature-list strong{color:#fff!important}
+html[data-theme="dark"] .feature-list small{color:#c9d5ce!important}
+html[data-theme="dark"] .equipment-pills span,
+html[data-theme="dark"] .why-pills span{
+  background:#23342d!important;color:#fff!important;border:1px solid rgba(255,255,255,.1)!important
+}
+
+/* Pro, parking, reviews. */
+html[data-theme="dark"] .pro-card p,
+html[data-theme="dark"] .pro-contact span,
+html[data-theme="dark"] .parking-hero p,
+html[data-theme="dark"] .parking-card small,
+html[data-theme="dark"] .review-card footer small{color:#c9d5ce!important}
+html[data-theme="dark"] .review-card blockquote,
+html[data-theme="dark"] .review-card footer strong{color:#fff!important}
+html[data-theme="dark"] .review-nav{background:#24372e!important;color:#fff!important;border:1px solid rgba(255,255,255,.12)!important}
+html[data-theme="dark"] .review-card:after{color:#23412d!important}
+html[data-theme="dark"] .parking-badge{box-shadow:0 18px 42px rgba(68,182,64,.16)!important}
+
+/* FAQ. */
+html[data-theme="dark"] .faq-group>h3{color:#ff7890!important}
+html[data-theme="dark"] .faq-item summary span{color:#fff!important}
+html[data-theme="dark"] .faq-answer p{color:#c9d5ce!important}
+html[data-theme="dark"] .faq-answer strong{color:#fff!important}
+html[data-theme="dark"] .faq-item summary b{background:#2a4b38!important;color:#96ea90!important}
+html[data-theme="dark"] .faq-warning{background:#3c2b20!important;color:#ffd9bd!important;border-color:rgba(255,188,128,.18)!important}
+html[data-theme="dark"] .idea-topics span{background:#24362e!important;color:#fff!important;border-color:rgba(255,255,255,.1)!important}
+
+/* Contact/form. */
+html[data-theme="dark"] .contact-info-copy h2,
+html[data-theme="dark"] .contact-address strong,
+html[data-theme="dark"] .contact-mail,
+html[data-theme="dark"] .contact-form-card h3,
+html[data-theme="dark"] .contact-form-card label>span{color:#fff!important}
+html[data-theme="dark"] .contact-info-copy p,
+html[data-theme="dark"] .contact-address span,
+html[data-theme="dark"] .form-privacy{color:#c9d5ce!important}
+html[data-theme="dark"] .contact-form-card :is(input,select,textarea){
+  background:#0d1714!important;color:#fff!important;border-color:rgba(255,255,255,.22)!important
+}
+html[data-theme="dark"] .contact-form-card :is(input,textarea)::placeholder{color:#9dacA4!important;opacity:1}
+html[data-theme="dark"] .idea-note{background:#1d432b!important;border-color:rgba(114,214,109,.26)!important}
+html[data-theme="dark"] .idea-note strong{color:#fff!important}
+html[data-theme="dark"] .idea-note span{color:#c9d5ce!important}
+
+/* First-view utility areas. */
+html[data-theme="dark"] .floating-card{background:#203329!important}
+html[data-theme="dark"] .floating-card strong{color:#fff!important}
+html[data-theme="dark"] .floating-card small{color:#c9d5ce!important}
+html[data-theme="dark"] .quick-strip{background:#14211c!important;border-color:rgba(255,255,255,.1)!important;backdrop-filter:none!important}
+html[data-theme="dark"] .quick-item strong{color:#fff!important}
+html[data-theme="dark"] .quick-item small{color:#c9d5ce!important}
+
+/* Very visible hover in dark mode on important categories. */
+@media(hover:hover){
+  html[data-theme="dark"] :is(
+    .machine-card,.tariff-card,.pet-feature,.service-feature,.loyalty-card,.products-card,
+    .parcel-service,.payment-easy,.feature-list>div,.equipment-highlight,.pro-card,
+    .utility-row>div,.parking-card,.review-card,.faq-item
+  ):hover{
+    background-color:#2b4939!important;
+    border-color:#7de177!important;
+    box-shadow:0 0 0 2px rgba(125,225,119,.22),0 18px 38px rgba(0,0,0,.30)!important;
+    transform:translateY(-5px)!important;
+    filter:brightness(1.07)!important
+  }
+  html[data-theme="dark"] .pet-feature:hover{background:linear-gradient(125deg,#302a30,#234331 48%,#2b563b 100%)!important}
+  html[data-theme="dark"] .parking-hero:hover{background:linear-gradient(135deg,#234031,#2c583c)!important}
+  html[data-theme="dark"] .feature-split:hover,
+  html[data-theme="dark"] .equipment-highlight:hover{box-shadow:0 0 0 2px rgba(125,225,119,.16),0 18px 38px rgba(0,0,0,.28)!important}
+}
+
 </style>
 </head>
 <body>
