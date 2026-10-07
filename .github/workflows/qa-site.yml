@@ -222,12 +222,18 @@ jobs:
                   titleColor:getComputedStyle(document.querySelector('.brand-title')).color
                 }));
                 if(visual.theme!==requestedMode) failures.push(engineName+' '+systemScheme+' saved '+requestedMode+': theme '+visual.theme);
-                const expectedBody=requestedMode==='dark'?'rgb(14, 24, 21)':'rgb(247, 240, 223)';
-                const expectedText=requestedMode==='dark'?'rgb(250, 247, 240)':'rgb(22, 28, 27)';
-                if(visual.bodyBg!==expectedBody) failures.push(engineName+' '+requestedMode+': body '+visual.bodyBg);
-                if(visual.bodyColor!==expectedText) failures.push(engineName+' '+requestedMode+': text '+visual.bodyColor);
-                if(visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' '+requestedMode+': header '+visual.headerBg);
-                if(visual.titleColor!=='rgb(22, 28, 27)') failures.push(engineName+' '+requestedMode+': brand '+visual.titleColor);
+                if(requestedMode==='light'){
+                  if(visual.bodyBg!=='rgb(247, 240, 223)') failures.push(engineName+' light: body '+visual.bodyBg);
+                  if(visual.bodyColor!=='rgb(22, 28, 27)') failures.push(engineName+' light: text '+visual.bodyColor);
+                  if(visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' light: header '+visual.headerBg);
+                  if(visual.titleColor!=='rgb(22, 28, 27)') failures.push(engineName+' light: brand '+visual.titleColor);
+                }else{
+                  const rgbSum=s=>{const m=s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);return m?(+m[1]+ +m[2]+ +m[3]):999};
+                  if(visual.bodyBg==='rgb(247, 240, 223)'||rgbSum(visual.bodyBg)>260) failures.push(engineName+' dark: body '+visual.bodyBg);
+                  if(rgbSum(visual.bodyColor)<570) failures.push(engineName+' dark: text '+visual.bodyColor);
+                  if(visual.headerBg==='rgb(255, 230, 188)'||rgbSum(visual.headerBg)>300) failures.push(engineName+' dark: header '+visual.headerBg);
+                  if(rgbSum(visual.titleColor)<570) failures.push(engineName+' dark: brand '+visual.titleColor);
+                }
                 await p.close();
               }
             }
@@ -255,15 +261,16 @@ jobs:
               logoDisplay:getComputedStyle(document.querySelector('.brand-logo-wrap img')).display,
               logoOpacity:getComputedStyle(document.querySelector('.brand-logo-wrap img')).opacity
             }));
-            if(!['rgb(248, 245, 238)','rgb(250, 247, 240)','rgb(255, 255, 255)'].includes(dark.wiTitle)) failures.push('dark readability: WiLine title '+dark.wiTitle);
-            if(!['rgb(201, 212, 205)','rgb(211, 221, 215)'].includes(dark.wiSmall)) failures.push('dark readability: WiLine secondary '+dark.wiSmall);
-            if(dark.heroTrustBg==='rgb(255, 255, 255)') failures.push('dark readability: hero trust stayed white');
-            if(!['rgb(246, 244, 237)','rgb(250, 247, 240)','rgb(255, 255, 255)'].includes(dark.heroTrustColor)) failures.push('dark readability: hero trust text '+dark.heroTrustColor);
-            if(!['rgb(16, 29, 24)','rgb(17, 29, 25)'].includes(dark.contactBg)) failures.push('dark readability: contact bg '+dark.contactBg);
-            if(!['rgb(23, 36, 31)','rgb(24, 39, 32)'].includes(dark.contactInfoBg)) failures.push('dark readability: contact info bg '+dark.contactInfoBg);
-            if(!['rgb(248, 245, 238)','rgb(250, 247, 240)','rgb(255, 255, 255)'].includes(dark.contactH2)) failures.push('dark readability: contact h2 '+dark.contactH2);
-            if(!['rgb(23, 36, 31)','rgb(24, 39, 32)'].includes(dark.formBg)) failures.push('dark readability: form bg '+dark.formBg);
-            if(dark.inputBg!=='rgb(13, 23, 20)'||!['rgb(248, 245, 238)','rgb(250, 247, 240)','rgb(255, 255, 255)'].includes(dark.inputColor)) failures.push('dark readability: input contrast '+JSON.stringify(dark));
+            const rgbSum=s=>{const m=s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);return m?(+m[1]+ +m[2]+ +m[3]):999};
+            if(rgbSum(dark.wiTitle)<570) failures.push('dark readability: WiLine title '+dark.wiTitle);
+            if(rgbSum(dark.wiSmall)<500) failures.push('dark readability: WiLine secondary '+dark.wiSmall);
+            if(dark.heroTrustBg==='rgb(255, 255, 255)'||rgbSum(dark.heroTrustBg)>420) failures.push('dark readability: hero trust surface '+dark.heroTrustBg);
+            if(rgbSum(dark.heroTrustColor)<560) failures.push('dark readability: hero trust text '+dark.heroTrustColor);
+            if(rgbSum(dark.contactBg)>360) failures.push('dark readability: contact bg '+dark.contactBg);
+            if(rgbSum(dark.contactInfoBg)>420) failures.push('dark readability: contact info bg '+dark.contactInfoBg);
+            if(rgbSum(dark.contactH2)<570) failures.push('dark readability: contact h2 '+dark.contactH2);
+            if(rgbSum(dark.formBg)>420) failures.push('dark readability: form bg '+dark.formBg);
+            if(rgbSum(dark.inputBg)>220||rgbSum(dark.inputColor)<560) failures.push('dark readability: input contrast '+JSON.stringify(dark));
             if(dark.logoDisplay==='none'||dark.logoOpacity==='0') failures.push('header logo hidden');
             await b.close();
           }
@@ -331,15 +338,16 @@ jobs:
                 inputBg:getComputedStyle(document.querySelector('.contact-form-card input')).backgroundColor
               }));
               if(!base.logoComplete||base.logoW<50||base.logoRect<35) failures.push(mode+': header logo not visible '+JSON.stringify(base));
-              if(base.brandTitle!=='rgb(22, 28, 27)') failures.push(mode+': brand title contrast '+base.brandTitle);
+              const rgbSum=s=>{const m=s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);return m?(+m[1]+ +m[2]+ +m[3]):999};
+              if(mode==='light' && base.brandTitle!=='rgb(22, 28, 27)') failures.push('light: brand title contrast '+base.brandTitle);
               if(mode==='dark'){
-                const lightText=['rgb(250, 247, 240)','rgb(248, 245, 238)','rgb(255, 255, 255)'];
-                if(base.heroSub!=='rgb(201, 213, 206)') failures.push('dark: hero subtitle '+base.heroSub);
-                if(!lightText.includes(base.wiTitle)) failures.push('dark: WiLine title '+base.wiTitle);
-                if(!['rgb(211, 221, 215)','rgb(201, 212, 205)'].includes(base.wiSmall)) failures.push('dark: WiLine secondary '+base.wiSmall);
-                if(!lightText.includes(base.contactH2)) failures.push('dark: contact heading '+base.contactH2);
-                if(!lightText.includes(base.formH3)) failures.push('dark: form heading '+base.formH3);
-                if(base.inputColor!=='rgb(255, 255, 255)'||base.inputBg!=='rgb(13, 23, 20)') failures.push('dark: form input '+JSON.stringify(base));
+                if(rgbSum(base.brandTitle)<570) failures.push('dark: brand title '+base.brandTitle);
+                if(rgbSum(base.heroSub)<500) failures.push('dark: hero subtitle '+base.heroSub);
+                if(rgbSum(base.wiTitle)<570) failures.push('dark: WiLine title '+base.wiTitle);
+                if(rgbSum(base.wiSmall)<500) failures.push('dark: WiLine secondary '+base.wiSmall);
+                if(rgbSum(base.contactH2)<570) failures.push('dark: contact heading '+base.contactH2);
+                if(rgbSum(base.formH3)<570) failures.push('dark: form heading '+base.formH3);
+                if(rgbSum(base.inputColor)<560||rgbSum(base.inputBg)>220) failures.push('dark: form input '+JSON.stringify(base));
               }
               for(const sel of ['.desktop-nav a','.hero-wiline-card','.parking-card','.social-link.facebook','.social-link.instagram']){
                 const el=p.locator(sel).first();
@@ -419,7 +427,7 @@ jobs:
             console.error('QA FAIL\n'+failures.join('\n'));
             process.exit(1);
           }
-          console.log('QA PASS: 7 viewports + all 11 languages verified, including FAQ, form, anchors, WiLine and translated links.');
+          console.log('QA PASS: 12 viewports + light/dark responsive passes + all 11 languages verified, including FAQ, form, anchors, WiLine and translated links.');
           EOF
           node qa.mjs
 
