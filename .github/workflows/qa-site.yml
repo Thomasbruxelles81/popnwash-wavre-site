@@ -106,6 +106,24 @@ jobs:
               return out;
             });
             if(verticalGaps.length) failures.push(`${name}: excessive vertical gaps ${verticalGaps.join(' | ')}`);
+            const faqCategoryState=await page.evaluate(()=>({
+              toggles:document.querySelectorAll('.faq-group-toggle').length,
+              visibleItems:[...document.querySelectorAll('.faq-group > .faq-item')].filter(el=>getComputedStyle(el).display!=='none').length,
+              totalItems:document.querySelectorAll('.faq-group > .faq-item').length
+            }));
+            if(faqCategoryState.toggles!==4) failures.push(`${name}: expected 4 FAQ category toggles, got ${faqCategoryState.toggles}`);
+            if(width<=1024){
+              if(faqCategoryState.visibleItems!==0) failures.push(`${name}: mobile/tablet FAQ should start compact, visible items=${faqCategoryState.visibleItems}`);
+              await page.locator('.faq-group-toggle').first().click();
+              const openedFaq=await page.evaluate(()=>({
+                expanded:document.querySelector('.faq-group-toggle')?.getAttribute('aria-expanded'),
+                visible:[...document.querySelectorAll('.faq-group:first-child > .faq-item')].filter(el=>getComputedStyle(el).display!=='none').length
+              }));
+              if(openedFaq.expanded!=='true'||openedFaq.visible<1) failures.push(`${name}: FAQ category did not expand correctly`);
+              await page.locator('.faq-group-toggle').first().click();
+            }else if(faqCategoryState.visibleItems!==faqCategoryState.totalItems){
+              failures.push(`${name}: desktop FAQ categories unexpectedly collapsed`);
+            }
             const checks = {
               h1: await page.locator('h1').count(),
               lang: await page.locator('#langButton').count(),
@@ -455,7 +473,7 @@ jobs:
             console.error('QA FAIL\n'+failures.join('\n'));
             process.exit(1);
           }
-          console.log('QA PASS: 12 viewports + light/dark responsive passes + no-crop/no-phantom-space checks + all 11 languages verified, including FAQ, form, anchors, WiLine and translated links.');
+          console.log('QA PASS: 12 viewports + compact responsive FAQ + light/dark + no-crop/no-phantom-space checks + all 11 languages verified.');
           EOF
           node qa.mjs
 
