@@ -883,6 +883,41 @@ html[data-theme] .brand-logo-wrap,
 html[data-theme] .brand-logo-wrap img{background:#ffe6bc!important}
 html[data-theme] .brand-title{color:#161c1b!important}
 
+
+/* Final hover-strength pass: unmistakable feedback, especially in dark mode */
+.social-link.facebook:hover{
+  background-color:#1877f2!important;background-image:none!important;color:#fff!important;border-color:#9cc7ff!important;
+  box-shadow:0 0 0 2px rgba(24,119,242,.18),0 15px 30px rgba(24,119,242,.34)!important;transform:translateY(-4px) scale(1.025)!important
+}
+.social-link.instagram:hover{
+  background-color:#d93b79!important;background-image:linear-gradient(135deg,#8f42bd 0%,#d93b79 48%,#f28b44 100%)!important;
+  color:#fff!important;border-color:#ffc1a5!important;box-shadow:0 0 0 2px rgba(217,59,121,.16),0 15px 30px rgba(217,59,121,.34)!important;
+  transform:translateY(-4px) scale(1.025)!important
+}
+html[data-theme="dark"] .social-link.facebook:hover{background-color:#2d8bf4!important;box-shadow:0 0 0 2px rgba(164,205,255,.24),0 18px 34px rgba(45,139,244,.4)!important}
+html[data-theme="dark"] .social-link.instagram:hover{background-color:#e24b83!important;filter:brightness(1.08);box-shadow:0 0 0 2px rgba(255,198,217,.22),0 18px 34px rgba(226,75,131,.4)!important}
+
+html[data-theme="dark"] .btn-primary:hover,
+html[data-theme="dark"] .hero-route-cta:hover{
+  filter:brightness(1.14) saturate(1.08)!important;
+  box-shadow:0 0 0 2px rgba(255,113,135,.2),0 17px 34px rgba(0,0,0,.3)!important
+}
+html[data-theme="dark"] .btn-whatsapp:hover{
+  background:#36c96d!important;color:#fff!important;filter:brightness(1.08)!important;
+  box-shadow:0 0 0 2px rgba(93,226,136,.2),0 16px 32px rgba(0,0,0,.28)!important
+}
+html[data-theme="dark"] .lang-button:hover,
+html[data-theme="dark"] .theme-control:hover .theme-slider-shell{
+  background:#f6f0e4!important;border-color:#4e9f5b!important;box-shadow:0 0 0 2px rgba(68,182,64,.16),0 10px 22px rgba(0,0,0,.14)!important
+}
+html[data-theme="dark"] .lang-menu button:hover,
+html[data-theme="dark"] .mobile-menu a:hover{
+  background:#2d6b3d!important;color:#fff!important;box-shadow:inset 3px 0 #8be584!important
+}
+html[data-theme="dark"] .review-nav:hover{
+  background:#72d66d!important;color:#102018!important;box-shadow:0 0 0 3px rgba(114,214,109,.18),0 13px 28px rgba(0,0,0,.3)!important
+}
+
 </style>
 </head>
 <body>
