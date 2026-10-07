@@ -1471,6 +1471,72 @@ img{max-width:100%}
   :is(.machine-card,.tariff-card,.service-feature,.pro-card,.parking-card,.faq-item):hover{transform:none!important;filter:none!important}
 }
 
+
+/* 2026-10-07 NO-CROP MEDIA PASS */
+/* Respect the source ratio of the main photography so no key visual is cropped. */
+.hero-photo-stack,
+.fleet-photo,
+.pet-photo,
+.service-feature-media,
+.pro-photo,
+.equipment-photo{
+  aspect-ratio:4/3!important;
+  min-height:0!important
+}
+.hero-photo,
+.fleet-photo img,
+.pet-photo img,
+.service-feature-media img,
+.pro-photo img,
+.equipment-photo img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center center!important
+}
+/* The entrance photo is portrait (3:4): show it whole rather than cutting the top/bottom. */
+.contact-info{grid-template-rows:auto 1fr!important}
+.contact-photo{
+  min-height:0!important;
+  background:#101916!important;
+  display:grid!important;
+  place-items:center!important
+}
+.contact-photo img{
+  width:100%!important;
+  height:100%!important;
+  max-height:560px!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  display:block!important
+}
+.parcel-photos img{object-fit:contain!important}
+
+/* On phones/tablets keep the same true photo ratios instead of using arbitrary crop frames. */
+@media(max-width:1024px){
+  .hero-photo-stack,
+  .fleet-photo,
+  .pet-photo,
+  .service-feature-media,
+  .pro-photo,
+  .equipment-photo{aspect-ratio:4/3!important;min-height:0!important}
+  .contact-photo{aspect-ratio:3/4!important;min-height:0!important}
+  .contact-photo img{max-height:none!important}
+}
+@media(max-width:1000px) and (orientation:landscape) and (max-height:560px){
+  .hero-photo-stack,
+  .fleet-photo,
+  .pet-photo,
+  .service-feature-media,
+  .pro-photo,
+  .equipment-photo{aspect-ratio:4/3!important;min-height:0!important}
+  .contact-photo{
+    aspect-ratio:3/4!important;
+    min-height:0!important;
+    max-height:420px!important
+  }
+}
+
 </style>
 </head>
 <body>
