@@ -162,7 +162,6 @@ function syncThemeA11y(){
   const modeLabel=l[themeMode]||l.light;
   const text=`${l.label} : ${modeLabel}`;
   themeSlider.setAttribute('aria-label',text);
-  themeControl.setAttribute('title',text);
 }
 function applyTheme(mode,persist=true){
   themeMode=themeModes.includes(mode)?mode:'light';
