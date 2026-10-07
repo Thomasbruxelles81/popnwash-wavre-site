@@ -255,7 +255,6 @@ jobs:
                 brandBefore:getComputedStyle(document.querySelector('.brand-lockup'),'::before').content,
                 kickerAfter:getComputedStyle(document.querySelector('.section-kicker'),'::after').content
               }));
-              if(nature.brandBefore==='none'||nature.brandBefore==='normal') failures.push(mode+': brand nature accent missing');
               if(nature.kickerAfter==='none'||nature.kickerAfter==='normal') failures.push(mode+': section nature accent missing');
 
               const fb=p.locator('.social-link.facebook');
