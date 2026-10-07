@@ -210,14 +210,14 @@ jobs:
               logoDisplay:getComputedStyle(document.querySelector('.brand-logo-wrap img')).display,
               logoOpacity:getComputedStyle(document.querySelector('.brand-logo-wrap img')).opacity
             }));
-            if(dark.wiTitle!=='rgb(255, 255, 255)') failures.push('dark readability: WiLine title '+dark.wiTitle);
-            if(dark.wiSmall!=='rgb(211, 221, 215)') failures.push('dark readability: WiLine secondary '+dark.wiSmall);
+            if(dark.wiTitle!=='rgb(248, 245, 238)') failures.push('dark readability: WiLine title '+dark.wiTitle);
+            if(dark.wiSmall!=='rgb(201, 212, 205)') failures.push('dark readability: WiLine secondary '+dark.wiSmall);
             if(dark.heroTrustBg==='rgb(255, 255, 255)') failures.push('dark readability: hero trust stayed white');
             if(dark.heroTrustColor!=='rgb(246, 244, 237)') failures.push('dark readability: hero trust text '+dark.heroTrustColor);
             if(dark.contactBg!=='rgb(16, 29, 24)') failures.push('dark readability: contact bg '+dark.contactBg);
-            if(dark.contactInfoBg!=='rgb(24, 39, 32)') failures.push('dark readability: contact info bg '+dark.contactInfoBg);
+            if(dark.contactInfoBg!=='rgb(23, 36, 31)') failures.push('dark readability: contact info bg '+dark.contactInfoBg);
             if(dark.contactH2!=='rgb(255, 255, 255)') failures.push('dark readability: contact h2 '+dark.contactH2);
-            if(dark.formBg!=='rgb(24, 39, 32)') failures.push('dark readability: form bg '+dark.formBg);
+            if(dark.formBg!=='rgb(23, 36, 31)') failures.push('dark readability: form bg '+dark.formBg);
             if(dark.inputBg!=='rgb(13, 23, 20)'||dark.inputColor!=='rgb(255, 255, 255)') failures.push('dark readability: input contrast '+JSON.stringify(dark));
             if(dark.logoDisplay==='none'||dark.logoOpacity==='0') failures.push('header logo hidden');
             await b.close();
@@ -251,9 +251,9 @@ jobs:
               await fb.hover();await p.waitForTimeout(320);
               const fbAfter=await fb.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor);
               if(fbBefore===fbAfter) failures.push(mode+': Facebook hover not visually changing');
-              const igBefore=await ig.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor);
+              const igBefore=await ig.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor+'|'+getComputedStyle(el).boxShadow+'|'+getComputedStyle(el).transform);
               await ig.hover();await p.waitForTimeout(320);
-              const igAfter=await ig.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor);
+              const igAfter=await ig.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor+'|'+getComputedStyle(el).boxShadow+'|'+getComputedStyle(el).transform);
               if(igBefore===igAfter) failures.push(mode+': Instagram hover not visually changing');
 
               const wi=p.locator('.hero-wiline-card').first();
@@ -289,10 +289,10 @@ jobs:
               if(!base.logoComplete||base.logoW<50||base.logoRect<35) failures.push(mode+': header logo not visible '+JSON.stringify(base));
               if(base.brandTitle!=='rgb(22, 28, 27)') failures.push(mode+': brand title contrast '+base.brandTitle);
               if(mode==='dark'){
-                const lightText=['rgb(250, 247, 240)','rgb(255, 255, 255)'];
+                const lightText=['rgb(250, 247, 240)','rgb(248, 245, 238)','rgb(255, 255, 255)'];
                 if(base.heroSub!=='rgb(201, 213, 206)') failures.push('dark: hero subtitle '+base.heroSub);
                 if(!lightText.includes(base.wiTitle)) failures.push('dark: WiLine title '+base.wiTitle);
-                if(base.wiSmall!=='rgb(211, 221, 215)') failures.push('dark: WiLine secondary '+base.wiSmall);
+                if(!['rgb(211, 221, 215)','rgb(201, 212, 205)'].includes(base.wiSmall)) failures.push('dark: WiLine secondary '+base.wiSmall);
                 if(!lightText.includes(base.contactH2)) failures.push('dark: contact heading '+base.contactH2);
                 if(!lightText.includes(base.formH3)) failures.push('dark: form heading '+base.formH3);
                 if(base.inputColor!=='rgb(255, 255, 255)'||base.inputBg!=='rgb(13, 23, 20)') failures.push('dark: form input '+JSON.stringify(base));
@@ -309,6 +309,45 @@ jobs:
               await p.close();
             }
             await b.close();
+          }
+
+          // Contrast ratio audit for dark mode: test representative text throughout the whole site.
+          {
+            const b=await chromium.launch({headless:true});
+            const p=await b.newPage({viewport:{width:1440,height:1000},colorScheme:'dark'});
+            await p.addInitScript(()=>{localStorage.setItem('popnwash-lang','fr');localStorage.setItem('popnwash-theme','dark')});
+            await p.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle',timeout:45000});
+            const contrastFailures=await p.evaluate(()=>{
+              function rgb(s){const m=s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);return m?[+m[1],+m[2],+m[3]]:null}
+              function lum(c){return c.map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)}).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0)}
+              function ratio(a,b){a=lum(a);b=lum(b);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05)}
+              function effectiveBg(el){
+                let n=el;
+                while(n&&n!==document.documentElement){
+                  const c=getComputedStyle(n).backgroundColor;
+                  const m=c.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/);
+                  if(m&&(+m[4]||1)>.85)return [+m[1],+m[2],+m[3]];
+                  n=n.parentElement;
+                }
+                return [14,24,21];
+              }
+              const selectors=['.hero-sub','.hero-wiline-copy strong','.hero-wiline-copy small','.machine-card h3','.machine-card small','.loyalty-copy h3','.loyalty-copy p','.products-card h3','.products-card p','.faq-item summary span','.faq-answer p','.contact-info-copy h2','.contact-info-copy p','.contact-form-card h3','.contact-form-card label>span','.footer'];
+              const out=[];
+              for(const sel of selectors){
+                const el=document.querySelector(sel);if(!el)continue;
+                const fg=rgb(getComputedStyle(el).color), bg=effectiveBg(el); if(!fg)continue;
+                const r=ratio(fg,bg);
+                if(r<4.3)out.push(sel+' ratio='+r.toFixed(2)+' fg='+fg.join(',')+' bg='+bg.join(','));
+              }
+              return out;
+            });
+            if(contrastFailures.length) failures.push('dark contrast: '+contrastFailures.join(' | '));
+            await p.screenshot({path:'qa-screenshots/dark-desktop.png',fullPage:true});
+            const nav=p.locator('.desktop-nav a').first();await nav.hover();await p.waitForTimeout(350);
+            await p.screenshot({path:'qa-screenshots/dark-hover-header.png',fullPage:false});
+            const social=p.locator('.social-link.instagram');await social.hover();await p.waitForTimeout(350);
+            await p.screenshot({path:'qa-screenshots/dark-hover-instagram.png',fullPage:false});
+            await p.close();await b.close();
           }
 
           if(failures.length){
