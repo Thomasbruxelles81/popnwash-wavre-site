@@ -1558,6 +1558,45 @@ img{max-width:100%}
   background:transparent!important
 }
 
+
+/* 2026-10-07 COMPACT MOBILE FAQ CATEGORIES */
+.faq-group-toggle{
+  all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;color:inherit;font:inherit;letter-spacing:inherit;cursor:default
+}
+.faq-group-toggle:after{content:"";display:none}
+@media(max-width:1024px){
+  .faq-groups-simple{gap:10px!important}
+  .faq-group{
+    padding:0!important;overflow:hidden!important;border:1px solid var(--line)!important;
+    box-shadow:0 8px 22px rgba(20,30,25,.045)!important
+  }
+  .faq-group>h3{
+    margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important
+  }
+  .faq-group-toggle{
+    min-height:58px;padding:14px 15px!important;cursor:pointer!important;
+    font-size:14px!important;font-weight:950!important;line-height:1.25!important;
+    background:linear-gradient(90deg,var(--softred),color-mix(in srgb,var(--softgreen) 42%,transparent))!important;
+    border-left:4px solid var(--red)!important
+  }
+  .faq-group-toggle:after{
+    content:"+";display:grid;place-items:center;width:30px;height:30px;flex:0 0 30px;border-radius:999px;
+    background:var(--softgreen);color:var(--green2);font-size:18px;font-weight:800;transition:transform .22s ease,background .22s ease,color .22s ease
+  }
+  .faq-group.is-open .faq-group-toggle:after{transform:rotate(45deg);background:var(--softred);color:var(--red2)}
+  .faq-group:not(.is-open)>.faq-item{display:none!important}
+  .faq-group.is-open>.faq-item{display:block}
+  .faq-group.is-open{padding-bottom:10px!important}
+  .faq-group.is-open>.faq-item{margin-left:10px!important;margin-right:10px!important}
+  html[data-theme="dark"] .faq-group-toggle{
+    background:linear-gradient(90deg,#321f25,#173323)!important;color:#fff!important
+  }
+}
+@media(min-width:1025px){
+  .faq-group-toggle{pointer-events:none}
+}
+
 </style>
 </head>
 <body>
@@ -1924,7 +1963,7 @@ img{max-width:100%}
 
       <div class="faq-groups faq-groups-simple">
         <div class="faq-group reveal">
-          <h3 data-i18n="faqGroupUse">Laver, sécher, repasser</h3>
+          <h3><button type="button" class="faq-group-toggle" data-i18n="faqGroupUse" aria-expanded="true">Laver, sécher, repasser</button></h3>
 
           <details class="faq-item" data-faq="washer">
             <summary><span>Comment lancer un lave-linge ?</span><b>+</b></summary>
@@ -1990,7 +2029,7 @@ img{max-width:100%}
         </div>
 
         <div class="faq-group reveal" data-delay="60">
-          <h3 data-i18n="faqGroupPay">Paiement, WiLine & factures</h3>
+          <h3><button type="button" class="faq-group-toggle" data-i18n="faqGroupPay" aria-expanded="true">Paiement, WiLine & factures</button></h3>
 
           <details class="faq-item" data-faq="pay">
             <summary><span>Comment payer ?</span><b>+</b></summary>
@@ -2033,7 +2072,7 @@ img{max-width:100%}
         </div>
 
         <div class="faq-group reveal" data-delay="120">
-          <h3 data-i18n="faqGroupServices">Lessive & services sur place</h3>
+          <h3><button type="button" class="faq-group-toggle" data-i18n="faqGroupServices" aria-expanded="true">Lessive & services sur place</button></h3>
 
           <details class="faq-item" data-faq="ownDetergent">
             <summary><span>Puis-je utiliser ma propre lessive ?</span><b>+</b></summary>
@@ -2073,7 +2112,7 @@ img{max-width:100%}
         </div>
 
         <div class="faq-group reveal" data-delay="180">
-          <h3 data-i18n="faqGroupContact">Contact, pros & accès</h3>
+          <h3><button type="button" class="faq-group-toggle" data-i18n="faqGroupContact" aria-expanded="true">Contact, pros & accès</button></h3>
 
           <details class="faq-item" data-faq="pro">
             <summary><span>Je suis professionnel, puis-je vous contacter ?</span><b>+</b></summary>
