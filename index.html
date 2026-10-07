@@ -692,6 +692,197 @@ html[data-theme="light"] .hero-wiline-card.invoice:hover{background:linear-gradi
 html[data-theme="dark"] body .contact-info-copy{background:#17241f!important}
 html[data-theme="dark"] body .contact-form-card{background:#17241f!important}
 
+
+/* FINAL VISUAL CORRECTION 2026-10-07 — logo, dark readability, strong hover */
+@media(min-width:1121px){
+  .site-header{display:grid!important;grid-template-columns:350px minmax(500px,auto) 1fr!important;align-items:center!important;column-gap:14px!important}
+  .brand-lockup{display:grid!important;grid-template-columns:64px 1fr!important;align-items:center!important;width:350px!important;min-width:350px!important;height:60px!important;gap:8px!important}
+  .brand-logo-wrap{display:grid!important;place-items:center!important;width:60px!important;height:60px!important;overflow:visible!important}
+  .brand-logo-wrap img{display:block!important;width:60px!important;height:60px!important;object-fit:contain!important;opacity:1!important;visibility:visible!important}
+  .brand-label{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;height:58px!important;padding:0 8px!important}
+  .brand-label .brand-title{font-size:19px!important;transform:scaleX(1.18)!important;transform-origin:center center!important;letter-spacing:.01em!important;text-align:center!important}
+  .desktop-nav{justify-self:start!important}
+  .header-actions{justify-self:end!important}
+}
+@media(max-width:1120px) and (min-width:901px){
+  .brand-lockup{display:grid!important;grid-template-columns:54px 1fr!important;min-width:270px!important;width:270px!important;gap:7px!important}
+  .brand-logo-wrap,.brand-logo-wrap img{width:52px!important;height:52px!important}
+  .brand-label{display:flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;width:100%!important}
+  .brand-label .brand-title{font-size:15.5px!important;transform:scaleX(1.08)!important;transform-origin:center!important}
+}
+@media(max-width:900px){
+  .brand-lockup{display:grid!important;grid-template-columns:48px 1fr!important;min-width:195px!important;width:195px!important;gap:5px!important}
+  .brand-logo-wrap,.brand-logo-wrap img{width:46px!important;height:46px!important}
+  .brand-label{display:flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;width:100%!important}
+  .brand-label .brand-title{font-size:13px!important;transform:none!important;text-align:center!important}
+}
+@media(max-width:600px){
+  .brand-lockup{grid-template-columns:42px 1fr!important;min-width:145px!important;width:145px!important}
+  .brand-logo-wrap,.brand-logo-wrap img{width:40px!important;height:40px!important}
+  .brand-label .brand-title{font-size:10.5px!important}
+}
+
+/* Header navigation: same animated top line as the WiLine cards. */
+.desktop-nav a{position:relative!important;overflow:hidden!important;border-radius:12px!important;padding:10px 13px!important}
+.desktop-nav a:after{display:none!important}
+.desktop-nav a:before{
+  content:"";position:absolute;left:8px;right:8px;top:0;height:3px;border-radius:0 0 99px 99px;
+  background:linear-gradient(90deg,#44b640,#ff3656);transform:scaleX(0);transform-origin:left;
+  transition:transform .28s cubic-bezier(.2,.8,.2,1)
+}
+@media(hover:hover){
+  .desktop-nav a:hover:before{transform:scaleX(1)}
+  html[data-theme="light"] .desktop-nav a:hover{
+    background:#e7f6df!important;color:#176b2a!important;transform:translateY(-3px)!important;
+    box-shadow:0 9px 20px rgba(42,104,47,.12)!important
+  }
+  html[data-theme="dark"] .desktop-nav a:hover{
+    background:#2d6b3d!important;color:#fff!important;transform:translateY(-3px)!important;
+    box-shadow:0 0 0 2px rgba(118,226,111,.22),0 11px 24px rgba(0,0,0,.22)!important
+  }
+}
+
+/* Important clickable categories use the same accent line. */
+:is(.hero-wiline-card,.parking-card,.connected-links a,.social-link,.hero-route-cta,.faq-item,.btn){
+  position:relative
+}
+:is(.parking-card,.connected-links a,.social-link,.hero-route-cta,.btn):before{
+  content:"";position:absolute;left:12px;right:12px;top:0;height:3px;border-radius:0 0 99px 99px;
+  background:linear-gradient(90deg,#44b640,#ff3656);transform:scaleX(0);transform-origin:left;
+  transition:transform .28s cubic-bezier(.2,.8,.2,1);pointer-events:none
+}
+@media(hover:hover){
+  :is(.parking-card,.connected-links a,.social-link,.hero-route-cta,.btn):hover:before{transform:scaleX(1)}
+}
+
+/* Dark theme rebuilt for readability across the entire site. */
+html[data-theme="dark"]{
+  --cream:#0e1815!important;--cream2:#14201c!important;--ink:#faf7f0!important;--muted:#c9d5ce!important;
+  --card:#18251f!important;--surface:#18251f!important;--surface2:#203029!important;
+  --line:rgba(255,255,255,.16)!important;--softgreen:#1d3b28!important;--softred:#43232c!important;
+}
+html[data-theme="dark"] body{background:#0e1815!important;color:#faf7f0!important}
+html[data-theme="dark"] main{color:#faf7f0!important}
+html[data-theme="dark"] :is(.hero-copy,.section-heading,.connected-copy,.loyalty-copy,.products-card,.parking-hero,.contact-section,.faq-section,.equipment-copy,.parcel-copy) :is(h1,h2,h3,h4,strong){
+  color:#faf7f0
+}
+html[data-theme="dark"] :is(.hero-sub,.section-heading p,.connected-copy p,.loyalty-copy p,.products-card p,.parking-hero p,.equipment-copy p,.parcel-copy p,.faq-answer p,.review-card p,.quick-item small,.machine-card small,.hero-wiline-copy small){
+  color:#c9d5ce!important
+}
+
+/* Hero metadata and chips. */
+html[data-theme="dark"] .hero-meta span{
+  background:#2a3932!important;color:#faf7f0!important;border-color:rgba(255,255,255,.2)!important
+}
+html[data-theme="dark"] :is(.hero-trust span,.why-pills span,.equipment-pills span,.payment-method-pills span,.idea-topics span){
+  background:#1c2b25!important;color:#f6f4ed!important;border-color:rgba(255,255,255,.14)!important
+}
+html[data-theme="dark"] .hero-trust span:first-child{background:#183d25!important;color:#8be584!important;border-color:rgba(108,220,102,.35)!important}
+
+/* Large panels/cards. */
+html[data-theme="dark"] :is(.quick-strip,.machine-card,.compact-card,.service-feature,.pro-card,.parcel-service,.payment-easy,.review-card,.faq-group,.faq-item,.parking-card,.equipment-highlight){
+  background:#18251f!important;color:#faf7f0!important;border-color:rgba(255,255,255,.11)!important;
+  box-shadow:0 12px 30px rgba(0,0,0,.16)!important
+}
+html[data-theme="dark"] .quick-item{color:#faf7f0!important}
+html[data-theme="dark"] .quick-item strong{color:#faf7f0!important}
+html[data-theme="dark"] :is(.loyalty-card,.products-card,.pet-feature,.parking-hero){
+  background:linear-gradient(145deg,#192820,#22372c)!important;color:#faf7f0!important;border:1px solid rgba(255,255,255,.1)!important
+}
+html[data-theme="dark"] .product-chips span{background:#111c18!important;color:#faf7f0!important;border:1px solid rgba(255,255,255,.09)!important}
+html[data-theme="dark"] .product-chips b{color:#faf7f0!important}
+html[data-theme="dark"] .service-pill{background:#193d27!important;color:#8be584!important}
+html[data-theme="dark"] .products-card .service-pill,
+html[data-theme="dark"] .service-feature:nth-child(2) .service-pill{background:#48232e!important;color:#ff8296!important}
+html[data-theme="dark"] .text-link{color:#ff8296!important}
+
+/* WiLine top cards: very clear default + hover. */
+html[data-theme="dark"] .hero-wiline-card,
+html[data-theme="dark"] .hero-wiline-card.invoice{
+  background:linear-gradient(135deg,#193026,#23432f)!important;color:#faf7f0!important;
+  border-color:rgba(108,220,102,.34)!important;box-shadow:0 13px 30px rgba(0,0,0,.22)!important
+}
+html[data-theme="dark"] .hero-wiline-copy strong{color:#fff!important}
+html[data-theme="dark"] .hero-wiline-copy small{color:#d3ddd7!important}
+html[data-theme="dark"] .hero-wiline-icon{background:#f7faf7!important;color:#249d3b!important}
+html[data-theme="dark"] .hero-wiline-card>b{color:#fff!important}
+@media(hover:hover){
+  html[data-theme="dark"] .hero-wiline-card:hover{
+    background:linear-gradient(135deg,#24543a,#2d6844)!important;
+    border-color:#72d66d!important;box-shadow:0 0 0 2px rgba(114,214,109,.2),0 19px 40px rgba(0,0,0,.3)!important
+  }
+}
+
+/* FAQ. */
+html[data-theme="dark"] .faq-group>h3{color:#ff7187!important}
+html[data-theme="dark"] .faq-item summary{color:#faf7f0!important}
+html[data-theme="dark"] .faq-item summary b{background:#284834!important;color:#91e88b!important}
+html[data-theme="dark"] .faq-answer p{color:#cad5cf!important}
+html[data-theme="dark"] .faq-answer strong{color:#fff!important}
+html[data-theme="dark"] .faq-link{color:#8be584!important}
+@media(hover:hover){
+  html[data-theme="dark"] .faq-item:hover{
+    background:#294336!important;border-color:#72d66d!important;
+    box-shadow:0 0 0 2px rgba(114,214,109,.18),0 15px 30px rgba(0,0,0,.25)!important
+  }
+  html[data-theme="dark"] .faq-item:hover summary{background:rgba(114,214,109,.08)!important}
+}
+
+/* Contact section: no more pale text on pale panel. */
+html[data-theme="dark"] .contact-section{background:#101d18!important;border-color:rgba(255,255,255,.1)!important}
+html[data-theme="dark"] .contact-info-copy{background:#182720!important;color:#faf7f0!important}
+html[data-theme="dark"] .contact-info-copy h2,
+html[data-theme="dark"] .contact-address strong,
+html[data-theme="dark"] .contact-mail{color:#fff!important}
+html[data-theme="dark"] .contact-info-copy p,
+html[data-theme="dark"] .contact-address span{color:#ccd7d0!important}
+html[data-theme="dark"] .contact-form-card{background:#182720!important;color:#faf7f0!important;border:1px solid rgba(255,255,255,.1)!important}
+html[data-theme="dark"] .contact-form-card h3,
+html[data-theme="dark"] .contact-form-card label>span{color:#fff!important}
+html[data-theme="dark"] .contact-form-card :is(input,select,textarea){
+  background:#0d1714!important;color:#fff!important;border-color:rgba(255,255,255,.22)!important
+}
+html[data-theme="dark"] .contact-form-card :is(input,textarea)::placeholder{color:#9aaba2!important;opacity:1}
+html[data-theme="dark"] .idea-note{background:#1d432b!important;border-color:rgba(114,214,109,.28)!important}
+html[data-theme="dark"] .idea-note strong{color:#fff!important}
+html[data-theme="dark"] .idea-note span{color:#d0dbd5!important}
+html[data-theme="dark"] .idea-topics span{background:#263630!important;color:#f4f6f3!important}
+html[data-theme="dark"] .form-privacy{color:#b9c7c0!important}
+
+/* Social: strong, unmistakable hover in both themes. */
+.social-link{background:transparent}
+@media(hover:hover){
+  html[data-theme="light"] .social-link.facebook:hover{background:#1877f2!important;color:#fff!important;border-color:#7eb3f8!important;box-shadow:0 13px 28px rgba(24,119,242,.32)!important}
+  html[data-theme="light"] .social-link.instagram:hover{background:linear-gradient(135deg,#833ab4,#e1306c,#f77737)!important;color:#fff!important;border-color:#ff9f79!important;box-shadow:0 13px 28px rgba(211,52,111,.30)!important}
+  html[data-theme="dark"] .social-link.facebook:hover{background:#2583ef!important;color:#fff!important;border-color:#a5cbff!important;box-shadow:0 0 0 2px rgba(255,255,255,.12),0 16px 32px rgba(37,131,239,.38)!important}
+  html[data-theme="dark"] .social-link.instagram:hover{background:linear-gradient(135deg,#a04bc9,#ee3c76,#f28b44)!important;color:#fff!important;border-color:#ffc0a4!important;box-shadow:0 0 0 2px rgba(255,255,255,.12),0 16px 32px rgba(221,61,120,.38)!important}
+}
+
+/* Every major clickable category gets a very visible dark hover. */
+@media(hover:hover){
+  html[data-theme="dark"] :is(.parking-card,.connected-links a,.btn-ghost,.visit-help-link):hover{
+    background:#2b4939!important;color:#fff!important;border-color:#72d66d!important;
+    box-shadow:0 0 0 2px rgba(114,214,109,.2),0 14px 30px rgba(0,0,0,.25)!important
+  }
+  html[data-theme="dark"] .connected-links a:hover b{color:#fff!important}
+  html[data-theme="dark"] :is(.text-link,.faq-link,.contact-mail,.footer a):hover{color:#9aef94!important}
+  html[data-theme="dark"] .back-to-top-float:hover{background:#326143!important;color:#fff!important;border-color:#79df74!important}
+}
+
+/* Footer and modal. */
+html[data-theme="dark"] .footer{color:#b8c6be!important}
+html[data-theme="dark"] .footer a{color:#f6f5ef!important}
+html[data-theme="dark"] .modal{background:#17241f!important;color:#faf7f0!important}
+html[data-theme="dark"] .modal p{color:#c9d5ce!important}
+html[data-theme="dark"] .bonus-grid span{background:#22342b!important;color:#faf7f0!important}
+
+/* Header stays brand beige in both themes; logo background blends into it. */
+html[data-theme] .site-header,
+html[data-theme] .brand-lockup,
+html[data-theme] .brand-logo-wrap,
+html[data-theme] .brand-logo-wrap img{background:#ffe6bc!important}
+html[data-theme] .brand-title{color:#161c1b!important}
+
 </style>
 </head>
 <body>
@@ -699,7 +890,7 @@ html[data-theme="dark"] body .contact-form-card{background:#17241f!important}
   <header class="site-header" id="top">
     <a class="brand brand-lockup" href="#top" aria-label="POP'n WASH Wavre">
       <span class="brand-logo-wrap" aria-hidden="true">
-        <img src="assets/logo-popnwash.webp" width="1024" height="1024" alt="" />
+        <img src="assets/logo-popnwash-header.webp" width="127" height="128" alt="" />
       </span>
       <span class="brand-label">
         <strong class="brand-title">POP’n WASH WAVRE</strong>

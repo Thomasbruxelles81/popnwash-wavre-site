@@ -266,6 +266,51 @@ jobs:
             await b.close();
           }
 
+          // Final visual regression checks: logo, dark contrast, and obvious hover states.
+          {
+            const b=await chromium.launch({headless:true});
+            for(const mode of ['light','dark']){
+              const p=await b.newPage({viewport:{width:1440,height:1000},colorScheme:mode});
+              await p.addInitScript(({mode})=>{localStorage.setItem('popnwash-lang','fr');localStorage.setItem('popnwash-theme',mode)},{mode});
+              await p.goto('http://127.0.0.1:4173/',{waitUntil:'networkidle',timeout:45000});
+              const base=await p.evaluate(()=>({
+                logoComplete:document.querySelector('.brand-logo-wrap img').complete,
+                logoW:document.querySelector('.brand-logo-wrap img').naturalWidth,
+                logoRect:document.querySelector('.brand-logo-wrap img').getBoundingClientRect().width,
+                brandTitle:getComputedStyle(document.querySelector('.brand-title')).color,
+                heroSub:getComputedStyle(document.querySelector('.hero-sub')).color,
+                wiTitle:getComputedStyle(document.querySelector('.hero-wiline-copy strong')).color,
+                wiSmall:getComputedStyle(document.querySelector('.hero-wiline-copy small')).color,
+                contactH2:getComputedStyle(document.querySelector('.contact-info-copy h2')).color,
+                formH3:getComputedStyle(document.querySelector('.contact-form-card h3')).color,
+                inputColor:getComputedStyle(document.querySelector('.contact-form-card input')).color,
+                inputBg:getComputedStyle(document.querySelector('.contact-form-card input')).backgroundColor
+              }));
+              if(!base.logoComplete||base.logoW<50||base.logoRect<35) failures.push(mode+': header logo not visible '+JSON.stringify(base));
+              if(base.brandTitle!=='rgb(22, 28, 27)') failures.push(mode+': brand title contrast '+base.brandTitle);
+              if(mode==='dark'){
+                const lightText=['rgb(250, 247, 240)','rgb(255, 255, 255)'];
+                if(base.heroSub!=='rgb(201, 213, 206)') failures.push('dark: hero subtitle '+base.heroSub);
+                if(!lightText.includes(base.wiTitle)) failures.push('dark: WiLine title '+base.wiTitle);
+                if(base.wiSmall!=='rgb(211, 221, 215)') failures.push('dark: WiLine secondary '+base.wiSmall);
+                if(!lightText.includes(base.contactH2)) failures.push('dark: contact heading '+base.contactH2);
+                if(!lightText.includes(base.formH3)) failures.push('dark: form heading '+base.formH3);
+                if(base.inputColor!=='rgb(255, 255, 255)'||base.inputBg!=='rgb(13, 23, 20)') failures.push('dark: form input '+JSON.stringify(base));
+              }
+              for(const sel of ['.desktop-nav a','.hero-wiline-card','.parking-card','.social-link.facebook','.social-link.instagram']){
+                const el=p.locator(sel).first();
+                if(await el.count()){
+                  const before=await el.evaluate(e=>getComputedStyle(e).backgroundColor+'|'+getComputedStyle(e).backgroundImage+'|'+getComputedStyle(e).boxShadow+'|'+getComputedStyle(e).transform);
+                  await el.hover();await p.waitForTimeout(340);
+                  const after=await el.evaluate(e=>getComputedStyle(e).backgroundColor+'|'+getComputedStyle(e).backgroundImage+'|'+getComputedStyle(e).boxShadow+'|'+getComputedStyle(e).transform);
+                  if(before===after) failures.push(mode+': hover not visible '+sel);
+                }
+              }
+              await p.close();
+            }
+            await b.close();
+          }
+
           if(failures.length){
             console.error('QA FAIL\n'+failures.join('\n'));
             process.exit(1);
