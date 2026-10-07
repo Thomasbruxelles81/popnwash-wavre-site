@@ -143,7 +143,40 @@ img[loading="lazy"]{content-visibility:auto}
 @media(max-width:1000px){.visit-card-grid{grid-template-columns:1fr 1fr}.first-visit-head{grid-template-columns:1fr}.first-visit-showcase{margin-top:14px}.desktop-nav{gap:2px}.desktop-nav a{padding:8px 9px;font-size:12px}}
 @media(max-width:700px){.visit-card-grid,.faq-firstvisit-grid{grid-template-columns:1fr}.first-visit-showcase{padding:18px 14px;border-radius:22px}.visit-card summary{min-height:72px}.faq-firstvisit-head{display:grid;gap:5px}.brand{width:58px;height:54px}.brand img{width:48px;height:48px}.desktop-nav{display:none}}
 @media(hover:none){.visit-card:hover{transform:none;background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.1);box-shadow:none}.visit-card:hover .visit-card-body{grid-template-rows:0fr;opacity:0}.visit-card[open] .visit-card-body{grid-template-rows:1fr;opacity:1}.visit-card[open]{transform:none;background:rgba(255,255,255,.085);border-color:rgba(255,255,255,.18)}}
-.first-visit-tips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.first-visit-tips span{padding:9px 11px;border-radius:12px;background:rgba(255,255,255,.045);color:#bac6bf;font-size:9px;line-height:1.45}.first-visit-tips b{color:#fff}@media(max-width:800px){.first-visit-tips{grid-template-columns:1fr}}</style>
+.first-visit-tips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.first-visit-tips span{padding:9px 11px;border-radius:12px;background:rgba(255,255,255,.045);color:#bac6bf;font-size:9px;line-height:1.45}.first-visit-tips b{color:#fff}@media(max-width:800px){.first-visit-tips{grid-template-columns:1fr}}
+/* October 2026 polish pass: route CTA, interaction, FAQ, parking and footer cohesion */
+.hero-route-cta{width:min(100%,560px);margin:2px 0 26px;padding:15px 17px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:13px;border-radius:19px;background:linear-gradient(135deg,#e3203a 0%,#c8142c 100%);color:#fff;text-decoration:none;box-shadow:0 16px 34px rgba(208,24,50,.24);border:1px solid rgba(255,255,255,.24);transition:transform .24s ease,box-shadow .24s ease,filter .24s ease}
+.hero-route-cta:hover{transform:translateY(-3px) scale(1.012);box-shadow:0 22px 42px rgba(208,24,50,.34);filter:saturate(1.08)}
+.hero-route-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.16);transition:transform .28s cubic-bezier(.2,.8,.2,1),background .24s ease}
+.hero-route-icon .ui-icon{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.hero-route-copy{display:grid;gap:2px;min-width:0}.hero-route-copy strong{font-size:14px;line-height:1.2}.hero-route-copy small{font-size:10px;line-height:1.35;color:rgba(255,255,255,.82)}
+.hero-route-cta>b{font-size:20px;transition:transform .24s ease}.hero-route-cta:hover .hero-route-icon{transform:rotate(-7deg) scale(1.08);background:rgba(255,255,255,.23)}.hero-route-cta:hover>b{transform:translate(3px,-3px)}
+.visit-card{position:relative;isolation:isolate}
+.visit-card:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 20% 10%,rgba(156,235,143,.18),transparent 44%),linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.01));opacity:0;transition:opacity .25s ease}
+.visit-dryer:before,.visit-products:before{background:radial-gradient(circle at 20% 10%,rgba(255,95,113,.18),transparent 44%),linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.01))}
+.visit-card:after{content:"";position:absolute;left:14px;right:14px;top:0;height:3px;border-radius:0 0 99px 99px;background:linear-gradient(90deg,#8ee27d,#fff);transform:scaleX(0);transform-origin:left;transition:transform .28s ease}
+.visit-dryer:after,.visit-products:after{background:linear-gradient(90deg,#ff6378,#fff)}
+.visit-card:hover{transform:translateY(-6px) scale(1.015);background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.24);box-shadow:0 20px 35px rgba(0,0,0,.2)}
+.visit-card:hover:before,.visit-card[open]:before{opacity:1}.visit-card:hover:after,.visit-card[open]:after{transform:scaleX(1)}
+.visit-card:hover .visit-icon{transform:translateY(-2px) rotate(-6deg) scale(1.12)}.visit-card:hover .visit-plus{transform:rotate(90deg);background:rgba(255,255,255,.18)}
+.visit-card:hover .visit-card-body{grid-template-rows:0fr;opacity:0}
+.visit-card[open]{transform:translateY(-3px);background:rgba(255,255,255,.095);border-color:rgba(255,255,255,.25);box-shadow:0 18px 34px rgba(0,0,0,.18)}
+.visit-card[open] .visit-card-body{grid-template-rows:1fr;opacity:1}.visit-card[open] .visit-plus{transform:rotate(45deg);background:rgba(255,255,255,.2)}.visit-card[open] .visit-icon{transform:scale(1.08)}
+.visit-help{margin:14px 0 0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 7px;color:#aebbb3;font-size:10px;text-align:center}
+.visit-help-link{color:#fff;text-decoration:none;font-weight:900;padding:4px 7px;border-radius:8px;background:rgba(255,255,255,.08);transition:.2s}.visit-help-link:hover{background:var(--red);color:#fff;transform:translateY(-1px)}
+.faq-group>h3{font-size:16px;font-weight:950;color:var(--red2);margin:2px 2px 13px;padding:10px 12px;border-left:4px solid var(--red);border-radius:11px;background:linear-gradient(90deg,var(--softred),rgba(255,255,255,0));letter-spacing:-.01em}
+.parking-hero{position:relative;overflow:hidden;border:1px solid rgba(225,33,59,.14);background:linear-gradient(120deg,#fff3f1 0%,#fffdf8 48%,#e7f7df 100%);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.parking-hero:after{content:"";position:absolute;width:210px;height:210px;border-radius:50%;right:105px;bottom:-155px;background:rgba(225,33,59,.07);pointer-events:none}
+.parking-hero h2{color:var(--red2)}.parking-hero:hover{transform:translateY(-3px);box-shadow:0 20px 48px rgba(35,38,32,.11);border-color:rgba(225,33,59,.28)}
+.parking-badge{transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s ease}.parking-hero:hover .parking-badge{transform:rotate(-3deg) scale(1.055);box-shadow:0 24px 48px rgba(68,182,64,.28)}
+.parking-card{position:relative;overflow:hidden;border:1px solid rgba(225,33,59,.08);box-shadow:0 7px 18px rgba(20,26,20,.035)}
+.parking-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(var(--red),var(--green));transform:scaleY(.35);transition:transform .25s ease}
+.parking-card>b{transition:transform .22s ease,color .22s ease}.parking-card:hover{transform:translateY(-6px);background:linear-gradient(135deg,#fff8f7,#fffdf8 58%,#f1faed);border-color:rgba(225,33,59,.2);box-shadow:0 18px 34px rgba(20,26,20,.1)}.parking-card:hover:before{transform:scaleY(1)}.parking-card:hover>b{transform:translate(3px,-3px);color:var(--red)}
+.footer .footer-brand{flex:0 0 auto}.footer .footer-brand img{width:72px;height:72px;object-fit:cover;border-radius:12px}
+@media(max-width:700px){.hero-route-cta{width:100%;margin-bottom:20px;padding:13px 14px}.hero-route-icon{width:40px;height:40px}.hero-route-copy strong{font-size:13px}.hero-route-copy small{font-size:9.5px}.parking-hero{padding:26px 22px}.parking-badge{width:125px;height:125px}.parking-badge strong{font-size:48px}}
+@media(hover:none){.visit-card:hover{transform:none;background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.1);box-shadow:none}.visit-card:hover:before{opacity:0}.visit-card:hover:after{transform:scaleX(0)}.visit-card:hover .visit-icon{transform:none}.visit-card:hover .visit-plus{transform:none;background:rgba(255,255,255,.09)}.visit-card[open]{transform:none;background:rgba(255,255,255,.095);border-color:rgba(255,255,255,.25)}.visit-card[open]:before{opacity:1}.visit-card[open]:after{transform:scaleX(1)}.visit-card[open] .visit-icon{transform:scale(1.06)}.visit-card[open] .visit-plus{transform:rotate(45deg);background:rgba(255,255,255,.2)}}
+
+</style>
 </head>
 <body>
   <div class="page-noise" aria-hidden="true"></div>
@@ -210,6 +243,16 @@ img[loading="lazy"]{content-visibility:auto}
           <span data-i18n="heroTrustPayment">Paiement facile</span>
           <span data-i18n="heroTrustPets">Machines animaux dédiées</span>
         </div>
+        <a class="hero-route-cta" href="https://www.google.com/maps/search/?api=1&query=POP%27n%20WASH%20Wavre&query_place_id=ChIJ616yFqB9wUcRf55Cp9uBEM0" target="_blank" rel="noopener" aria-label="Itinéraire vers POP'n WASH Wavre">
+          <span class="hero-route-icon" aria-hidden="true">
+            <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 21s6-5.4 6-11a6 6 0 1 0-12 0c0 5.6 6 11 6 11Z"/><circle cx="12" cy="10" r="2.2"/></svg>
+          </span>
+          <span class="hero-route-copy">
+            <strong data-i18n="heroRouteTitle">Itinéraire vers la laverie</strong>
+            <small data-i18n="heroRouteText">Rue de Namur 72 · Ouvrir Google Maps</small>
+          </span>
+          <b aria-hidden="true">↗</b>
+        </a>
         
       </div>
 
@@ -298,7 +341,13 @@ img[loading="lazy"]{content-visibility:auto}
           <span data-i18n="firstVisitTipWiLine"><b>WiLine :</b> vérifiez les machines disponibles et activez la cloche pour être averti en fin de cycle.</span>
           <span data-i18n="firstVisitTipPets"><b>Linge des animaux :</b> utilisez uniquement les machines ANIMAUX / PETS.</span>
         </div>
-        <p class="visit-help" data-i18n="firstVisitHelp">Un doute ? Ouvrez une carte ou consultez la FAQ plus bas : toutes les étapes y sont détaillées.</p>
+        <div class="visit-help">
+          <span data-i18n="firstVisitHelpPrefix">Un doute ?</span>
+          <a class="visit-help-link" href="https://www.google.com/maps/search/?api=1&query=POP%27n%20WASH%20Wavre&query_place_id=ChIJ616yFqB9wUcRf55Cp9uBEM0" target="_blank" rel="noopener" data-i18n="firstVisitHelpMap">Ouvrez une carte</a>
+          <span data-i18n="firstVisitHelpOr">ou</span>
+          <a class="visit-help-link" href="#faq" data-i18n="firstVisitHelpFaq">consultez la FAQ plus bas</a>
+          <span data-i18n="firstVisitHelpSuffix">Toutes les étapes y sont détaillées.</span>
+        </div>
       </div>
 </section>
 
@@ -762,7 +811,9 @@ img[loading="lazy"]{content-visibility:auto}
   </main>
 
   <footer class="footer section-shell">
-    <img src="assets/logo-popnwash.webp" width="1024" height="1024" alt="POP'n WASH Wavre" />
+    <a class="brand footer-brand" href="#top" aria-label="POP'n WASH Wavre">
+      <img src="assets/logo-popnwash.webp" width="1024" height="1024" alt="Logo POP'n WASH Wavre" />
+    </a>
     <p>© <span id="year"></span> POP'n WASH Wavre</p>
     <a href="#top" data-i18n="backTop">Retour en haut ↑</a>
   </footer>
