@@ -124,6 +124,19 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()=>showR
 const loyalty=document.getElementById('loyaltyModal');document.getElementById('loyaltyOpen').addEventListener('click',()=>loyalty.showModal());document.getElementById('loyaltyClose').addEventListener('click',()=>loyalty.close());loyalty.addEventListener('click',e=>{if(e.target===loyalty)loyalty.close()});
 document.getElementById('year').textContent=new Date().getFullYear();
 
+const formMessages={
+fr:{sending:"Envoi en cours…",success:"Merci{name} ! Votre message est bien parti. Nous revenons vers vous rapidement. À bientôt chez POP'n WASH Wavre ✨",error:"L’envoi automatique n’a pas abouti. Vous pouvez nous écrire directement à"},
+nl:{sending:"Bezig met verzenden…",success:"Bedankt{name}! Uw bericht is verzonden. We antwoorden zo snel mogelijk. Tot binnenkort bij POP'n WASH Wavre ✨",error:"Automatisch verzenden is niet gelukt. U kunt ons rechtstreeks mailen op"},
+en:{sending:"Sending…",success:"Thank you{name}! Your message has been sent. We’ll get back to you soon. See you at POP'n WASH Wavre ✨",error:"Automatic sending did not work. You can email us directly at"},
+de:{sending:"Wird gesendet…",success:"Danke{name}! Ihre Nachricht wurde gesendet. Wir melden uns schnellstmöglich. Bis bald bei POP'n WASH Wavre ✨",error:"Der automatische Versand hat nicht funktioniert. Sie können uns direkt schreiben an"},
+it:{sending:"Invio in corso…",success:"Grazie{name}! Il messaggio è stato inviato. Ti risponderemo presto. A presto da POP'n WASH Wavre ✨",error:"L’invio automatico non è riuscito. Puoi scriverci direttamente a"},
+es:{sending:"Enviando…",success:"¡Gracias{name}! Tu mensaje se ha enviado. Te responderemos pronto. Hasta pronto en POP'n WASH Wavre ✨",error:"El envío automático no ha funcionado. Puedes escribirnos directamente a"},
+pt:{sending:"A enviar…",success:"Obrigado{name}! A sua mensagem foi enviada. Responderemos em breve. Até breve na POP'n WASH Wavre ✨",error:"O envio automático não funcionou. Pode escrever-nos diretamente para"},
+ro:{sending:"Se trimite…",success:"Mulțumim{name}! Mesajul a fost trimis. Vă răspundem cât mai curând. Pe curând la POP'n WASH Wavre ✨",error:"Trimiterea automată nu a funcționat. Ne puteți scrie direct la"},
+pl:{sending:"Wysyłanie…",success:"Dziękujemy{name}! Wiadomość została wysłana. Odpowiemy wkrótce. Do zobaczenia w POP'n WASH Wavre ✨",error:"Automatyczne wysyłanie nie powiodło się. Możesz napisać bezpośrednio na"},
+uk:{sending:"Надсилання…",success:"Дякуємо{name}! Повідомлення надіслано. Ми відповімо якнайшвидше. До зустрічі в POP'n WASH Wavre ✨",error:"Автоматичне надсилання не вдалося. Ви можете написати нам напряму на"},
+ru:{sending:"Отправка…",success:"Спасибо{name}! Сообщение отправлено. Мы ответим в ближайшее время. До встречи в POP'n WASH Wavre ✨",error:"Автоматическая отправка не сработала. Вы можете написать нам напрямую на"}
+};
 // Contact form: direct email delivery via FormSubmit AJAX.
 const contactForm=document.getElementById('contactForm');
 if(contactForm){
@@ -143,7 +156,8 @@ if(contactForm){
     const button=contactForm.querySelector('button[type="submit"]');
     const buttonText=button.querySelector('span');
     const original=buttonText.textContent;
-    button.disabled=true; buttonText.textContent='Envoi en cours…';
+    const fm=formMessages[currentLang]||formMessages.fr;
+    button.disabled=true; buttonText.textContent=fm.sending;
     status.className='form-status'; status.textContent='';
     const data=new FormData(contactForm);
     data.append('_subject',"Nouveau message depuis le site POP'n WASH Wavre");
@@ -155,11 +169,11 @@ if(contactForm){
       if(!res.ok || body.success===false) throw new Error('send failed');
       const name=(firstName && firstName.value ? firstName.value : '').trim();
       status.className='form-status success';
-      status.textContent=name ? ('Merci '+name+' ! Votre message est bien parti. Nous revenons vers vous rapidement. À bientôt chez POP\'n WASH Wavre ✨') : 'Merci ! Votre message est bien parti. Nous revenons vers vous rapidement. À bientôt chez POP\'n WASH Wavre ✨';
+      status.textContent=fm.success.replace('{name}',name?' '+name:'');
       contactForm.reset();
     }catch(err){
       status.className='form-status error';
-      status.innerHTML='L’envoi automatique n’a pas abouti. Vous pouvez nous écrire directement à <a href="mailto:ahb.lavoir@gmail.com">ahb.lavoir@gmail.com</a>.';
+      status.innerHTML=fm.error+' <a href="mailto:ahb.lavoir@gmail.com">ahb.lavoir@gmail.com</a>.';
     }finally{
       button.disabled=false; buttonText.textContent=original;
     }
