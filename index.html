@@ -9,14 +9,15 @@
   (()=>{try{
     const saved=localStorage.getItem('popnwash-theme');
     const systemDark=matchMedia('(prefers-color-scheme: dark)').matches;
-    const mode=(saved==='light'||saved==='dark')?saved:(systemDark?'dark':'light');
-    document.documentElement.dataset.theme=mode;
-    document.documentElement.dataset.themeMode=mode;
-    document.documentElement.dataset.themeSource=(saved==='light'||saved==='dark')?'user':'system';
+    const preference=(saved==='light'||saved==='auto'||saved==='dark')?saved:'auto';
+    const effective=preference==='auto'?(systemDark?'dark':'light'):preference;
+    document.documentElement.dataset.theme=effective;
+    document.documentElement.dataset.themeMode=preference;
+    document.documentElement.dataset.themeSource=preference==='auto'?'system':'user';
   }catch(e){
-    const mode=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
-    document.documentElement.dataset.theme=mode;
-    document.documentElement.dataset.themeMode=mode;
+    const effective=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+    document.documentElement.dataset.theme=effective;
+    document.documentElement.dataset.themeMode='auto';
     document.documentElement.dataset.themeSource='system';
   }})();
   </script>
@@ -1637,8 +1638,13 @@ img,svg,video{max-width:100%}
 .theme-control[data-mode="light"] .theme-light-label,
 .theme-control[data-mode="auto"] .theme-auto-label{color:#16201c!important;transform:scale(1.02)}
 .theme-control[data-mode="dark"] .theme-dark-label{color:#fff!important;transform:scale(1.02)}
-html[data-theme="dark"] .theme-slider-shell{background:#101a17!important}
-html[data-theme="dark"] .theme-control[data-mode="auto"] .theme-auto-label{color:#dff6d9!important}
+html[data-theme="dark"] .theme-slider-shell{
+  background:rgba(255,255,255,.84)!important;
+  border-color:rgba(22,28,27,.12)!important;
+  box-shadow:0 5px 14px rgba(22,28,27,.08)!important;
+}
+html[data-theme="dark"] .theme-option-label{color:#69756f!important}
+html[data-theme="dark"] .theme-control[data-mode="auto"] .theme-auto-label{color:#16201c!important}
 
 /* Dark means genuinely dark: eliminate residual pale panels and keep readable contrast. */
 html[data-theme="dark"] body,
