@@ -322,9 +322,13 @@ jobs:
               inputBg:getComputedStyle(document.querySelector('.contact-form-card input')).backgroundColor,
               inputColor:getComputedStyle(document.querySelector('.contact-form-card input')).color,
               logoDisplay:getComputedStyle(document.querySelector('.brand-logo-wrap img')).display,
-              logoOpacity:getComputedStyle(document.querySelector('.brand-logo-wrap img')).opacity
+              logoOpacity:getComputedStyle(document.querySelector('.brand-logo-wrap img')).opacity,
+              langCodeColor:getComputedStyle(document.querySelector('#langCode')).color,
+              langChevronColor:getComputedStyle(document.querySelector('.lang-button .chev')).color
             }));
             const rgbSum=s=>{const m=s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);return m?(+m[1]+ +m[2]+ +m[3]):999};
+            if(dark.langCodeColor!=='rgb(22, 28, 27)') failures.push('dark readability: language code '+dark.langCodeColor);
+            if(dark.langChevronColor!=='rgb(22, 28, 27)') failures.push('dark readability: language chevron '+dark.langChevronColor);
             if(rgbSum(dark.wiTitle)<570) failures.push('dark readability: WiLine title '+dark.wiTitle);
             if(rgbSum(dark.wiSmall)<500) failures.push('dark readability: WiLine secondary '+dark.wiSmall);
             if(dark.heroTrustBg==='rgb(255, 255, 255)'||rgbSum(dark.heroTrustBg)>420) failures.push('dark readability: hero trust surface '+dark.heroTrustBg);
