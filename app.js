@@ -137,50 +137,56 @@ function applyFaqLang(lang){
 let currentLang='fr';
 
 const themeLabels={
-  fr:{label:"Thème",light:"Clair",auto:"Automatique",dark:"Sombre"},
-  nl:{label:"Thema",light:"Licht",auto:"Automatisch",dark:"Donker"},
-  en:{label:"Theme",light:"Light",auto:"Automatic",dark:"Dark"},
-  de:{label:"Design",light:"Hell",auto:"Automatisch",dark:"Dunkel"},
-  it:{label:"Tema",light:"Chiaro",auto:"Automatico",dark:"Scuro"},
-  es:{label:"Tema",light:"Claro",auto:"Automático",dark:"Oscuro"},
-  pt:{label:"Tema",light:"Claro",auto:"Automático",dark:"Escuro"},
-  ro:{label:"Temă",light:"Luminos",auto:"Automat",dark:"Întunecat"},
-  pl:{label:"Motyw",light:"Jasny",auto:"Automatyczny",dark:"Ciemny"},
-  uk:{label:"Тема",light:"Світла",auto:"Автоматично",dark:"Темна"},
-  ru:{label:"Тема",light:"Светлая",auto:"Автоматически",dark:"Тёмная"}
+  fr:{label:"Thème",light:"Clair",dark:"Sombre"},
+  nl:{label:"Thema",light:"Licht",dark:"Donker"},
+  en:{label:"Theme",light:"Light",dark:"Dark"},
+  de:{label:"Design",light:"Hell",dark:"Dunkel"},
+  it:{label:"Tema",light:"Chiaro",dark:"Scuro"},
+  es:{label:"Tema",light:"Claro",dark:"Oscuro"},
+  pt:{label:"Tema",light:"Claro",dark:"Escuro"},
+  ro:{label:"Temă",light:"Luminos",dark:"Întunecat"},
+  pl:{label:"Motyw",light:"Jasny",dark:"Ciemny"},
+  uk:{label:"Тема",light:"Світла",dark:"Темна"},
+  ru:{label:"Тема",light:"Светлая",dark:"Тёмная"}
 };
-const themeModes=['light','auto','dark'];
+const themeModes=['light','dark'];
 const themeSlider=document.getElementById('themeSlider');
 const themeControl=document.getElementById('themeControl');
 const systemTheme=matchMedia('(prefers-color-scheme: dark)');
-let themeMode='light';
-try{const savedTheme=localStorage.getItem('popnwash-theme');if(themeModes.includes(savedTheme))themeMode=savedTheme}catch(e){}
-function resolvedTheme(mode){return mode==='auto'?(systemTheme.matches?'dark':'light'):mode}
+let savedTheme=null;
+try{const v=localStorage.getItem('popnwash-theme');if(themeModes.includes(v))savedTheme=v}catch(e){}
+let themeFollowsSystem=!savedTheme;
+let themeMode=savedTheme||(systemTheme.matches?'dark':'light');
 function syncThemeA11y(){
   if(!themeSlider||!themeControl)return;
   const l=themeLabels[currentLang]||themeLabels.fr;
   const modeLabel=l[themeMode]||l.light;
   const text=`${l.label} : ${modeLabel}`;
   themeSlider.setAttribute('aria-label',text);
+  themeSlider.setAttribute('aria-valuetext',modeLabel);
 }
 function applyTheme(mode,persist=true){
-  themeMode=themeModes.includes(mode)?mode:'light';
-  const resolved=resolvedTheme(themeMode);
-  document.documentElement.dataset.theme=resolved;
+  themeMode=themeModes.includes(mode)?mode:(systemTheme.matches?'dark':'light');
+  document.documentElement.dataset.theme=themeMode;
   document.documentElement.dataset.themeMode=themeMode;
-  if(themeSlider)themeSlider.value=String(themeModes.indexOf(themeMode));
+  document.documentElement.dataset.themeSource=persist?'user':(themeFollowsSystem?'system':'user');
+  if(themeSlider)themeSlider.value=themeMode==='dark'?'1':'0';
   if(themeControl)themeControl.dataset.mode=themeMode;
   const meta=document.querySelector('meta[name="theme-color"]');
-  if(meta)meta.setAttribute('content',resolved==='dark'?'#0f1815':'#ffe6bc');
-  if(persist){try{localStorage.setItem('popnwash-theme',themeMode)}catch(e){}}
+  if(meta)meta.setAttribute('content',themeMode==='dark'?'#0e1815':'#ffe6bc');
+  if(persist){
+    themeFollowsSystem=false;
+    try{localStorage.setItem('popnwash-theme',themeMode)}catch(e){}
+  }
   syncThemeA11y();
 }
 if(themeSlider){
-  themeSlider.addEventListener('input',()=>applyTheme(themeModes[Number(themeSlider.value)]||'light'));
-  themeSlider.addEventListener('change',()=>applyTheme(themeModes[Number(themeSlider.value)]||'light'));
+  themeSlider.addEventListener('input',()=>applyTheme(Number(themeSlider.value)===1?'dark':'light'));
+  themeSlider.addEventListener('change',()=>applyTheme(Number(themeSlider.value)===1?'dark':'light'));
 }
-if(systemTheme.addEventListener)systemTheme.addEventListener('change',()=>{if(themeMode==='auto')applyTheme('auto',false)});
-else if(systemTheme.addListener)systemTheme.addListener(()=>{if(themeMode==='auto')applyTheme('auto',false)});
+const handleSystemTheme=()=>{if(themeFollowsSystem)applyTheme(systemTheme.matches?'dark':'light',false)};
+if(systemTheme.addEventListener)systemTheme.addEventListener('change',handleSystemTheme);
+else if(systemTheme.addListener)systemTheme.addListener(handleSystemTheme);
 applyTheme(themeMode,false);
 
 function applyLang(lang){
