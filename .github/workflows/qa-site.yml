@@ -84,6 +84,7 @@ jobs:
               instagram: await page.locator('a[href*="instagram.com/popnwashwavre"]').count(),
               services: await page.locator('#services').count(),
               pros: await page.locator('#pros').count(),
+              themeSlider: await page.locator('#themeSlider').count(),
               pet7: await page.getByText('7 kg · 4,00 €', {exact:true}).count(),
               pet14: await page.getByText('14 kg · 7,00 €', {exact:true}).count(),
             };
@@ -151,26 +152,39 @@ jobs:
 
           await browser.close();
 
-          // Cross-browser visual theme audit: Chromium (Chrome/Edge engine), Firefox and WebKit (Safari engine).
+          // Cross-browser theme audit: same light rendering everywhere + explicit dark + automatic mode.
           for (const [engineName,engine] of [['chromium',chromium],['firefox',firefox],['webkit',webkit]]) {
             const b = await engine.launch({headless:true});
-            for (const scheme of ['light','dark']) {
-              const p = await b.newPage({viewport:{width:1366,height:900},colorScheme:scheme});
-              await p.addInitScript(() => localStorage.setItem('popnwash-lang','fr'));
-              await p.goto('http://127.0.0.1:4173/', {waitUntil:'networkidle', timeout:45000});
-              const visual = await p.evaluate(() => ({
-                bodyBg:getComputedStyle(document.body).backgroundColor,
-                bodyColor:getComputedStyle(document.body).color,
-                headerBg:getComputedStyle(document.querySelector('.site-header')).backgroundColor,
-                logoBg:getComputedStyle(document.querySelector('.brand-logo-wrap')).backgroundColor,
-                titleColor:getComputedStyle(document.querySelector('.brand-title')).color
-              }));
-              if(visual.bodyBg!=='rgb(247, 240, 223)') failures.push(engineName+' '+scheme+': body bg '+visual.bodyBg);
-              if(visual.bodyColor!=='rgb(22, 28, 27)') failures.push(engineName+' '+scheme+': body text '+visual.bodyColor);
-              if(visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' '+scheme+': header bg '+visual.headerBg);
-              if(visual.logoBg!=='rgb(255, 230, 188)') failures.push(engineName+' '+scheme+': logo bg '+visual.logoBg);
-              if(visual.titleColor!=='rgb(22, 28, 27)') failures.push(engineName+' '+scheme+': brand title '+visual.titleColor);
-              await p.close();
+            for (const systemScheme of ['light','dark']) {
+              for (const requestedMode of ['light','auto','dark']) {
+                const p = await b.newPage({viewport:{width:1366,height:900},colorScheme:systemScheme});
+                await p.addInitScript(({mode}) => {
+                  localStorage.setItem('popnwash-lang','fr');
+                  localStorage.setItem('popnwash-theme',mode);
+                }, {mode:requestedMode});
+                await p.goto('http://127.0.0.1:4173/', {waitUntil:'networkidle', timeout:45000});
+                const expectedResolved=requestedMode==='auto'?systemScheme:requestedMode;
+                const visual = await p.evaluate(() => ({
+                  theme:document.documentElement.dataset.theme,
+                  mode:document.documentElement.dataset.themeMode,
+                  bodyBg:getComputedStyle(document.body).backgroundColor,
+                  bodyColor:getComputedStyle(document.body).color,
+                  headerBg:getComputedStyle(document.querySelector('.site-header')).backgroundColor,
+                  logoBg:getComputedStyle(document.querySelector('.brand-logo-wrap')).backgroundColor,
+                  titleColor:getComputedStyle(document.querySelector('.brand-title')).color,
+                  slider:getComputedStyle(document.querySelector('.theme-slider-shell')).backgroundColor
+                }));
+                if(visual.mode!==requestedMode) failures.push(engineName+' '+systemScheme+' '+requestedMode+': mode '+visual.mode);
+                if(visual.theme!==expectedResolved) failures.push(engineName+' '+systemScheme+' '+requestedMode+': resolved '+visual.theme+' != '+expectedResolved);
+                const expectedBody=expectedResolved==='dark'?'rgb(15, 24, 21)':'rgb(247, 240, 223)';
+                const expectedText=expectedResolved==='dark'?'rgb(246, 242, 233)':'rgb(22, 28, 27)';
+                if(visual.bodyBg!==expectedBody) failures.push(engineName+' '+systemScheme+' '+requestedMode+': body bg '+visual.bodyBg);
+                if(visual.bodyColor!==expectedText) failures.push(engineName+' '+systemScheme+' '+requestedMode+': body text '+visual.bodyColor);
+                if(visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' '+systemScheme+' '+requestedMode+': header bg '+visual.headerBg);
+                if(visual.logoBg!=='rgb(255, 230, 188)') failures.push(engineName+' '+systemScheme+' '+requestedMode+': logo bg '+visual.logoBg);
+                if(visual.titleColor!=='rgb(22, 28, 27)') failures.push(engineName+' '+systemScheme+' '+requestedMode+': brand title '+visual.titleColor);
+                await p.close();
+              }
             }
             await b.close();
           }
