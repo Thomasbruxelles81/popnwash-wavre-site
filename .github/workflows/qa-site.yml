@@ -209,8 +209,9 @@ jobs:
               const subjectText=(await page.locator('#contactSubject option').first().textContent())?.trim();
               if(lang!=='fr' && subjectText==='Choisir un sujet') failures.push('lang '+lang+': subject option stayed French');
               const lightThemeText=(await page.locator('#themeLightText').textContent())?.trim();
+              const autoThemeText=(await page.locator('#themeAutoText').textContent())?.trim();
               const darkThemeText=(await page.locator('#themeDarkText').textContent())?.trim();
-              if(!lightThemeText || !darkThemeText) failures.push('lang '+lang+': theme labels missing');
+              if(!lightThemeText || !autoThemeText || !darkThemeText) failures.push('lang '+lang+': theme labels missing');
               const activeLang=await page.locator('#langMenu button[data-lang="'+lang+'"]').getAttribute('aria-current');
               if(activeLang!=='true') failures.push('lang '+lang+': active language state missing');
               const badFaqLinks=await page.locator('[data-faq] a').evaluateAll(as=>as.filter(a=>{
@@ -229,7 +230,7 @@ jobs:
 
           await browser.close();
 
-          // Cross-browser theme audit: system preference on first visit, then explicit light/dark user choice.
+          // Cross-browser theme audit: Auto follows system preference; explicit light/dark choices override it.
           for (const [engineName,engine] of [['chromium',chromium],['firefox',firefox],['webkit',webkit]]) {
             const b = await engine.launch({headless:true});
             for (const systemScheme of ['light','dark']) {
@@ -248,7 +249,7 @@ jobs:
                 }));
                 if(visual.theme!==systemScheme) failures.push(engineName+' system '+systemScheme+': first visit theme '+visual.theme);
                 if(visual.source!=='system') failures.push(engineName+' system '+systemScheme+': source '+visual.source);
-                if(visual.slider!==(systemScheme==='dark'?'1':'0')) failures.push(engineName+' system '+systemScheme+': slider '+visual.slider);
+                if(visual.slider!=='1') failures.push(engineName+' system '+systemScheme+': auto slider '+visual.slider);
                 if(systemScheme==='light' && visual.headerBg!=='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': light header '+visual.headerBg);
                 if(systemScheme==='dark' && visual.headerBg==='rgb(255, 230, 188)') failures.push(engineName+' system '+systemScheme+': dark header stayed beige');
                 if(!visual.logoVisible) failures.push(engineName+' system '+systemScheme+': logo hidden');
