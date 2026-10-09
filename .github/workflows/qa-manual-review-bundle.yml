@@ -15,7 +15,7 @@ jobs:
       - name: Package exact site snapshots for offline browser inspection
         run: |
           mkdir -p review-bundle/candidate review-bundle/baseline
-          cp index.html app.js display-scale.css display-scale.js review-bundle/candidate/
+          cp index.html app.js display-scale.css display-scale.js mobile-landing.css review-bundle/candidate/
           cp -r assets review-bundle/candidate/assets
           git archive origin/main index.html app.js assets | tar -x -C review-bundle/baseline
           printf 'candidate=%s\nbaseline=%s\n' "$(git rev-parse HEAD)" "$(git rev-parse origin/main)" > review-bundle/commits.txt
