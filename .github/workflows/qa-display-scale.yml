@@ -70,7 +70,24 @@ jobs:
               const before=await page.locator('.hero-sub').evaluate(e=>parseFloat(getComputedStyle(e).fontSize));
               await page.locator('#displaySizeButton').click();
               if(!await page.locator('#displaySizePanel').isVisible())errors.push('panel not open on 320');
-              await page.locator('#displaySizeRange').evaluate(e=>{e.value='150';e.dispatchEvent(new Event('input',{bubbles:true}));});
+              if(await page.locator('[data-display-size]').count())errors.push('old percentage tiles still present');
+              const range=page.locator('#displaySizeRange');
+              if(await range.getAttribute('type')!=='range')errors.push('AAA control is not a range slider');
+              await range.evaluate(e=>{e.value='80';e.dispatchEvent(new Event('input',{bubbles:true}));});
+              const rail=await range.boundingBox();
+              if(!rail)errors.push('AAA range not visible');
+              else{
+                await page.mouse.move(rail.x+14,rail.y+rail.height/2);
+                await page.mouse.down();
+                await page.mouse.move(rail.x+rail.width-14,rail.y+rail.height/2,{steps:12});
+                await page.mouse.up();
+                if(await range.inputValue()!=='150')errors.push('pointer drag to 150% failed: '+await range.inputValue());
+              }
+              await range.focus();
+              await page.keyboard.press('Home');
+              if(await range.inputValue()!=='80')errors.push('keyboard Home must select 80%');
+              await page.keyboard.press('End');
+              if(await range.inputValue()!=='150')errors.push('keyboard End must select 150%');
               const after=await page.locator('.hero-sub').evaluate(e=>parseFloat(getComputedStyle(e).fontSize));
               if(!(after>before))errors.push('font size unchanged after selecting 150: '+before+'/'+after);
               if(await page.locator('#displaySizePanel').getAttribute('aria-label')===null)errors.push('missing panel label');
