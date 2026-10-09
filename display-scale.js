@@ -31,6 +31,20 @@
     try{const n=Number(localStorage.getItem(STORAGE));return levels.includes(n)?n:110;}catch(e){return 110;}
   }
   let value=read();
+
+  /* Content-aware navigation: long translations must never collide with AAA. */
+  function synchronizeDesktopNavigation(){
+    const header=document.querySelector('.site-header');
+    const nav=header?.querySelector('.desktop-nav');
+    if(!header||!nav)return;
+    header.classList.remove('nav-fit-compact');
+    if(getComputedStyle(nav).display==='none')return;
+    const links=[...nav.querySelectorAll('a')];
+    const collides=nav.getBoundingClientRect().right>trigger.getBoundingClientRect().left-8;
+    const wraps=links.some(a=>a.getBoundingClientRect().height>44||a.scrollWidth>a.clientWidth+2);
+    header.classList.toggle('nav-fit-compact',collides||wraps);
+  }
+
   function translate(){
     const t=locales[root.lang]||locales.fr;
     title.textContent=t[0];description.textContent=t[1];hint.textContent=t[4];
@@ -39,6 +53,7 @@
     trigger.title=t[5]+' : '+value+' %';
     panel.setAttribute('aria-label',t[0]);
     buttons.forEach(b=>b.setAttribute('aria-label',t[5]+' : '+b.dataset.displaySize+' %'));
+    synchronizeDesktopNavigation();
   }
   function setSize(n,persist=true){
     if(!levels.includes(n))return;
@@ -81,6 +96,7 @@
   document.getElementById('menuButton')?.addEventListener('click',()=>show(false));
   document.getElementById('themeSlider')?.addEventListener('input',()=>show(false));
   new MutationObserver(translate).observe(root,{attributes:true,attributeFilter:['lang']});
+  window.addEventListener('resize',synchronizeDesktopNavigation,{passive:true});
   setSize(value,false);
   show(false);
 })();

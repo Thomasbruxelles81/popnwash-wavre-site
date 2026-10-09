@@ -222,3 +222,11 @@ body.display-size-open .mobile-actionbar{display:none!important}
   }
   :where(h1,h2,h3,.contact-mail){overflow-wrap:anywhere!important}
 }
+
+/* R4: actual content-fit fallback, independent of language and screen label. */
+.site-header.nav-fit-compact .desktop-nav{display:none!important}
+.site-header.nav-fit-compact .menu-button{display:block!important}
+.site-header.nav-fit-compact .brand-lockup{
+  min-width:0!important;width:min(350px,38vw)!important;max-width:min(350px,38vw)!important
+}
+.site-header.nav-fit-compact .brand-label{min-width:0!important}
