@@ -1,0 +1,64 @@
+name: QA extended browsers and devices — DO NOT DEPLOY
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qa-expanded-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  engines:
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, chrome, msedge, brave, firefox, webkit]
+    runs-on: ubuntu-latest
+    timeout-minutes: 42
+    env:
+      AUDIT_BROWSER: ${{ matrix.engine }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install test runner
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.55.0 >/dev/null
+      - name: Install selected real browser and system dependencies
+        shell: bash
+        run: |
+          if [ "$AUDIT_BROWSER" = "brave" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y curl apt-transport-https >/dev/null
+            sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg \
+              https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+            echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" \
+              | sudo tee /etc/apt/sources.list.d/brave-browser-release.list >/dev/null
+            sudo apt-get update -qq
+            sudo apt-get install -y brave-browser >/dev/null
+            npx playwright install --with-deps chromium >/dev/null
+            /usr/bin/brave-browser --version
+          else
+            npx playwright install --with-deps "$AUDIT_BROWSER" >/dev/null
+          fi
+      - name: Serve exact PR snapshot
+        run: |
+          python3 -m http.server 4173 >/tmp/popnwash-device-http.log 2>&1 &
+          sleep 2
+      - name: Execute 34 device profiles and 8 display levels
+        run: node qa/extended-device-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: expanded-${{ matrix.engine }}-evidence
+          path: qa-expanded/${{ matrix.engine }}/
+          retention-days: 14
+  summary:
+    if: always()
+    needs: [engines]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preserve strict CI status
+        run: |
+          echo "Browser matrix outcome: ${{ needs.engines.result }}"
+          test "${{ needs.engines.result }}" = "success"
