@@ -41,7 +41,7 @@ jobs:
           const base='http://127.0.0.1:4173/';
           for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
             const browser=await engine.launch({headless:true});
-            const page=await browser.newPage({viewport:{width:375,height:812},deviceScaleFactor:3,hasTouch:true,isMobile:true});
+            const page=await browser.newPage({viewport:{width:375,height:812},deviceScaleFactor:3,hasTouch:true,isMobile:engineName!=='firefox'});
             page.on('pageerror',e=>fail(engineName,'JS '+e.message));
             for(const [label,width,height] of cases){
               await page.setViewportSize({width,height});
@@ -115,6 +115,7 @@ jobs:
               // Explicit touch selection must move the knob to the intended HALF.
               for(const choice of ['dark','light']){
                 await page.locator('[data-theme-choice="'+choice+'"]').click();
+                await page.waitForTimeout(370); // Wait for the knob's CSS transition.
                 const state=await page.evaluate(()=>{
                   const knob=document.querySelector('.theme-knob').getBoundingClientRect();
                   const shell=document.querySelector('.theme-slider-shell').getBoundingClientRect();
