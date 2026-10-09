@@ -86,7 +86,7 @@ main img,main svg{max-width:100%}
 .services-secondary-grid,.review-grid,.faq-groups)>*{min-width:0}
 :where(input,select,textarea){max-width:100%}
 :where(.lang-menu,.mobile-menu,.display-size-panel){overflow-wrap:anywhere}
-@media(max-width:1400px){
+@media(max-width:1200px){
   .desktop-nav{display:none!important}
   .menu-button{display:block!important;flex:0 0 auto}
   .site-header{justify-content:space-between!important}
@@ -96,7 +96,7 @@ main img,main svg{max-width:100%}
   .brand-label .brand-title{transform:none!important;max-width:100%;overflow:hidden}
   .mobile-menu{max-height:calc(100dvh - 90px);overflow-y:auto}
 }
-@media(min-width:701px) and (max-width:1400px){
+@media(min-width:701px) and (max-width:1200px){
   .site-header{gap:8px!important}
   .brand-lockup{width:min(350px,38vw)!important}
 }
@@ -181,4 +181,12 @@ main img,main svg{max-width:100%}
 }
 @media(prefers-reduced-motion:reduce){
   .display-size-button,.display-size-options button{transition:none!important}
+}
+/* Keep the familiar desktop navigation at normal sizes; collapse only when needed. */
+@media(min-width:1201px) and (max-width:1450px){
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .desktop-nav{display:none!important}
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .menu-button{display:block!important}
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .brand-lockup{
+    min-width:0!important;width:350px!important;max-width:38vw!important
+  }
 }
