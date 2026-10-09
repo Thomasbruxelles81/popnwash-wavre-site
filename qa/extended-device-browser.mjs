@@ -26,10 +26,16 @@ const devices=[
 ['chromebook1366',1366,768],['chromebook1280',1280,800],
 ['macbook13',1440,900],['laptop1536',1536,864],['laptop1600',1600,900],
 ['desktopFHD',1920,1080],['retina2560',2560,1440],['retina2880',2880,1800],
-['ultrawide3440',3440,1440],['fourK',3840,2160]];
-const full=new Set(['iphoneSE','iphone13mini','iphoneProMax','landscapeMini',
-'ipadMini','tablet768','ipadPro11','ipadProLandscape','chromebook1366',
-'macbook13','desktopFHD','ultrawide3440','fourK']);
+['ultrawide3440',3440,1440],['fourK',3840,2160],
+['narrow300',300,650],['compact330',330,720],['modern390',390,844],
+['largePhone440',440,956],['landscape740',740,360],['landscape844',844,390],
+['landscape896',896,414],['smallTabletPortrait',640,960],
+['splitTablet',512,900],['largeTabletPortrait',1024,1366],
+['compactLaptop1024',1024,600],['chromebook1360',1360,768],
+['wideMonitor2560',2560,1080],['fiveK',5120,2880]];
+// Run the full language × scale × theme product for EVERY device.
+ // No sampled devices: a PASS means every profile received the same coverage.
+const full=new Set(devices.map(([name])=>name));
 const pictures=new Set(['iphoneSE','iphone13mini','landscapeMini','ipadMini',
 'ipadProLandscape','chromebook1366','desktopFHD','ultrawide3440','fourK']);
 const report={engine,version:browser.version(),date:new Date().toISOString(),
@@ -76,6 +82,25 @@ function stateChecks({lang,size,theme,width,height,deep}){
  if(brand.right>button.x-2)errs.push('brand overlaps AAA');
  if(button.x<0||button.right>width+2)errs.push('AAA outside screen');
  if(header.w>width+2)errs.push('header width exceeds screen');
+ for(const selector of ['#langButton','#displaySizeButton','.theme-slider-shell','#menuButton']){
+  const control=sel(selector);
+  if(control&&vis(control)){
+   const r=rect(control);
+   if(r.x< -2||r.right>width+2)errs.push(selector+' outside viewport');
+   if(r.w<22||r.h<22)errs.push(selector+' too small to interact');
+  }
+ }
+ const desktopNav=sel('.desktop-nav');
+ if(desktopNav&&vis(desktopNav)&&rect(desktopNav).right>button.x+4)
+   errs.push('desktop navigation overlaps display-size control');
+ const mobileLinks=[['.mobile-quick-link.route','google.com/maps'],
+  ['.mobile-quick-link.machines','status.wi-line.fr'],
+  ['.mobile-quick-link.invoices','status.wi-line.fr']];
+ for(const [selector,target] of mobileLinks){
+  const e=sel(selector);
+  if(!e||!String(e.getAttribute('href')||'').includes(target))
+   errs.push(selector+' target missing or incorrect');
+ }
  const middle=(shell.x+shell.right)/2,knobMiddle=(knob.x+knob.right)/2;
  if(theme==='dark'&&knobMiddle<=middle+1)errs.push('dark knob stuck left');
  if(theme==='light'&&knobMiddle>=middle-1)errs.push('light knob stuck right');
@@ -118,8 +143,8 @@ for(const [name,width,height] of devices){
  await page.goto(base,{waitUntil:'domcontentloaded'});
  await page.evaluate(()=>document.fonts.ready);
  const detailed=full.has(name);
- const langs=detailed?locales:['fr','nl','de','uk'];
- const levels=detailed?sizes:[80,110,150];
+ const langs=locales;
+ const levels=sizes;
  for(const lang of langs)for(const size of levels)for(const theme of ['light','dark']){
   const id=engine+'/'+name+'/'+width+'x'+height+'/'+lang+'/'+size+'/'+theme;
   try{
@@ -138,6 +163,41 @@ for(const [name,width,height] of devices){
    report.screenshots.push(filename);
   }
  }
+ // Independent interaction smoke on every viewport, not only a CSS snapshot.
+ // Verify that overlays can open, have a usable on-screen entry point and close.
+ try{
+  const ui=await page.evaluate(()=>{
+   const errors=[];
+   const visible=e=>!!e&&getComputedStyle(e).display!=='none'&&
+    getComputedStyle(e).visibility!=='hidden'&&e.getBoundingClientRect().width>0;
+   const check=(id,buttonId,panelId)=>{
+    const button=document.getElementById(buttonId);
+    const panel=document.getElementById(panelId);
+    if(!button||!panel){errors.push(id+' missing');return;}
+    if(!visible(button))return; // Ex: desktop menu trigger hidden.
+    button.click();
+    if(panel.hidden||!visible(panel)){errors.push(id+' does not open');return;}
+    const box=panel.getBoundingClientRect();
+    if(box.right>innerWidth+3||box.left< -3||box.top>innerHeight)
+     errors.push(id+' opens outside screen');
+    button.click();
+    if(!panel.hidden)errors.push(id+' does not close');
+   };
+   document.querySelector('[data-lang="fr"]').click();
+   document.querySelector('[data-display-size="110"]').click();
+   document.querySelector('[data-theme-choice="light"]').click();
+   check('display-size','displaySizeButton','displaySizePanel');
+   check('language','langButton','langMenu');
+   check('navigation','menuButton','mobileMenu');
+   const displayButton=document.getElementById('displaySizeButton');
+   displayButton?.click();
+   document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+   if(!document.getElementById('displaySizePanel').hidden)
+    errors.push('display-size Escape fails');
+   return errors;
+  });
+  for(const issue of ui)bad(engine+'/'+name+'/overlay',issue);
+ }catch(e){bad(engine+'/'+name+'/overlay',String(e).slice(0,110));}
  if(report.errors.length>=160)break;
 }
 for(const e of jsErrors)bad(engine,'JS '+e);
