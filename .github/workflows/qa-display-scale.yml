@@ -117,9 +117,13 @@ jobs:
                     const label=document.querySelector('.brand-label').getBoundingClientRect();
                     const wordmark=document.querySelector('.brand-main').getBoundingClientRect();
                     const brandClipped=width<=360&&wordmark.right>label.right+2;
+                    const brandOverlapsAa=document.querySelector('.brand-title').getBoundingClientRect().right>action.left-3;
+                    const themeLabelsWrap=[...document.querySelectorAll('.theme-option-label span')]
+                      .filter(el=>getComputedStyle(el).display!=='none'&&el.getBoundingClientRect().height>25)
+                      .map(el=>el.textContent.trim());
                     return {lang:root.lang,scale:root.dataset.displayScale,
                       theme:root.dataset.theme,docWidth,beyond,visibleAction,hero,
-                      imgWidth:image.naturalWidth,navOverlap,brandClipped};
+                      imgWidth:image.naturalWidth,navOverlap,brandClipped,brandOverlapsAa,themeLabelsWrap};
                   },{lang,scale,theme,width});
                   summary.checks++;
                   const id=name+' '+lang+' '+scale+'% '+theme;
@@ -129,6 +133,8 @@ jobs:
                   if(!found.visibleAction)errors.push(id+' display icon not reachable');
                   if(found.navOverlap)errors.push(id+' desktop navigation overlaps AAA control');
                   if(found.brandClipped)errors.push(id+' brand POPnWASH name clipped');
+                  if(found.brandOverlapsAa)errors.push(id+' brand wordmark overlaps AAA button');
+                  if(found.themeLabelsWrap.length)errors.push(id+' theme words wrapped: '+found.themeLabelsWrap.join(','));
                   if(found.imgWidth<1)errors.push(id+' supplied AAA image not loaded');
                   if(errors.length>250)break;
                 }
@@ -146,6 +152,10 @@ jobs:
                 const slider=document.querySelector('#themeSlider');
                 slider.value=theme==='dark'?'1':'0';slider.dispatchEvent(new Event('input',{bubbles:true}));
               },{lang,scale,theme});
+              await page.waitForTimeout(650); // Do not capture mid-transition.
+              const stableBg=await page.locator('body').evaluate(el=>getComputedStyle(el).backgroundColor);
+              const expectedBg=theme==='light'?'rgb(247, 240, 223)':'rgb(13, 23, 20)';
+              if(stableBg!==expectedBg)errors.push('wrong visual theme in '+s+': '+stableBg+' (wanted '+expectedBg+')');
               const screenshot=await page.screenshot({path:'qa-screenshots/after-'+s+'.png',fullPage:true});
               const actualWidth=screenshot.readUInt32BE(16);
               if(actualWidth>width+2)errors.push('screenshot overflow '+s+' '+actualWidth+' > '+width);
@@ -165,6 +175,10 @@ jobs:
             await page.setViewportSize({width,height});
             await page.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
             await page.locator('[data-display-size="100"]').evaluate(e=>e.click());
+            await page.locator('#themeSlider').evaluate(el=>{
+              el.value='0';el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));
+            });
+            await page.waitForTimeout(650); // Explicit stable LIGHT comparison with baseline.
             await page.screenshot({path:'qa-screenshots/after-'+name+'-100.png',fullPage:true});
             summary.screenshots++;
           }
