@@ -178,6 +178,11 @@ function syncThemeA11y(){
   const darkText=document.getElementById('themeDarkText');
   if(lightText)lightText.textContent=l.light;
   if(darkText)darkText.textContent=l.dark;
+  document.querySelectorAll('[data-theme-choice]').forEach(button=>{
+    const mode=button.dataset.themeChoice;
+    button.setAttribute('aria-label',l[mode]);
+    button.setAttribute('aria-pressed',String(themeMode===mode));
+  });
 }
 
 function applyTheme(mode,persist=true){
@@ -196,6 +201,9 @@ function applyTheme(mode,persist=true){
   syncThemeA11y();
 }
 
+document.querySelectorAll('[data-theme-choice]').forEach(button=>{
+  button.addEventListener('click',()=>applyTheme(button.dataset.themeChoice,true));
+});
 if(themeSlider){
   const applySliderTheme=()=>applyTheme(Number(themeSlider.value)===1?'dark':'light');
   themeSlider.addEventListener('input',applySliderTheme);
@@ -208,11 +216,29 @@ if(systemTheme.addEventListener)systemTheme.addEventListener('change',handleSyst
 else if(systemTheme.addListener)systemTheme.addListener(handleSystemTheme);
 applyTheme(themeMode,false);
 
+/* Concise mobile quick actions in every supported language. */
+Object.assign(translations.fr,{mobileRoute:"Itinéraire",mobileMachines:"Machines",mobileInvoices:"Factures",mobileRouteAria:"Ouvrir l’itinéraire vers POP’n WASH",mobileMachinesAria:"Voir les machines en direct",mobileInvoicesAria:"Récupérer une facture WiLine",mobileHeroKicker:"Laverie à Wavre · 7j/7 · 7h–22h",mobileHeroSub:"19 lave-linge · 16 séchoirs · linge pour animaux · paiement facile."});
+Object.assign(translations.nl,{mobileRoute:"Route",mobileMachines:"Machines",mobileInvoices:"Facturen",mobileRouteAria:"Route naar POP’n WASH openen",mobileMachinesAria:"Machines live bekijken",mobileInvoicesAria:"Factuur ophalen via WiLine",mobileHeroKicker:"Wasserette in Waver · 7/7 · 7–22 u",mobileHeroSub:"19 wasmachines · 16 drogers · dierentextiel · eenvoudig betalen."});
+Object.assign(translations.en,{mobileRoute:"Directions",mobileMachines:"Machines",mobileInvoices:"Invoices",mobileRouteAria:"Open directions to POP’n WASH",mobileMachinesAria:"Check live machine status",mobileInvoicesAria:"Get an invoice via WiLine",mobileHeroKicker:"Laundromat in Wavre · 7 days · 7am–10pm",mobileHeroSub:"19 washers · 16 dryers · pet laundry · easy payment."});
+Object.assign(translations.de,{mobileRoute:"Route",mobileMachines:"Maschinen",mobileInvoices:"Rechnungen",mobileRouteAria:"Route zu POP’n WASH öffnen",mobileMachinesAria:"Maschinenstatus live ansehen",mobileInvoicesAria:"Rechnung bei WiLine abrufen",mobileHeroKicker:"Waschsalon in Wavre · täglich · 7–22 Uhr",mobileHeroSub:"19 Waschmaschinen · 16 Trockner · Tierwäsche · einfach zahlen."});
+Object.assign(translations.it,{mobileRoute:"Indicazioni",mobileMachines:"Macchine",mobileInvoices:"Fatture",mobileRouteAria:"Apri indicazioni per POP’n WASH",mobileMachinesAria:"Controlla le macchine in tempo reale",mobileInvoicesAria:"Recupera la fattura su WiLine",mobileHeroKicker:"Lavanderia a Wavre · tutti i giorni · 7–22",mobileHeroSub:"19 lavatrici · 16 asciugatrici · tessuti animali · pagamenti facili."});
+Object.assign(translations.es,{mobileRoute:"Cómo llegar",mobileMachines:"Máquinas",mobileInvoices:"Facturas",mobileRouteAria:"Abrir ruta a POP’n WASH",mobileMachinesAria:"Consultar máquinas en directo",mobileInvoicesAria:"Obtener factura en WiLine",mobileHeroKicker:"Lavandería en Wavre · 7 días · 7–22 h",mobileHeroSub:"19 lavadoras · 16 secadoras · ropa de mascotas · pago fácil."});
+Object.assign(translations.pt,{mobileRoute:"Direções",mobileMachines:"Máquinas",mobileInvoices:"Faturas",mobileRouteAria:"Abrir rota para POP’n WASH",mobileMachinesAria:"Ver máquinas em tempo real",mobileInvoicesAria:"Obter fatura no WiLine",mobileHeroKicker:"Lavandaria em Wavre · todos os dias · 7–22 h",mobileHeroSub:"19 máquinas · 16 secadores · roupa de animais · pagamento fácil."});
+Object.assign(translations.ro,{mobileRoute:"Traseu",mobileMachines:"Mașini",mobileInvoices:"Facturi",mobileRouteAria:"Deschide traseul către POP’n WASH",mobileMachinesAria:"Verifică mașinile în timp real",mobileInvoicesAria:"Obține o factură prin WiLine",mobileHeroKicker:"Spălătorie în Wavre · zilnic · 7–22",mobileHeroSub:"19 mașini de spălat · 16 uscătoare · textile animale · plată ușoară."});
+Object.assign(translations.pl,{mobileRoute:"Trasa",mobileMachines:"Pralki",mobileInvoices:"Faktury",mobileRouteAria:"Otwórz trasę do POP’n WASH",mobileMachinesAria:"Sprawdź dostępność pralek",mobileInvoicesAria:"Pobierz fakturę WiLine",mobileHeroKicker:"Pralnia w Wavre · codziennie · 7–22",mobileHeroSub:"19 pralek · 16 suszarek · tekstylia zwierząt · łatwa płatność."});
+Object.assign(translations.uk,{mobileRoute:"Маршрут",mobileMachines:"Машини",mobileInvoices:"Рахунки",mobileRouteAria:"Відкрити маршрут до POP’n WASH",mobileMachinesAria:"Переглянути стан машин",mobileInvoicesAria:"Отримати рахунок у WiLine",mobileHeroKicker:"Пральня у Ваврі · щодня · 7–22",mobileHeroSub:"19 пральних машин · 16 сушарок · речі тварин · зручна оплата."});
+Object.assign(translations.ru,{mobileRoute:"Маршрут",mobileMachines:"Машины",mobileInvoices:"Счета",mobileRouteAria:"Открыть маршрут к POP’n WASH",mobileMachinesAria:"Проверить машины онлайн",mobileInvoicesAria:"Получить счёт в WiLine",mobileHeroKicker:"Прачечная в Вавре · ежедневно · 7–22",mobileHeroSub:"19 стиральных машин · 16 сушилок · вещи животных · удобная оплата."});
+
 function applyLang(lang){
   currentLang=translations[lang]?lang:'fr';
   const t=translations[currentLang];
   document.documentElement.lang=currentLang;
   document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;const v=t[k]!==undefined?t[k]:translations.fr[k];if(v!==undefined)el.innerHTML=v});
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>{
+    const key=el.dataset.i18nAria;
+    const value=t[key]!==undefined?t[key]:translations.fr[key];
+    if(value!==undefined)el.setAttribute('aria-label',value);
+  });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const k=el.dataset.i18nPlaceholder;const v=t[k]!==undefined?t[k]:translations.fr[k];if(v!==undefined)el.setAttribute('placeholder',v)});
   applyFaqLang(currentLang);
   const topFloat=document.getElementById('backToTopFloat');
