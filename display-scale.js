@@ -57,6 +57,7 @@
     panel.hidden=!open;
     trigger.setAttribute('aria-expanded',String(open));
     wrapper.classList.toggle('is-open',open);
+    document.body.classList.toggle('display-size-open',open);
     if(open){
       const lang=document.getElementById('langMenu');
       const langButton=document.getElementById('langButton');
