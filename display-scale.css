@@ -230,3 +230,9 @@ body.display-size-open .mobile-actionbar{display:none!important}
   min-width:0!important;width:min(350px,38vw)!important;max-width:min(350px,38vw)!important
 }
 .site-header.nav-fit-compact .brand-label{min-width:0!important}
+
+/* QA visual: do not truncate the POP'n WASH wordmark on 320px phones. */
+@media(max-width:360px){
+  .brand-lockup{width:118px!important;max-width:118px!important}
+  .brand-label{min-width:0!important;flex:1 1 auto!important}
+}
