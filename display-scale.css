@@ -290,3 +290,8 @@ body.display-size-open .mobile-actionbar{display:none!important}
 @media(max-width:700px){
   .hero h1,.section-heading h2,.first-visit-head h2{max-width:100%!important}
 }
+
+/* Natural word boundaries for all editorial headings and card names. */
+h1,h2,h3,h4,.visit-summary-copy strong,.tariff-copy strong{
+  hyphens:none!important;word-break:normal!important;overflow-wrap:normal!important
+}

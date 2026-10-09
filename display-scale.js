@@ -45,6 +45,38 @@
     header.classList.toggle('nav-fit-compact',collides||wraps);
   }
 
+
+  /* Preserve complete words in long translations without shrinking every title.
+   * Only an overlong word is allowed to reduce its own heading's font size. */
+  const fitContext=document.createElement('canvas').getContext('2d');
+  function fitHeadingWords(){
+    if(!fitContext)return;
+    const targets=document.querySelectorAll('h1,h2,h3,h4,.visit-summary-copy strong,.tariff-copy strong');
+    targets.forEach(el=>{
+      // Reset the old fit first, otherwise scale changes would compound.
+      el.style.removeProperty('font-size');
+      el.removeAttribute('data-word-fit');
+      const style=getComputedStyle(el),rect=el.getBoundingClientRect();
+      const isCardLabel=el.matches('.visit-summary-copy strong,.tariff-copy strong');
+      const available=isCardLabel?
+        (el.parentElement?.getBoundingClientRect().width||rect.width):rect.width;
+      if(available<25||rect.height===0)return;
+      const fontSize=parseFloat(style.fontSize);
+      if(!Number.isFinite(fontSize)||fontSize<=0)return;
+      fitContext.font=style.fontStyle+' '+style.fontWeight+' '+fontSize+'px '+style.fontFamily;
+      const spacing=parseFloat(style.letterSpacing)||0;
+      const words=(el.textContent||'').match(/[\p{L}\p{N}][\p{L}\p{N}’'-]{3,}/gu)||[];
+      const maxWord=words.reduce((max,word)=>Math.max(max,
+        fitContext.measureText(word).width+Math.max(0,word.length-1)*spacing),0);
+      if(maxWord<=available-4)return;
+      const minSize=isCardLabel?12:17;
+      const font=Math.max(minSize,Math.floor(fontSize*(available-6)/maxWord*10)/10);
+      if(font>=fontSize)return;
+      el.style.setProperty('font-size',font+'px','important');
+      el.dataset.wordFit=String(font);
+    });
+  }
+
   function translate(){
     const t=locales[root.lang]||locales.fr;
     title.textContent=t[0];description.textContent=t[1];hint.textContent=t[4];
@@ -54,6 +86,7 @@
     panel.setAttribute('aria-label',t[0]);
     buttons.forEach(b=>b.setAttribute('aria-label',t[5]+' : '+b.dataset.displaySize+' %'));
     synchronizeDesktopNavigation();
+    fitHeadingWords();
   }
   function setSize(n,persist=true){
     if(!levels.includes(n))return;
@@ -96,7 +129,7 @@
   document.getElementById('menuButton')?.addEventListener('click',()=>show(false));
   document.getElementById('themeSlider')?.addEventListener('input',()=>show(false));
   new MutationObserver(translate).observe(root,{attributes:true,attributeFilter:['lang']});
-  window.addEventListener('resize',synchronizeDesktopNavigation,{passive:true});
+  window.addEventListener('resize',()=>{synchronizeDesktopNavigation();fitHeadingWords();},{passive:true});
   setSize(value,false);
   show(false);
 })();
