@@ -190,3 +190,15 @@ main img,main svg{max-width:100%}
     min-width:0!important;width:350px!important;max-width:38vw!important
   }
 }
+
+/* QA visual R2: keep navigation readable instead of overlapping Contact and AAA. */
+@media(min-width:1201px){
+  .site-header{width:min(1480px,calc(100% - 32px))!important}
+}
+/* The language flag and code cannot share a 43px button; retain flag + chevron. */
+@media(max-width:480px){
+  .lang-button{gap:2px!important;justify-content:center!important}
+  .lang-button #langCode{display:none!important}
+  .lang-button .chev{font-size:13px!important}
+}
+body.display-size-open .mobile-actionbar{display:none!important}
