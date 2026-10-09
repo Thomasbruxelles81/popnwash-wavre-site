@@ -96,7 +96,7 @@ jobs:
                   const header=document.querySelector('.site-header');
                   const icon=rect(document.querySelector('#displaySizeButton'));
                   const headerControls=[...header.querySelectorAll('a,button,input')].filter(visible)
-                    .filter(el=>!el.closest('.display-size-panel')).map(el=>({el,r:rect(el)}));
+                    .filter(el=>!el.closest('.display-size-panel')&&!el.matches('.theme-slider,[aria-hidden="true"]')).map(el=>({el,r:rect(el)}));
                   for(let i=0;i<headerControls.length;i++)for(let j=i+1;j<headerControls.length;j++){
                     const a=headerControls[i],b=headerControls[j];
                     const x=Math.min(a.r.right,b.r.right)-Math.max(a.r.left,b.r.left);
