@@ -262,3 +262,31 @@ body.display-size-open .mobile-actionbar{display:none!important}
 .display-size-options button{font-size:max(11px,calc(12px * var(--display-scale)))}
 .display-size-reset{font-size:max(11px,calc(12px * var(--display-scale)))}
 .display-size-panel .display-size-hint{font-size:max(10.5px,calc(10px * var(--display-scale)))}
+
+
+/* Preserve whole words in titles — line wrapping must occur between words. */
+.hero h1,.section-heading h2,.first-visit-head h2,.visit-summary-copy strong{
+  hyphens:none!important;word-break:normal!important;overflow-wrap:normal!important
+}
+/* At 140–150% give long translated card titles a whole line of their own. */
+@media(max-width:430px){
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .visit-card summary{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-rows:auto auto!important;
+    align-items:start!important;row-gap:9px!important
+  }
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .visit-card summary .visit-icon{
+    grid-row:1!important;grid-column:1 / -1!important
+  }
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .visit-card summary .visit-summary-copy{
+    grid-row:2!important;grid-column:1!important;
+    min-width:0!important
+  }
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .visit-card summary .visit-plus{
+    grid-row:2!important;grid-column:2!important
+  }
+}
+/* Longer headings may use the full available width instead of clipping. */
+@media(max-width:700px){
+  .hero h1,.section-heading h2,.first-visit-head h2{max-width:100%!important}
+}
