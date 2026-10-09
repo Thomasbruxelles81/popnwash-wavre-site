@@ -1,0 +1,218 @@
+/* POP'n WASH — compact mobile landing and reliable two-choice theme control.
+   Keep desktop presentation intact; no global page zoom. */
+.mobile-quick-links,.hero-mobile-sub,.hero-mobile-kicker{display:none}
+
+/* Exactly two reachable theme positions, regardless of the phone's width. */
+.theme-slider-shell .theme-knob{
+  left:4px!important;top:4px!important;
+  width:calc(50% - 4px)!important;
+  height:calc(100% - 8px)!important;
+  transform:translateX(0)!important;
+}
+.theme-control[data-mode="dark"] .theme-slider-shell .theme-knob{
+  transform:translateX(100%)!important;
+}
+.theme-control[data-mode="light"] .theme-slider-shell .theme-knob{
+  transform:translateX(0)!important;
+}
+.theme-slider-shell .theme-slider{
+  pointer-events:none!important;
+}
+.theme-choice-button{
+  appearance:none;-webkit-appearance:none;
+  position:absolute;z-index:8;top:0;bottom:0;width:50%;
+  border:0;padding:0;margin:0;background:transparent;color:transparent;
+  cursor:pointer;touch-action:manipulation;
+}
+.theme-choice-light{left:0}
+.theme-choice-dark{left:50%}
+.theme-choice-button:focus-visible{
+  outline:3px solid #237b39;outline-offset:-4px;border-radius:12px;
+}
+.theme-control .theme-option-label{pointer-events:none}
+.theme-control .theme-option-label span{white-space:nowrap}
+
+/* Order is explicit: avoid CSS Grid auto-placement putting First Visit above the hero. */
+.hero>.hero-copy{order:1!important}
+.hero>.hero-visual{order:2!important}
+.hero>.first-visit-showcase{order:3!important}
+
+@media(max-width:700px){
+  /* Three truly distinct actions immediately after the compact header. */
+  .hero.section-shell{
+    display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+    gap:13px!important;padding-top:12px!important;align-items:start!important;
+    min-height:0!important
+  }
+  .mobile-quick-links{
+    order:0!important;grid-column:1/-1;display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;
+    width:100%;max-width:100%;min-width:0;
+  }
+  .mobile-quick-link{
+    min-width:0;min-height:63px;display:flex;flex-direction:column;
+    justify-content:center;align-items:center;gap:5px;
+    padding:7px 3px;text-align:center;text-decoration:none;
+    background:#fffcf5;color:#17261d!important;
+    border:1px solid rgba(22,28,27,.12);border-radius:14px;
+    box-shadow:0 5px 14px rgba(22,28,27,.06);
+    font-size:clamp(10px,calc(11px * var(--display-scale)),13px);
+    font-weight:850;line-height:1.15;
+    overflow-wrap:normal!important;hyphens:none!important;word-break:normal!important;
+    touch-action:manipulation;
+  }
+  .mobile-quick-link svg{
+    display:block;width:20px;height:20px;flex:0 0 20px;
+    stroke:currentColor;stroke-width:1.8;fill:none;
+    stroke-linecap:round;stroke-linejoin:round
+  }
+  .mobile-quick-link.route{
+    background:#1d5130;color:#fff!important;border-color:#1d5130;
+  }
+  .mobile-quick-link:focus-visible{outline:3px solid #308e42;outline-offset:2px}
+  .mobile-quick-link:active{transform:scale(.98)}
+  .hero>.hero-copy{
+    order:1!important;grid-column:1/-1;width:100%;padding:0 3px!important;
+    text-align:left;min-width:0
+  }
+  .hero>.hero-visual{
+    order:2!important;grid-column:1/-1;width:100%;min-width:0;
+    margin:0
+  }
+  .hero>.first-visit-showcase{
+    order:3!important;grid-column:1/-1;width:100%;min-width:0;margin-top:9px!important
+  }
+  .hero-copy>.eyebrow,.hero-copy>.hero-sub,
+  .hero-copy>.hero-trust,.hero-copy>.hero-route-cta,
+  .hero-visual>.hero-wiline-cards{display:none!important}
+  .hero-mobile-kicker{
+    display:block!important;margin:1px 0 9px;
+    font-size:clamp(10px,calc(11px * var(--display-scale)),13px);
+    line-height:1.35;font-weight:850;letter-spacing:.045em;
+    text-transform:uppercase;color:#2e7834!important;
+  }
+  .hero-copy h1{
+    margin:2px 0 10px!important;max-width:100%!important;
+    font-size:clamp(30px,calc(34px * var(--display-scale)),44px)!important;
+    line-height:1.08!important;letter-spacing:-.035em!important;
+    overflow-wrap:normal!important;hyphens:none!important;
+    text-wrap:balance;
+  }
+  .hero-mobile-sub{
+    display:block!important;margin:0 0 9px!important;
+    font-size:clamp(13px,calc(13px * var(--display-scale)),17px)!important;
+    line-height:1.42!important;color:var(--muted);text-wrap:pretty;
+  }
+  .hero-meta{
+    margin:8px 0 2px!important;
+    display:flex!important;flex-wrap:wrap!important;
+    align-items:center;justify-content:flex-start;gap:6px!important
+  }
+  .hero-meta span{
+    font-size:clamp(10px,calc(10px * var(--display-scale)),12.5px)!important;
+    line-height:1.25!important;padding:5px 8px!important
+  }
+  .hero-photo-stack{
+    margin:0!important;aspect-ratio:2.1/1!important;
+    max-height:210px!important;min-height:0!important;
+    border-radius:18px!important
+  }
+  .hero-visual>.shape{display:none!important}
+  .mobile-actionbar{display:none!important}
+  body{padding-bottom:24px!important}
+  html[data-theme="dark"] .mobile-quick-link{
+    background:#263d30;color:#f6fbf4!important;border-color:#476750;
+  }
+  html[data-theme="dark"] .mobile-quick-link.route{
+    background:#387942;border-color:#387942;color:#fff!important;
+  }
+  html[data-theme="dark"] .hero-mobile-kicker{color:#a4eba0!important}
+  .first-visit-head h2{
+    font-size:clamp(24px,calc(26px * var(--display-scale)),36px)!important;
+    line-height:1.13!important;
+    overflow-wrap:normal!important;hyphens:none!important;
+    text-wrap:balance
+  }
+  .first-visit-head p{font-size:clamp(12px,calc(12px * var(--display-scale)),15px)!important}
+  .first-visit-showcase{padding:clamp(14px,4.1vw,20px)!important}
+  .first-visit-head{gap:9px!important}
+  .visit-card summary{
+    grid-template-columns:48px minmax(0,1fr) 30px!important;
+    gap:10px!important;min-height:74px!important;padding:11px!important
+  }
+  .visit-card summary .visit-icon{width:44px!important;height:44px!important}
+  .visit-summary-copy strong{font-size:clamp(13px,calc(14px * var(--display-scale)),18px)!important}
+  .visit-summary-copy small{font-size:clamp(11px,calc(11px * var(--display-scale)),13.5px)!important}
+  .theme-slider-shell{height:40px!important}
+  .theme-slider-shell .theme-knob{height:calc(100% - 8px)!important}
+}
+
+/* Compact controls without sacrificing the complete POP'n WASH identity. */
+@media(max-width:480px){
+  .site-header{
+    width:calc(100% - 12px)!important;
+    height:60px!important;padding:5px 6px!important;gap:3px!important;
+  }
+  .brand-lockup{
+    flex:1 1 auto!important;min-width:0!important;
+    width:auto!important;max-width:min(137px,36vw)!important;
+    gap:4px!important;
+  }
+  .brand-logo-wrap,.brand-logo-wrap img{
+    width:clamp(31px,9vw,40px)!important;
+    height:clamp(31px,9vw,40px)!important;
+    flex-basis:clamp(31px,9vw,40px)!important
+  }
+  .brand-label{min-width:0!important;overflow:hidden!important}
+  .brand-label .brand-main{
+    font-size:clamp(10px,calc(11px * var(--display-scale)),14px)!important;
+    letter-spacing:-.03em!important
+  }
+  .brand-label .brand-place{
+    font-size:clamp(8px,calc(8px * var(--display-scale)),10px)!important
+  }
+  .header-actions{
+    min-width:0!important;flex:0 0 auto!important;
+    gap:clamp(2px,.65vw,4px)!important
+  }
+  .display-size-button{width:36px!important;height:38px!important;padding:2px!important}
+  .display-size-button img{width:31px!important;height:29px!important}
+  .theme-slider-shell{width:60px!important;height:38px!important}
+  .theme-slider-shell .theme-knob{
+    width:calc(50% - 4px)!important;height:calc(100% - 8px)!important
+  }
+  .lang-button{width:42px!important;min-width:42px!important;height:38px!important;padding:0 3px!important}
+  .lang-button #langCode{display:none!important}
+  .lang-button .chev{font-size:12px!important}
+  .menu-button{width:32px!important;min-width:32px!important;height:38px!important;padding:5px!important}
+  .mobile-menu{top:75px!important}
+}
+@media(max-width:355px){
+  .brand-lockup{max-width:112px!important}
+  .brand-label .brand-main{font-size:clamp(10px,calc(10px * var(--display-scale)),12px)!important}
+  .header-actions{gap:2px!important}
+  .theme-slider-shell{width:56px!important}
+  .lang-button{width:40px!important;min-width:40px!important}
+  .mobile-quick-links{gap:5px!important}
+  .mobile-quick-link{padding:6px 1px!important;font-size:clamp(9.5px,calc(10px * var(--display-scale)),12px)!important}
+  .hero-copy h1{font-size:clamp(29px,calc(31px * var(--display-scale)),41px)!important}
+}
+/* Landscape phone: same quick access, but a shorter landing, never mixed order. */
+@media(orientation:landscape) and (max-height:550px) and (min-width:701px) and (max-width:1000px){
+  .hero{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:12px!important}
+  .mobile-quick-links{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));grid-column:1/-1;order:0!important;gap:8px}
+  .mobile-quick-link{
+    display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 12px;
+    text-decoration:none;background:#f4f8ef;color:#163323;border:1px solid #d6dfd1;
+    border-radius:12px;min-height:44px;font-size:13px;font-weight:850
+  }
+  .mobile-quick-link svg{width:19px;height:19px;vertical-align:middle}
+  .hero-copy{grid-column:1;order:1!important}
+  .hero-visual{grid-column:2;order:2!important}
+  .first-visit-showcase{grid-column:1/-1;order:3!important}
+  .mobile-actionbar{display:none!important}
+  body{padding-bottom:20px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .mobile-quick-link{transition:none!important}
+}
