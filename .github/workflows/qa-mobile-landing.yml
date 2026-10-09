@@ -58,6 +58,14 @@ jobs:
                       const r=el.getBoundingClientRect(),st=getComputedStyle(el);
                       return {x:r.x,right:r.right,y:r.y,bottom:r.bottom,w:r.width,h:r.height,display:st.display}};
                     const qs=[...document.querySelectorAll('.mobile-quick-link')];
+                    const details=qs.map(a=>{
+                      const el=a.querySelector('.mobile-quick-detail'),title=a.querySelector('.mobile-quick-title');
+                      if(!el||!title)return {missing:true};
+                      const rc=el.getBoundingClientRect(),aRc=a.getBoundingClientRect();
+                      return {missing:false,text:el.textContent.trim(),font:parseFloat(getComputedStyle(el).fontSize),
+                        top:rc.top,bottom:rc.bottom,left:rc.left,right:rc.right,
+                        cardTop:aRc.top,cardBottom:aRc.bottom,cardLeft:aRc.left,cardRight:aRc.right};
+                    });
                     const quicks=qs.map(a=>{const r=a.getBoundingClientRect();return {x:r.x,right:r.right,y:r.y,w:r.width,h:r.height,text:a.innerText.trim(),href:a.href}});
                     const top=document.querySelector('.first-visit-showcase').getBoundingClientRect().top;
                     const heading=document.querySelector('.hero h1').getBoundingClientRect();
@@ -72,7 +80,7 @@ jobs:
                     return {
                       scrollWidth:Math.max(root.scrollWidth,document.body.scrollWidth),
                       state:{lang:root.lang,size:root.dataset.displayScale,theme:root.dataset.theme},
-                      isPhone,quicks,header:box('.site-header'),logo:box('.brand-lockup'),
+                      isPhone,quicks,details,header:box('.site-header'),logo:box('.brand-lockup'),
                       aa:box('#displaySizeButton'),theme:box('.theme-slider-shell'),
                       headerOverlap:logo.right>aa.left+2,
                       firstBeforeHero:first.top<heading.top-4,
@@ -88,6 +96,12 @@ jobs:
                   if(report.firstBeforeHero)fail(k,'First visit shown before hero headline');
                   if(report.isPhone){
                     if(report.quicks.length!==3)fail(k,'three quick links missing');
+                    for(const [i,d] of report.details.entries()){
+                      if(d.missing||!d.text)fail(k,'quick link '+i+' is not explained');
+                      if(d.font<10.4)fail(k,'quick link '+i+' too small '+d.font);
+                      if(d.bottom>d.cardBottom+2||d.top<d.cardTop-2||d.left<d.cardLeft-2||d.right>d.cardRight+2)
+                        fail(k,'quick link '+i+' text outside tile');
+                    }
                     if(!report.quickBeforeHero)fail(k,'quick actions not below header and before hero');
                     for(const q of report.quicks){
                       if(q.w<55||q.h<43||q.x<0||q.right>width+2)

@@ -228,6 +228,17 @@ Object.assign(translations.ro,{mobileRoute:"Traseu",mobileMachines:"Mașini",mob
 Object.assign(translations.pl,{mobileRoute:"Trasa",mobileMachines:"Pralki",mobileInvoices:"Faktury",mobileRouteAria:"Otwórz trasę do POP’n WASH",mobileMachinesAria:"Sprawdź dostępność pralek",mobileInvoicesAria:"Pobierz fakturę WiLine",mobileHeroKicker:"Pralnia w Wavre · codziennie · 7–22",mobileHeroSub:"19 pralek · 16 suszarek · tekstylia zwierząt · łatwa płatność."});
 Object.assign(translations.uk,{mobileRoute:"Маршрут",mobileMachines:"Машини",mobileInvoices:"Рахунки",mobileRouteAria:"Відкрити маршрут до POP’n WASH",mobileMachinesAria:"Переглянути стан машин",mobileInvoicesAria:"Отримати рахунок у WiLine",mobileHeroKicker:"Пральня у Ваврі · щодня · 7–22",mobileHeroSub:"19 пральних машин · 16 сушарок · речі тварин · зручна оплата."});
 Object.assign(translations.ru,{mobileRoute:"Маршрут",mobileMachines:"Машины",mobileInvoices:"Счета",mobileRouteAria:"Открыть маршрут к POP’n WASH",mobileMachinesAria:"Проверить машины онлайн",mobileInvoicesAria:"Получить счёт в WiLine",mobileHeroKicker:"Прачечная в Вавре · ежедневно · 7–22",mobileHeroSub:"19 стиральных машин · 16 сушилок · вещи животных · удобная оплата."});
+Object.assign(translations.fr,{mobileRouteDetail:"Nous rejoindre",mobileMachinesDetail:"Disponibilité en direct",mobileInvoicesDetail:"Récupérer une facture"});
+Object.assign(translations.nl,{mobileRouteDetail:"Kom langs",mobileMachinesDetail:"Live beschikbaarheid",mobileInvoicesDetail:"Factuur ophalen"});
+Object.assign(translations.en,{mobileRouteDetail:"Find us",mobileMachinesDetail:"Live availability",mobileInvoicesDetail:"Get an invoice"});
+Object.assign(translations.de,{mobileRouteDetail:"Zu uns kommen",mobileMachinesDetail:"Live-Verfügbarkeit",mobileInvoicesDetail:"Rechnung abrufen"});
+Object.assign(translations.it,{mobileRouteDetail:"Raggiungici",mobileMachinesDetail:"Disponibilità in tempo reale",mobileInvoicesDetail:"Ottieni una fattura"});
+Object.assign(translations.es,{mobileRouteDetail:"Ven a vernos",mobileMachinesDetail:"Disponibilidad en directo",mobileInvoicesDetail:"Obtener una factura"});
+Object.assign(translations.pt,{mobileRouteDetail:"Como chegar",mobileMachinesDetail:"Disponibilidade em tempo real",mobileInvoicesDetail:"Obter uma fatura"});
+Object.assign(translations.ro,{mobileRouteDetail:"Vino la noi",mobileMachinesDetail:"Disponibilitate în timp real",mobileInvoicesDetail:"Obține factura"});
+Object.assign(translations.pl,{mobileRouteDetail:"Dojazd do nas",mobileMachinesDetail:"Dostępność na żywo",mobileInvoicesDetail:"Pobierz fakturę"});
+Object.assign(translations.uk,{mobileRouteDetail:"Як дістатися",mobileMachinesDetail:"Наявність онлайн",mobileInvoicesDetail:"Отримати рахунок"});
+Object.assign(translations.ru,{mobileRouteDetail:"Как добраться",mobileMachinesDetail:"Наличие онлайн",mobileInvoicesDetail:"Получить счёт"});
 
 function applyLang(lang){
   currentLang=translations[lang]?lang:'fr';

@@ -306,3 +306,31 @@
   left:auto!important;right:4px!important;
   transform:none!important;-webkit-transform:none!important
 }
+
+/* Small-screen quick links: keep the three familiar cards; explain each action. */
+@media(max-width:700px){
+  .mobile-quick-links{align-items:stretch}
+  .mobile-quick-link{
+    min-height:97px;gap:4px;padding:9px 3px;
+  }
+  .mobile-quick-link .mobile-quick-title{
+    display:block;max-width:100%;font-size:clamp(12px,calc(12px * var(--display-scale)),14px);
+    font-weight:850;line-height:1.18;text-wrap:balance
+  }
+  .mobile-quick-link .mobile-quick-detail{
+    display:block;max-width:100%;
+    font-size:clamp(10.5px,calc(10.5px * var(--display-scale)),12px);
+    font-weight:650;line-height:1.28;
+    color:inherit!important;opacity:.86;
+    overflow-wrap:break-word;hyphens:auto;text-wrap:pretty
+  }
+}
+@media(max-width:355px){
+  .mobile-quick-link{min-height:104px;padding-inline:2px!important}
+  .mobile-quick-link .mobile-quick-title{font-size:12px}
+}
+@media(orientation:landscape) and (max-height:550px) and (min-width:701px) and (max-width:1000px){
+  .mobile-quick-link{flex-wrap:wrap;min-height:52px;gap:4px 7px}
+  .mobile-quick-link .mobile-quick-title{font-weight:850;white-space:nowrap}
+  .mobile-quick-link .mobile-quick-detail{font-size:11px;line-height:1.25;opacity:.85}
+}

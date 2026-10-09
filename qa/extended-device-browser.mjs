@@ -106,6 +106,17 @@ function stateChecks({lang,size,theme,width,height,deep}){
  if(theme==='light'&&knobMiddle>=middle-1)errs.push('light knob stuck right');
  if(mobile){
   if(quick.length!==3)errs.push('quick buttons not all visible');
+  for(const [i,a] of [...document.querySelectorAll('.mobile-quick-link')].entries()){
+   if(!vis(a))continue;
+   const title=a.querySelector('.mobile-quick-title'),detail=a.querySelector('.mobile-quick-detail');
+   if(!title||!detail||!detail.textContent.trim())errs.push('quick action '+i+' unclear label');
+   else{
+    const b=rect(a),d=rect(detail),st=getComputedStyle(detail);
+    if(d.x<b.x-2||d.right>b.right+2||d.bottom>b.bottom+2)
+     errs.push('quick action '+i+' detail overflow');
+    if(parseFloat(st.fontSize)<10.4)errs.push('quick action '+i+' illegible');
+   }
+  }
   if(quick.some(q=>q.x<0||q.right>width+2||q.h<38))errs.push('quick buttons inaccessible');
   if(quick[0]&&quick[0].top<header.bottom-3)errs.push('quick buttons over header');
   if(quick[0]&&quick[0].top>hero.top+3)errs.push('quick buttons after hero');
