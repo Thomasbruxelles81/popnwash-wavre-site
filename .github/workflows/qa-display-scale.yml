@@ -96,7 +96,7 @@ jobs:
                     slider.value=theme==='dark'?'1':'0';
                     slider.dispatchEvent(new Event('input',{bubbles:true}));
                     const root=document.documentElement;
-                    const docWidth=root.scrollWidth;
+                    const docWidth=Math.max(root.scrollWidth,document.body.scrollWidth);
                     const visible=[...document.querySelectorAll(
                       '.site-header,.brand-lockup,.header-actions,.display-size-button,#langButton,'+
                       '#themeControl,#menuButton,.hero-copy,.hero-route-cta,.section-shell,'+
@@ -106,12 +106,17 @@ jobs:
                       .filter(({el,r})=>r.width>0&&(r.left < -3||r.right > width+3))
                       .slice(0,4).map(({el,r})=>el.className+' ('+Math.round(r.left)+'..'+Math.round(r.right)+')');
                     const action=document.querySelector('#displaySizeButton').getBoundingClientRect();
+                    const nav=document.querySelector('.desktop-nav');
+                    const navVisible=getComputedStyle(nav).display!=='none';
+                    const navRight=nav.getBoundingClientRect().right;
+                    const iconLeft=action.left;
+                    const navOverlap=navVisible&&navRight>iconLeft-2;
                     const visibleAction=action.left>=0&&action.right<=width+2&&action.height>=34;
                     const hero=getComputedStyle(document.querySelector('.hero-sub')).fontSize;
                     const image=document.querySelector('#displaySizeButton img');
                     return {lang:root.lang,scale:root.dataset.displayScale,
                       theme:root.dataset.theme,docWidth,beyond,visibleAction,hero,
-                      imgWidth:image.naturalWidth};
+                      imgWidth:image.naturalWidth,navOverlap};
                   },{lang,scale,theme,width});
                   summary.checks++;
                   const id=name+' '+lang+' '+scale+'% '+theme;
@@ -119,6 +124,7 @@ jobs:
                   if(found.docWidth>width+2)errors.push(id+' horizontal overflow '+found.docWidth+' > '+width);
                   if(found.beyond.length)errors.push(id+' elements clipped '+found.beyond.join(';'));
                   if(!found.visibleAction)errors.push(id+' display icon not reachable');
+                  if(found.navOverlap)errors.push(id+' desktop navigation overlaps AAA control');
                   if(found.imgWidth<1)errors.push(id+' supplied AAA image not loaded');
                   if(errors.length>250)break;
                 }
@@ -136,7 +142,9 @@ jobs:
                 const slider=document.querySelector('#themeSlider');
                 slider.value=theme==='dark'?'1':'0';slider.dispatchEvent(new Event('input',{bubbles:true}));
               },{lang,scale,theme});
-              await page.screenshot({path:'qa-screenshots/after-'+s+'.png',fullPage:true});
+              const screenshot=await page.screenshot({path:'qa-screenshots/after-'+s+'.png',fullPage:true});
+              const actualWidth=screenshot.readUInt32BE(16);
+              if(actualWidth>width+2)errors.push('screenshot overflow '+s+' '+actualWidth+' > '+width);
               await page.locator('#displaySizeButton').click();
               await page.screenshot({path:'qa-screenshots/panel-'+s+'.png'});
               await page.keyboard.press('Escape');

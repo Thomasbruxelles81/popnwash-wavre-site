@@ -202,3 +202,23 @@ main img,main svg{max-width:100%}
   .lang-button .chev{font-size:13px!important}
 }
 body.display-size-open .mobile-actionbar{display:none!important}
+
+/* QA R3: the decorative circles must never create phantom page width. */
+@media(max-width:1400px){
+  .hero-visual .shape-red{right:0!important}
+  .hero-visual .shape-green{left:0!important}
+}
+.contact-mail{
+  max-width:100%!important;min-width:0!important;white-space:normal!important;
+  overflow-wrap:anywhere!important;word-break:break-word!important
+}
+@media(max-width:700px){
+  .first-visit-head,.first-visit-head>*,
+  .first-visit-showcase,.first-visit-showcase :is(h2,p),
+  .section-heading,.section-heading>*,
+  .contact-copy,.contact-info,.contact-info-copy,.contact-section,
+  .contact-info-copy :is(h2,p,a){
+    min-width:0!important;max-width:100%!important
+  }
+  :where(h1,h2,h3,.contact-mail){overflow-wrap:anywhere!important}
+}
