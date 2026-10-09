@@ -239,3 +239,39 @@
   }
   .brand-label .brand-place{font-size:clamp(7.5px,calc(7.6px * var(--display-scale)),9px)!important}
 }
+
+/* Fix WebKit desktop/tablet knob geometry: physical left-half/right-half placement. */
+.theme-slider-shell .theme-knob{
+  transform:none!important;left:4px!important;
+  transition:left .2s ease,background-color .2s ease!important
+}
+.theme-control[data-mode="dark"] .theme-slider-shell .theme-knob{
+  left:50%!important;transform:none!important
+}
+.theme-control[data-mode="light"] .theme-slider-shell .theme-knob{
+  left:4px!important;transform:none!important
+}
+/* Landscape phone: same short mobile story and no duplicate service cards. */
+@media(orientation:landscape) and (max-height:550px) and (min-width:701px) and (max-width:1000px){
+  .hero-copy>.eyebrow,.hero-copy>.hero-sub,.hero-copy>.hero-trust,
+  .hero-copy>.hero-route-cta,.hero-visual>.hero-wiline-cards{display:none!important}
+  .hero-mobile-kicker{
+    display:block!important;font-size:12px!important;font-weight:850!important;
+    text-transform:uppercase;color:#2e7834!important;letter-spacing:.04em
+  }
+  .hero-mobile-sub{
+    display:block!important;color:var(--muted)!important;
+    font-size:clamp(12px,calc(12px * var(--display-scale)),15px)!important;
+    line-height:1.4!important;margin:8px 0!important
+  }
+  .hero-copy h1{
+    font-size:clamp(27px,calc(29px * var(--display-scale)),37px)!important;
+    line-height:1.08!important
+  }
+  .hero-visual .hero-photo-stack{
+    margin:0!important;aspect-ratio:1.75/1!important;
+    max-height:240px!important;border-radius:18px!important
+  }
+  .hero-visual>.shape{display:none!important}
+  html[data-theme="dark"] .hero-mobile-kicker{color:#a4eba0!important}
+}
