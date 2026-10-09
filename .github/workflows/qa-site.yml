@@ -3,6 +3,8 @@ name: QA responsive POP'n WASH
 on:
   push:
     branches: ["main"]
+  pull_request:
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -173,7 +175,7 @@ jobs:
             }));
             if(darkVisual.theme!=='dark') failures.push(`${name}: dark theme did not activate`);
             if(darkVisual.bodyBg==='rgb(247, 240, 223)') failures.push(`${name}: dark body still light`);
-            if(darkVisual.headerBg==='rgb(255, 230, 188)') failures.push(`${name}: dark header still beige/light`);
+            if(darkVisual.headerBg!=='rgb(255, 230, 188)') failures.push(`${name}: brand header must remain beige in both themes, got ${darkVisual.headerBg}`);
             if(darkVisual.sw > darkVisual.cw + 2) failures.push(`${name}: dark horizontal overflow ${darkVisual.sw}>${darkVisual.cw}`);
             if(!darkVisual.lightText || !darkVisual.darkText) failures.push(`${name}: visible theme labels missing`);
             await page.screenshot({path:`qa-screenshots/${name}-dark.png`, fullPage:true});
@@ -408,7 +410,7 @@ jobs:
               const rgbSum=s=>{const m=s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);return m?(+m[1]+ +m[2]+ +m[3]):999};
               if(mode==='light' && base.brandTitle!=='rgb(22, 28, 27)') failures.push('light: brand title contrast '+base.brandTitle);
               if(mode==='dark'){
-                if(rgbSum(base.brandTitle)<570) failures.push('dark: brand title '+base.brandTitle);
+                if(base.brandTitle!=='rgb(22, 28, 27)') failures.push('dark: beige-header brand title must stay anthracite '+base.brandTitle);
                 if(rgbSum(base.heroSub)<500) failures.push('dark: hero subtitle '+base.heroSub);
                 if(rgbSum(base.wiTitle)<570) failures.push('dark: WiLine title '+base.wiTitle);
                 if(rgbSum(base.wiSmall)<500) failures.push('dark: WiLine secondary '+base.wiSmall);

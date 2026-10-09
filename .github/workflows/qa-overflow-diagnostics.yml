@@ -1,0 +1,56 @@
+name: QA overflow visual diagnostics
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  overflow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Browser setup
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+      - name: Inspect all horizontal overflow ancestors
+        run: |
+          python3 -m http.server 4173 >/tmp/qa-http.log 2>&1 &
+          sleep 2
+          cat > check-overflow.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          const browser=await chromium.launch({headless:true});
+          for (const [name,w,h,size,lang] of [
+            ['320-fr',320,700,150,'fr'],['320-de',320,700,150,'de'],
+            ['390-nl',390,844,110,'nl'],['568-de-landscape',568,320,150,'de'],
+            ['768-nl',768,1024,150,'nl'],['1024-de',1024,768,150,'de'],
+            ['1280-fr',1280,800,150,'fr'],['1440-fr',1440,900,110,'fr']
+          ]) {
+            const page=await browser.newPage({viewport:{width:w,height:h}});
+            await page.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
+            const result=await page.evaluate(({w,size,lang})=>{
+              document.querySelector('[data-lang="'+lang+'"]').click();
+              document.querySelector('[data-display-size="'+size+'"]').click();
+              const nodes=[...document.querySelectorAll('body *')];
+              const overflow=nodes.map(el=>{
+                const b=el.getBoundingClientRect(),css=getComputedStyle(el);
+                return {tag:el.tagName,cl:String(el.className).slice(0,85),
+                  x:Math.round(b.left),right:Math.round(b.right),width:Math.round(b.width),
+                  scroll:Math.round(el.scrollWidth),client:Math.round(el.clientWidth),
+                  overflow:css.overflowX,position:css.position};
+              }).filter(e=>e.right>w+2&&e.width>0||e.x< -10&&e.width>0)
+                .sort((a,b)=>b.right-a.right).slice(0,16);
+              return {width:w,rootScroll:document.documentElement.scrollWidth,bodyScroll:document.body.scrollWidth,
+                bodyClient:document.body.clientWidth,overflow};
+            },{w,size,lang});
+            const shot=await page.screenshot({fullPage:true});
+            result.screenshotWidth=shot.readUInt32BE(16);
+            console.log('OVERFLOW '+name+' '+JSON.stringify(result));
+            await page.close();
+          }
+          await browser.close();
+          EOF
+          node check-overflow.mjs

@@ -1,0 +1,236 @@
+name: QA cross-browser visual integrity and links
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cross-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Chromium Firefox WebKit
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium firefox webkit >/dev/null
+      - name: Serve candidate
+        run: |
+          python3 -m http.server 4173 > /tmp/popnwash-review-http.log 2>&1 &
+          sleep 2
+      - name: Inspect visual text, controls and links on three engines
+        run: |
+          mkdir -p qa-crossbrowser
+          cat > qa-crossbrowser.mjs <<'EOF'
+          import {chromium,firefox,webkit} from 'playwright';
+          import fs from 'node:fs';
+          const result={cases:0,engines:{},linkTargets:[],failures:[],warnings:[],fontFindings:[],screenshots:[]};
+          const fail=(where,description)=>{if(result.failures.length<240)result.failures.push(where+': '+description)};
+          const warn=(where,description)=>{if(result.warnings.length<200)result.warnings.push(where+': '+description)};
+          const cases=[
+            ['tiny',320,568],['small',360,740],['normal',390,844],
+            ['widePhone',568,320],['phoneLandscape',844,390],
+            ['tablet',768,1024],['tabletLandscape',1024,768],
+            ['laptop',1280,800],['medium',1366,768],
+            ['desktop',1440,900],['wide',1920,1080],
+          ];
+          const scales=[80,110,150],langs=['fr','nl','de','uk'],themes=['light','dark'];
+          const base='http://127.0.0.1:4173/';
+          for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
+            const browser=await engine.launch({headless:true});
+            const page=await browser.newPage({viewport:{width:1440,height:900}});
+            const pageErrors=[];
+            page.on('pageerror',e=>{if(pageErrors.length<20)pageErrors.push(e.message)});
+            await page.goto(base,{waitUntil:'domcontentloaded'});
+            await page.locator('#displaySizeButton').waitFor();
+            const links=await page.evaluate(()=>{
+              const items=[...document.querySelectorAll('a[href],link[rel="stylesheet"][href],script[src],img[src]')];
+              return items.map(el=>({tag:el.tagName,href:el.getAttribute('href')||el.getAttribute('src')||'',label:(el.textContent||el.getAttribute('aria-label')||'').trim().slice(0,50)}));
+            });
+            if(engineName==='chromium'){
+              const linkErrors=[],linkWarnings=[];
+              const seen=new Set();
+              for(const {href,tag,label} of links){
+                if(!href||seen.has(tag+' '+href))continue;
+                seen.add(tag+' '+href);
+                if(href.startsWith('#')){
+                  const id=decodeURIComponent(href.slice(1));
+                  if(!await page.evaluate(id=>document.getElementById(id)!==null,id))linkErrors.push('missing anchor '+href);
+                }else if(/^https?:\/\//.test(href)){
+                  if(!/^https:\/\//.test(href))linkWarnings.push('non-https external '+href);
+                  result.linkTargets.push({url:href,kind:'external',label});
+                }else if(/^(tel:|mailto:)/.test(href)){
+                  if(href.startsWith('tel:')&&!/^tel:\+\d{8,15}$/.test(href))linkErrors.push('invalid telephone '+href);
+                  if(href.startsWith('mailto:')&&!href.includes('@'))linkErrors.push('invalid email '+href);
+                }else if(!/^(data:|blob:|javascript:)/.test(href)){
+                  const path=href.replace(/^\//,'');
+                  const response=await page.request.get(base+path);
+                  if(!response.ok())linkErrors.push('local asset '+href+' status '+response.status());
+                }else if(href.startsWith('javascript:'))linkErrors.push('unsafe link '+href);
+              }
+              for(const e of linkErrors)fail('links',e);
+              for(const w of linkWarnings)warn('links',w);
+              result.linkTargets=[...new Map(result.linkTargets.map(x=>[x.url,x])).values()];
+            }
+            for(const [viewport,w,h] of cases){
+              await page.setViewportSize({width:w,height:h});
+              await page.goto(base,{waitUntil:'domcontentloaded'});
+              for(const lang of langs)for(const scale of scales)for(const theme of themes){
+                const key=engineName+'/'+viewport+'/'+lang+'/'+scale+'/'+theme;
+                const data=await page.evaluate(({lang,scale,theme,w})=>{
+                  document.querySelector('[data-lang="'+lang+'"]').click();
+                  document.querySelector('[data-display-size="'+scale+'"]').click();
+                  const sl=document.querySelector('#themeSlider');
+                  sl.value=theme==='dark'?'1':'0';
+                  sl.dispatchEvent(new Event('input',{bubbles:true}));
+                  const root=document.documentElement;
+                  const visible=el=>{
+                    const s=getComputedStyle(el),r=el.getBoundingClientRect();
+                    return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0;
+                  };
+                  const rect=el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};
+                  const issues=[];
+                  const overflow=Math.max(root.scrollWidth,document.body.scrollWidth)-w;
+                  const header=document.querySelector('.site-header');
+                  const icon=rect(document.querySelector('#displaySizeButton'));
+                  const headerControls=[...header.querySelectorAll('a,button,input')].filter(visible)
+                    .filter(el=>!el.closest('.display-size-panel')&&!el.matches('.theme-slider,[aria-hidden="true"]')).map(el=>({el,r:rect(el)}));
+                  for(let i=0;i<headerControls.length;i++)for(let j=i+1;j<headerControls.length;j++){
+                    const a=headerControls[i],b=headerControls[j];
+                    const x=Math.min(a.r.right,b.r.right)-Math.max(a.r.left,b.r.left);
+                    const y=Math.min(a.r.bottom,b.r.bottom)-Math.max(a.r.top,b.r.top);
+                    if(x>4&&y>8)issues.push('overlapping header controls '+a.el.tagName+'.'+a.el.className+'/'+b.el.tagName+'.'+b.el.className+' x='+Math.round(x));
+                  }
+                  // Detect actual clipped text, not legitimate text wrapping inside auto-height paragraphs.
+                  const textCut=[];
+                  const targets=[...document.querySelectorAll(
+                    'h1,h2,h3,h4,p,small,strong,summary,button,a,label,.price,.tariff-price,.lang-button,.theme-option-label'
+                  )].filter(visible);
+                  for(const el of targets){
+                    const s=getComputedStyle(el),r=rect(el);
+                    if(r.top< -15||r.top>document.documentElement.scrollHeight)continue;
+                    if(el.matches('.form-honey,[aria-hidden="true"]'))continue;
+                    // Brand uses intentional overflow containment and gets its own geometric check.
+                    if(el.matches('.brand-title'))continue;
+                    const t=(el.innerText||'').trim();
+                    if(!t)continue;
+                    // Hidden overflow + text wider/taller than box means clipped text.
+                    const clippingX=['hidden','clip'].includes(s.overflowX)&&el.scrollWidth>el.clientWidth+3;
+                    const clippingY=['hidden','clip'].includes(s.overflowY)&&el.scrollHeight>el.clientHeight+3;
+                    if(clippingX||clippingY)textCut.push(el.tagName+'.'+String(el.className).slice(0,45)+' '+t.slice(0,28));
+                  }
+                  // Spot intra-word line splitting in editorial headings/card labels.
+                  const wordBreaks=[];
+                  const textSelect='h1,h2,h3,.visit-card summary strong,.tariff-copy strong';
+                  for(const el of [...document.querySelectorAll(textSelect)].filter(visible)){
+                    if(wordBreaks.length>=6)break;
+                    const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+                    for(let node=walker.nextNode();node;node=walker.nextNode()){
+                      const txt=node.textContent||'';
+                      const words=txt.matchAll(/[\p{L}\p{N}][\p{L}\p{N}’'-]{4,}/gu);
+                      for(const word of words){
+                        const range=document.createRange();
+                        range.setStart(node,word.index);
+                        range.setEnd(node,word.index+word[0].length);
+                        if(range.getClientRects().length>1)
+                          wordBreaks.push({tag:el.tagName,cls:String(el.className).slice(0,35),word:word[0]});
+                        if(wordBreaks.length>=6)break;
+                      }
+                      if(wordBreaks.length>=6)break;
+                    }
+                  }
+                  const heading=document.querySelector('.hero h1')||document.querySelector('h1');
+                  const smallFonts=targets.filter(el=>{
+                    const sz=parseFloat(getComputedStyle(el).fontSize);
+                    return sz<10&&el.innerText.trim().length>10;
+                  }).slice(0,6).map(el=>({tag:el.tagName,cls:String(el.className).slice(0,40),
+                    font:getComputedStyle(el).fontSize,text:el.innerText.trim().slice(0,30)}));
+                  const langButton=document.getElementById('langButton');
+                  const themeLabels=[...document.querySelectorAll('.theme-option-label')].filter(visible).map(el=>({
+                    text:el.innerText.trim(),height:el.getBoundingClientRect().height,
+                    innerHeight:el.querySelector('span')?.getBoundingClientRect().height||0
+                  }));
+                  return {overflow,issues:issues.slice(0,10),textCut:textCut.slice(0,12),wordBreaks,
+                    smallFonts,lang:root.lang,scale:root.dataset.displayScale,theme:root.dataset.theme,
+                    icon,header:rect(header),langBtn:rect(langButton),hero:heading?rect(heading):null,
+                    themeLabels,fontsReady:document.fonts.status};
+                },{lang,scale,theme,w});
+                result.cases++;
+                if(data.lang!==lang||data.scale!==String(scale)||data.theme!==theme)fail(key,'wrong preference state');
+                if(data.overflow>2)fail(key,'page overflow +'+data.overflow+'px');
+                for(const issue of data.issues)fail(key,issue);
+                for(const issue of data.textCut)fail(key,'clipped text '+issue);
+                for(const wbreak of data.wordBreaks)fail(key,'split single word '+JSON.stringify(wbreak));
+                if(data.icon.left<0||data.icon.right>w+2)fail(key,'AAA outside viewport');
+                for(const font of data.smallFonts)if(result.fontFindings.length<90)result.fontFindings.push({key,...font});
+                if(data.fontsReady!=='loaded')warn(key,'document fonts state '+data.fontsReady);
+                if(result.failures.length>=240)break;
+              }
+              if(result.failures.length>=240)break;
+              // Capture only a few representative states per engine, with transitions fully settled.
+              if(['tiny','widePhone','tablet','laptop','desktop'].includes(viewport)){
+                const screenshotKey=engineName+'-'+viewport;
+                await page.evaluate(()=>{
+                  document.querySelector('[data-lang="de"]').click();
+                  document.querySelector('[data-display-size="150"]').click();
+                  const sl=document.querySelector('#themeSlider');
+                  sl.value='0';sl.dispatchEvent(new Event('input',{bubbles:true}));
+                });
+                await page.waitForTimeout(700);
+                const file='qa-crossbrowser/'+screenshotKey+'.png';
+                await page.screenshot({path:file,fullPage:false});
+                result.screenshots.push(file);
+              }
+            }
+            await page.goto(base,{waitUntil:'domcontentloaded'});
+            await page.locator('#displaySizeButton').click();
+            if(!await page.locator('#displaySizePanel').isVisible())fail(engineName,'AAA panel does not open');
+            await page.locator('[data-display-size="150"]').click();
+            if((await page.evaluate(()=>document.documentElement.dataset.displayScale))!=='150')fail(engineName,'150% not selectable');
+            await page.locator('#displaySizeReset').click();
+            if((await page.evaluate(()=>document.documentElement.dataset.displayScale))!=='110')fail(engineName,'reset to 110 failed');
+            await page.keyboard.press('Escape');
+            if(await page.locator('#displaySizePanel').isVisible())fail(engineName,'Escape not closing');
+            await page.reload({waitUntil:'domcontentloaded'});
+            if((await page.evaluate(()=>document.documentElement.dataset.displayScale))!=='110')fail(engineName,'persisted reset incorrect');
+            for(const e of pageErrors)fail(engineName,'pageerror '+e);
+            result.engines[engineName]='checked';
+            await browser.close();
+          }
+          result.fontFindings=result.fontFindings.slice(0,90);
+          fs.writeFileSync('qa-crossbrowser/report.json',JSON.stringify(result,null,2));
+          console.log('QA-CROSS '+JSON.stringify({cases:result.cases,engines:result.engines,
+            failCount:result.failures.length,firstFailures:result.failures.slice(0,45),
+            tinyFonts:result.fontFindings.slice(0,16),linkTargets:result.linkTargets.map(x=>x.url),
+            warnings:result.warnings.slice(0,15)}));
+          if(result.failures.length)process.exitCode=1;
+          EOF
+          node qa-crossbrowser.mjs
+      - name: Inspect external website response codes (informational only)
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json,urllib.request,urllib.error,concurrent.futures
+          from pathlib import Path
+          p=Path('qa-crossbrowser/report.json')
+          if not p.exists():exit(0)
+          d=json.loads(p.read_text())
+          urls=[e['url'] for e in d.get('linkTargets',[]) if e['url'].startswith('https://')]
+          def check(url):
+            try:
+              req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'},method='HEAD')
+              with urllib.request.urlopen(req,timeout=8) as r:return [url,r.status,'ok']
+            except Exception as e:return [url,'unverified',str(e)[:160]]
+          with concurrent.futures.ThreadPoolExecutor(max_workers=6) as ex:
+            d['externalChecks']=list(ex.map(check,urls))
+          p.write_text(json.dumps(d,ensure_ascii=False,indent=2))
+          for x in d['externalChecks']:print('EXTERNAL-LINK',*x)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: crossbrowser-visual-link-audit
+          path: qa-crossbrowser/
+          retention-days: 14

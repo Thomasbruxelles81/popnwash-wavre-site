@@ -1,0 +1,205 @@
+name: QA display size 80-150 (draft only)
+
+on:
+  push:
+    branches: ["feat/display-size-80-150-responsive"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  display-scale:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Chromium Playwright
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Start current and baseline servers
+        run: |
+          mkdir -p qa-baseline qa-screenshots
+          git archive origin/main | tar -x -C qa-baseline
+          python3 -m http.server 4173 >/tmp/site-scale.log 2>&1 &
+          (cd qa-baseline && python3 -m http.server 4174 >/tmp/site-before.log 2>&1) &
+          sleep 2
+      - name: Audit paliers, langues, thèmes et formats
+        run: |
+          cat > qa-display.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+          const browser=await chromium.launch({headless:true});
+          const errors=[], warnings=[], summary={checks:0, screenshots:0, scales:new Set(), languages:new Set(), viewports:0};
+          const widths=[
+            ['phone320',320,568],['phone360',360,740],['phone375',375,812],
+            ['phone390',390,844],['phone430',430,932],
+            ['landscape568',568,320],['landscape844',844,390],['landscape915',915,412],
+            ['tablet600',600,960],['tablet768',768,1024],['tablet820',820,1180],
+            ['tablet1024',1024,768],['tablet1180',1180,820],
+            ['laptop1024',1024,768],['laptop1280',1280,800],
+            ['laptop1366',1366,768],['desktop1440',1440,900],
+            ['desktop1920',1920,1080],['desktop2560',2560,1440],
+            ['ultrawide3440',3440,1440],
+          ];
+          const langs=['fr','nl','en','de','it','es','pt','ro','pl','uk','ru'];
+          const scales=[80,90,100,110,120,130,140,150];
+          const screens=new Set([
+            'phone320-150-de-dark','phone320-150-fr-light',
+            'phone390-110-nl-light','landscape568-150-de-dark',
+            'landscape844-150-fr-dark','tablet768-150-nl-light',
+            'tablet1024-150-de-dark','laptop1280-150-fr-light',
+            'desktop1440-110-fr-light','desktop2560-80-fr-light',
+            'ultrawide3440-80-en-dark'
+          ]);
+          const page=await browser.newPage();
+          page.on('pageerror',e=>errors.push('JavaScript error: '+e.message));
+          page.on('console',msg=>{if(msg.type()==='error')warnings.push(msg.text().slice(0,160));});
+          for(const [name,width,height] of widths){
+            summary.viewports++;
+            await page.setViewportSize({width,height});
+            await page.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
+            await page.locator('#displaySizeButton').waitFor();
+            if(name==='phone320'){
+              const before=await page.locator('.hero-sub').evaluate(e=>parseFloat(getComputedStyle(e).fontSize));
+              await page.locator('#displaySizeButton').click();
+              if(!await page.locator('#displaySizePanel').isVisible())errors.push('panel not open on 320');
+              await page.locator('[data-display-size="150"]').click();
+              const after=await page.locator('.hero-sub').evaluate(e=>parseFloat(getComputedStyle(e).fontSize));
+              if(!(after>before))errors.push('font size unchanged after selecting 150: '+before+'/'+after);
+              if(await page.locator('#displaySizePanel').getAttribute('aria-label')===null)errors.push('missing panel label');
+              await page.reload({waitUntil:'domcontentloaded'});
+              const restored=await page.evaluate(()=>document.documentElement.dataset.displayScale);
+              if(restored!=='150')errors.push('persistence failed after reload');
+              await page.locator('#displaySizeButton').click();
+              await page.locator('#displaySizeReset').click();
+              if((await page.evaluate(()=>document.documentElement.dataset.displayScale))!=='110')errors.push('reset failed');
+              await page.keyboard.press('Escape');
+              if(await page.locator('#displaySizePanel').isVisible())errors.push('Escape did not close panel');
+            }
+            for(const lang of langs){
+              summary.languages.add(lang);
+              for(const scale of scales){
+                summary.scales.add(scale);
+                for(const theme of ['light','dark']){
+                  const found=await page.evaluate(({lang,scale,theme,width})=>{
+                    const choose=document.querySelector('[data-lang="'+lang+'"]');
+                    choose.click();
+                    document.querySelector('[data-display-size="'+scale+'"]').click();
+                    const slider=document.querySelector('#themeSlider');
+                    slider.value=theme==='dark'?'1':'0';
+                    slider.dispatchEvent(new Event('input',{bubbles:true}));
+                    const root=document.documentElement;
+                    const docWidth=Math.max(root.scrollWidth,document.body.scrollWidth);
+                    const visible=[...document.querySelectorAll(
+                      '.site-header,.brand-lockup,.header-actions,.display-size-button,#langButton,'+
+                      '#themeControl,#menuButton,.hero-copy,.hero-route-cta,.section-shell,'+
+                      '.machine-card,.tariff-card,.faq-item,.contact-form-card'
+                    )].filter(el=>getComputedStyle(el).display!=='none');
+                    const beyond=visible.map(el=>({el,r:el.getBoundingClientRect()}))
+                      .filter(({el,r})=>r.width>0&&(r.left < -3||r.right > width+3))
+                      .slice(0,4).map(({el,r})=>el.className+' ('+Math.round(r.left)+'..'+Math.round(r.right)+')');
+                    const action=document.querySelector('#displaySizeButton').getBoundingClientRect();
+                    const nav=document.querySelector('.desktop-nav');
+                    const navVisible=getComputedStyle(nav).display!=='none';
+                    const navRight=nav.getBoundingClientRect().right;
+                    const iconLeft=action.left;
+                    const navOverlap=navVisible&&navRight>iconLeft-2;
+                    const visibleAction=action.left>=0&&action.right<=width+2&&action.height>=34;
+                    const hero=getComputedStyle(document.querySelector('.hero-sub')).fontSize;
+                    const image=document.querySelector('#displaySizeButton img');
+                    const label=document.querySelector('.brand-label').getBoundingClientRect();
+                    const wordmark=document.querySelector('.brand-main').getBoundingClientRect();
+                    const brandClipped=width<=360&&wordmark.right>label.right+2;
+                    const brandOverlapsAa=document.querySelector('.brand-title').getBoundingClientRect().right>action.left-3;
+                    const themeLabelsWrap=[...document.querySelectorAll('.theme-option-label span')]
+                      .filter(el=>getComputedStyle(el).display!=='none'&&el.getBoundingClientRect().height>25)
+                      .map(el=>el.textContent.trim());
+                    return {lang:root.lang,scale:root.dataset.displayScale,
+                      theme:root.dataset.theme,docWidth,beyond,visibleAction,hero,
+                      imgWidth:image.naturalWidth,navOverlap,brandClipped,brandOverlapsAa,themeLabelsWrap};
+                  },{lang,scale,theme,width});
+                  summary.checks++;
+                  const id=name+' '+lang+' '+scale+'% '+theme;
+                  if(found.lang!==lang||found.scale!==String(scale)||found.theme!==theme)errors.push(id+' state mismatch');
+                  if(found.docWidth>width+2)errors.push(id+' horizontal overflow '+found.docWidth+' > '+width);
+                  if(found.beyond.length)errors.push(id+' elements clipped '+found.beyond.join(';'));
+                  if(!found.visibleAction)errors.push(id+' display icon not reachable');
+                  if(found.navOverlap)errors.push(id+' desktop navigation overlaps AAA control');
+                  if(found.brandClipped)errors.push(id+' brand POPnWASH name clipped');
+                  if(found.brandOverlapsAa)errors.push(id+' brand wordmark overlaps AAA button');
+                  if(found.themeLabelsWrap.length)errors.push(id+' theme words wrapped: '+found.themeLabelsWrap.join(','));
+                  if(found.imgWidth<1)errors.push(id+' supplied AAA image not loaded');
+                  if(errors.length>250)break;
+                }
+                if(errors.length>250)break;
+              }
+              if(errors.length>250)break;
+            }
+            for(const s of screens){
+              if(!s.startsWith(name+'-'))continue;
+              const vals=s.split('-');
+              const scale=Number(vals[1]),lang=vals[2],theme=vals[3];
+              await page.evaluate(({lang,scale,theme})=>{
+                document.querySelector('[data-lang="'+lang+'"]').click();
+                document.querySelector('[data-display-size="'+scale+'"]').click();
+                const slider=document.querySelector('#themeSlider');
+                slider.value=theme==='dark'?'1':'0';slider.dispatchEvent(new Event('input',{bubbles:true}));
+              },{lang,scale,theme});
+              await page.waitForTimeout(650); // Do not capture mid-transition.
+              const stableBg=await page.locator('body').evaluate(el=>getComputedStyle(el).backgroundColor);
+              const expectedBg=theme==='light'?'rgb(247, 240, 223)':'rgb(13, 23, 20)';
+              if(stableBg!==expectedBg)errors.push('wrong visual theme in '+s+': '+stableBg+' (wanted '+expectedBg+')');
+              const screenshot=await page.screenshot({path:'qa-screenshots/after-'+s+'.png',fullPage:true});
+              const actualWidth=screenshot.readUInt32BE(16);
+              if(actualWidth>width+2)errors.push('screenshot overflow '+s+' '+actualWidth+' > '+width);
+              await page.locator('#displaySizeButton').click();
+              await page.screenshot({path:'qa-screenshots/panel-'+s+'.png'});
+              await page.keyboard.press('Escape');
+              summary.screenshots+=2;
+            }
+            if(errors.length>250)break;
+          }
+          for(const [name,width,height] of [['baseline-phone390',390,844],['baseline-desktop1440',1440,900]]){
+            const before=await browser.newPage({viewport:{width,height}});
+            await before.goto('http://127.0.0.1:4174/',{waitUntil:'domcontentloaded'});
+            await before.screenshot({path:'qa-screenshots/before-'+name+'.png',fullPage:true});
+            summary.screenshots++;
+            await before.close();
+            await page.setViewportSize({width,height});
+            await page.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
+            await page.locator('[data-display-size="100"]').evaluate(e=>e.click());
+            await page.locator('#themeSlider').evaluate(el=>{
+              el.value='0';el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));
+            });
+            await page.waitForTimeout(650); // Explicit stable LIGHT comparison with baseline.
+            await page.screenshot({path:'qa-screenshots/after-'+name+'-100.png',fullPage:true});
+            summary.screenshots++;
+          }
+          /* Browser 200% layout-equivalent: 640 physical pixels / 2 = 320 CSS pixels. */
+          const zoomProxy=await browser.newPage({viewport:{width:320,height:700},deviceScaleFactor:2});
+          await zoomProxy.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
+          const zoomWidth=await zoomProxy.evaluate(()=>document.documentElement.scrollWidth);
+          if(zoomWidth>322)errors.push('200% reflow proxy overflow '+zoomWidth);
+          await zoomProxy.screenshot({path:'qa-screenshots/zoom200-reflow-proxy.png',fullPage:true});
+          await zoomProxy.close();
+          summary.scales=[...summary.scales];summary.languages=[...summary.languages];
+          const report={...summary,failures:errors.length,warnings:warnings.slice(0,30),errors:errors.slice(0,260)};
+          fs.writeFileSync('qa-screenshots/report.json',JSON.stringify(report,null,2));
+          console.log(JSON.stringify({...summary,failures:errors.length,firstErrors:errors.slice(0,35),warnings:warnings.slice(0,8)},null,2));
+          await browser.close();
+          if(errors.length)process.exit(1);
+          EOF
+          node qa-display.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: display-scale-qa
+          path: qa-screenshots/
+          retention-days: 14

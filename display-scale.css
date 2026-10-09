@@ -1,0 +1,297 @@
+/* POP'n WASH display-size controls — layout reflows; no page zoom or transforms. */
+:root{--display-scale:1.1}
+.display-size-control{position:relative;z-index:1010;flex:0 0 auto}
+.display-size-button{
+  width:48px;height:44px;padding:4px;border:1px solid rgba(22,28,27,.14);
+  border-radius:14px;background:rgba(255,255,255,.72);display:grid;place-items:center;
+  cursor:pointer;transition:background .2s ease,box-shadow .2s ease,border-color .2s ease
+}
+.display-size-button:hover,.display-size-control.is-open .display-size-button{
+  background:#fff;border-color:#3e8740;box-shadow:0 4px 14px rgba(24,77,35,.12)
+}
+.display-size-button:focus-visible,.display-size-panel button:focus-visible{
+  outline:3px solid #328743;outline-offset:3px
+}
+.display-size-button img{display:block;width:42px;max-width:100%;height:35px;object-fit:contain}
+html[data-theme="dark"] .display-size-button{background:#fff4da;color:#161c1b;border-color:rgba(22,28,27,.16)}
+.display-size-panel{
+  position:absolute;right:0;top:calc(100% + 12px);z-index:1011;
+  width:min(355px,calc(100vw - 24px));max-height:calc(100dvh - 100px);overflow-y:auto;
+  padding:18px;border-radius:22px;border:1px solid rgba(22,28,27,.12);
+  box-shadow:0 25px 70px rgba(10,28,21,.2);background:#fffaf0;color:#161c1b;
+  overscroll-behavior:contain;
+}
+.display-size-panel[hidden]{display:none!important}
+.display-size-panel h2{font-size:calc(18px * var(--display-scale));line-height:1.2;margin:0 0 8px;
+  letter-spacing:-.015em;color:inherit!important}
+.display-size-panel p{font-size:calc(12px * var(--display-scale));line-height:1.45;
+  margin:0 0 12px;color:#56645b}
+.display-size-current{font-size:calc(12px * var(--display-scale));font-weight:800;color:#2c7139;
+  margin:8px 0 12px}
+.display-size-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.display-size-options button{
+  min-width:0;min-height:44px;padding:7px 3px;font:800 calc(12px * var(--display-scale))/1.2 system-ui,sans-serif;
+  background:#fff;border:1px solid #d8d6cb;color:#18211b;border-radius:12px;
+  cursor:pointer;white-space:nowrap
+}
+.display-size-options button:hover{border-color:#4d9b48;background:#f0f8eb}
+.display-size-options button[aria-pressed="true"]{
+  background:#327b35;color:#fff;border-color:#327b35;box-shadow:0 5px 12px rgba(31,96,37,.17)
+}
+.display-size-reset{
+  width:100%;min-height:46px;margin:12px 0 7px;padding:9px 10px;
+  font:800 calc(12px * var(--display-scale))/1.25 system-ui,sans-serif;
+  border:0;border-radius:12px;background:#e4eddb;color:#20552b;cursor:pointer
+}
+.display-size-reset:hover{background:#d0e7c8}
+.display-size-panel .display-size-hint{text-align:center;color:#66716b;
+  font-size:calc(10px * var(--display-scale));margin:0}
+html[data-theme="dark"] .display-size-panel{
+  background:#192820;color:#f9fbf6;border-color:rgba(255,255,255,.22)
+}
+html[data-theme="dark"] .display-size-panel p,
+html[data-theme="dark"] .display-size-panel .display-size-hint{color:#d2dfd6}
+html[data-theme="dark"] .display-size-current{color:#a4eca3}
+html[data-theme="dark"] .display-size-options button:not([aria-pressed="true"]){
+  background:#263a2f;border-color:#56705d;color:#f9fbf6
+}
+html[data-theme="dark"] .display-size-reset{background:#355741;color:#f7fff7}
+/* Safe content sizing: every grid cell can shrink; text grows its card vertically. */
+main,.hero,.hero-copy,.hero-visual,.section-shell,.section-heading,
+:where(.machine-grid,.tariff-grid,.services-main-grid,.services-secondary-grid,.pro-grid,
+.parking-grid,.review-grid,.faq-groups,.faq-groups-simple,.contact-grid,
+.hero-wiline-cards,.visit-card-grid,.first-visit-head,.quick-strip,
+.loyalty-grid,.products-grid,.service-grid,.contact-section,.connected-panel) > *{
+  min-width:0
+}
+main img,main svg{max-width:100%}
+:where(.tariff-card,.machine-card,.faq-group,.faq-item,.pro-card,.service-feature,
+.loyalty-card,.products-card,.review-card,.parking-card,.connected-panel,
+.contact-form-card,.pet-feature,.first-visit-showcase,.visit-card,
+.hero-wiline-card,.contact-info,.hero-copy){height:auto;overflow-wrap:break-word}
+:where(h1,h2,h3,h4,.tariff-copy strong,.hero-route-copy strong){overflow-wrap:anywhere}
+:where(.hero-route-cta,.hero-wiline-card,.visit-card summary,.quick-item){min-width:0}
+:where(.hero-route-copy,.visit-summary-copy,.hero-wiline-copy,.connected-copy){min-width:0}
+:where(.faq-answer,.faq-item summary,.contact-copy,.first-visit-steps){max-width:100%}
+.btn,.form-submit,.display-size-options button{touch-action:manipulation}
+.btn{min-height:max(44px,calc(46px * var(--display-scale)))!important}
+:where(.machine-card,.tariff-card,.pro-card,.service-feature,.faq-group){
+  padding:clamp(12px,calc(16px * var(--display-scale)),28px)
+}
+:where(.machine-grid,.tariff-grid,.services-main-grid,.services-secondary-grid,
+.pro-grid,.parking-grid,.review-grid,.faq-groups){
+  gap:clamp(10px,calc(12px * var(--display-scale)),21px)
+}
+:where(.machine-grid,.tariff-grid,.pro-grid,.parking-grid,.services-main-grid,
+.services-secondary-grid,.review-grid,.faq-groups)>*{min-width:0}
+:where(input,select,textarea){max-width:100%}
+:where(.lang-menu,.mobile-menu,.display-size-panel){overflow-wrap:anywhere}
+@media(max-width:1200px){
+  .desktop-nav{display:none!important}
+  .menu-button{display:block!important;flex:0 0 auto}
+  .site-header{justify-content:space-between!important}
+  .brand-lockup{min-width:0!important;width:auto!important;max-width:min(350px,39vw)!important;
+    flex:0 1 auto!important}
+  .brand-label{min-width:0!important;width:auto!important;flex:1 1 auto!important}
+  .brand-label .brand-title{transform:none!important;max-width:100%;overflow:hidden}
+  .mobile-menu{max-height:calc(100dvh - 90px);overflow-y:auto}
+}
+@media(min-width:701px) and (max-width:1200px){
+  .site-header{gap:8px!important}
+  .brand-lockup{width:min(350px,38vw)!important}
+}
+@media(max-width:700px){
+  .display-size-button{width:42px;height:40px;padding:3px;border-radius:12px}
+  .display-size-button img{width:36px;height:33px}
+  .site-header{min-width:0!important;overflow:visible!important}
+  .header-actions{min-width:0!important;flex:0 0 auto;gap:5px!important}
+  .brand-lockup{min-width:0!important;max-width:clamp(100px,31vw,195px)!important;
+    width:clamp(100px,31vw,195px)!important;gap:5px!important}
+  .brand-label{min-width:0!important;overflow:hidden!important}
+  .brand-label .brand-title{max-width:100%;transform:none!important}
+  .theme-slider-shell{width:78px!important}
+  .hero,.pet-feature,.connected-panel,.contact-grid,.first-visit-head{
+    grid-template-columns:minmax(0,1fr)!important
+  }
+  .hero-visual,.hero-copy{width:100%;min-width:0}
+  .lang-menu{z-index:1012!important}
+  .display-size-panel{
+    position:fixed;top:calc(70px + env(safe-area-inset-top));left:12px;right:12px;
+    width:auto;max-height:calc(100dvh - 88px);padding:16px
+  }
+}
+@media(max-width:480px){
+  .site-header{width:calc(100% - 10px)!important;padding:5px!important;gap:3px!important}
+  .brand-lockup{max-width:clamp(91px,30vw,139px)!important;
+    width:clamp(91px,30vw,139px)!important}
+  .brand-logo-wrap,.brand-logo-wrap img{width:clamp(27px,8vw,42px)!important;
+    height:clamp(27px,8vw,42px)!important;flex-basis:clamp(27px,8vw,42px)!important}
+  .brand-label .brand-main{font-size:clamp(9px,calc(10px * var(--display-scale)),12.5px)!important}
+  .brand-label .brand-place{font-size:clamp(7px,calc(8px * var(--display-scale)),9px)!important}
+  .header-actions{gap:3px!important}
+  .display-size-button{width:37px;height:40px;padding:2px}
+  .display-size-button img{width:33px;height:30px}
+  .theme-slider-shell{width:59px!important;height:40px!important}
+  .theme-option-label span{display:none!important}
+  .theme-option-label svg{width:14px!important;height:14px!important}
+  .lang-button{min-width:43px!important;width:43px!important;padding:0 4px!important}
+  .lang-button .chev{font-size:13px}
+  .menu-button{width:34px!important;padding:6px!important}
+  .hero-route-cta{grid-template-columns:auto minmax(0,1fr) auto}
+  .hero-route-copy strong{overflow-wrap:anywhere}
+}
+@media(max-width:360px){
+  .brand-lockup{width:96px!important;max-width:96px!important}
+  .brand-label .brand-main{font-size:10px!important}
+  .brand-logo-wrap,.brand-logo-wrap img{width:29px!important;height:29px!important;flex-basis:29px!important}
+  .header-actions{gap:2px!important}
+  .display-size-button{width:36px}
+  .theme-slider-shell{width:54px!important}
+  .lang-button{width:41px!important;min-width:41px!important}
+  .menu-button{width:33px!important}
+  .display-size-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* At the larger settings, reflow columns before text becomes cramped. */
+@media(min-width:701px) and (max-width:1400px){
+  html:is([data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"])
+  :is(.machine-grid,.tariff-grid,.pro-grid,.services-main-grid,.services-secondary-grid,.parking-grid){
+    grid-template-columns:repeat(2,minmax(0,1fr))!important
+  }
+}
+@media(max-width:700px){
+  html:is([data-display-scale="140"],[data-display-scale="150"])
+  :is(.machine-grid,.tariff-grid,.pro-grid,.services-main-grid,.services-secondary-grid,
+  .parking-grid,.faq-groups,.visit-card-grid){
+    grid-template-columns:minmax(0,1fr)!important
+  }
+}
+@media(max-width:430px){
+  html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"])
+  :is(.machine-grid,.tariff-grid,.pro-grid,.services-main-grid,.services-secondary-grid,
+  .parking-grid,.faq-groups,.visit-card-grid){
+    grid-template-columns:minmax(0,1fr)!important
+  }
+}
+@media(max-width:1000px) and (orientation:landscape) and (max-height:600px){
+  html:is([data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .hero{
+    grid-template-columns:minmax(0,1fr)!important
+  }
+  .display-size-panel{top:64px;max-height:calc(100dvh - 76px)}
+  .mobile-menu{overflow-y:auto}
+}
+@media(prefers-reduced-motion:reduce){
+  .display-size-button,.display-size-options button{transition:none!important}
+}
+/* Keep the familiar desktop navigation at normal sizes; collapse only when needed. */
+@media(min-width:1201px) and (max-width:1450px){
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .desktop-nav{display:none!important}
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .menu-button{display:block!important}
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .brand-lockup{
+    min-width:0!important;width:350px!important;max-width:38vw!important
+  }
+}
+
+/* QA visual R2: keep navigation readable instead of overlapping Contact and AAA. */
+@media(min-width:1201px){
+  .site-header{width:min(1480px,calc(100% - 32px))!important}
+}
+/* The language flag and code cannot share a 43px button; retain flag + chevron. */
+@media(max-width:480px){
+  .lang-button{gap:2px!important;justify-content:center!important}
+  .lang-button #langCode{display:none!important}
+  .lang-button .chev{font-size:13px!important}
+}
+body.display-size-open .mobile-actionbar{display:none!important}
+
+/* QA R3: the decorative circles must never create phantom page width. */
+@media(max-width:1400px){
+  .hero-visual .shape-red{right:0!important}
+  .hero-visual .shape-green{left:0!important}
+}
+.contact-mail{
+  max-width:100%!important;min-width:0!important;white-space:normal!important;
+  overflow-wrap:anywhere!important;word-break:break-word!important
+}
+@media(max-width:700px){
+  .first-visit-head,.first-visit-head>*,
+  .first-visit-showcase,.first-visit-showcase :is(h2,p),
+  .section-heading,.section-heading>*,
+  .contact-copy,.contact-info,.contact-info-copy,.contact-section,
+  .contact-info-copy :is(h2,p,a){
+    min-width:0!important;max-width:100%!important
+  }
+  :where(h1,h2,h3,.contact-mail){overflow-wrap:anywhere!important}
+}
+
+/* R4: actual content-fit fallback, independent of language and screen label. */
+.site-header.nav-fit-compact .desktop-nav{display:none!important}
+.site-header.nav-fit-compact .menu-button{display:block!important}
+.site-header.nav-fit-compact .brand-lockup{
+  min-width:0!important;width:min(350px,38vw)!important;max-width:min(350px,38vw)!important
+}
+.site-header.nav-fit-compact .brand-label{min-width:0!important}
+
+/* QA visual: do not truncate the POP'n WASH wordmark on 320px phones. */
+@media(max-width:360px){
+  .brand-lockup{width:118px!important;max-width:118px!important}
+  .brand-label{min-width:0!important;flex:1 1 auto!important}
+}
+
+/* Final visual review: enlarged translated theme names and POP'n WASH wordmark. */
+@media(min-width:1025px){
+  html[data-display-scale="110"] .theme-slider-shell{width:210px!important}
+  html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .theme-slider-shell{
+    width:clamp(215px,calc(188px * var(--display-scale)),288px)!important
+  }
+  html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .theme-option-label{
+    font-size:clamp(11px,calc(10px * var(--display-scale)),14px)!important;
+    white-space:nowrap!important
+  }
+  html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .theme-option-label span{white-space:nowrap!important}
+  html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .brand-main{
+    font-size:clamp(22px,calc(18px * var(--display-scale)),25px)!important
+  }
+  html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .brand-place{
+    font-size:clamp(12px,calc(10px * var(--display-scale)),13px)!important
+  }
+}
+
+/* Readability floor: keep the display settings themselves legible at 80%. */
+.display-size-panel h2{font-size:max(17px,calc(18px * var(--display-scale)))}
+.display-size-panel p{font-size:max(11px,calc(12px * var(--display-scale)))}
+.display-size-options button{font-size:max(11px,calc(12px * var(--display-scale)))}
+.display-size-reset{font-size:max(11px,calc(12px * var(--display-scale)))}
+.display-size-panel .display-size-hint{font-size:max(10.5px,calc(10px * var(--display-scale)))}
+
+
+/* Preserve whole words in titles — line wrapping must occur between words. */
+.hero h1,.section-heading h2,.first-visit-head h2,.visit-summary-copy strong{
+  hyphens:none!important;word-break:normal!important;overflow-wrap:normal!important
+}
+/* At 140–150% give long translated card titles a whole line of their own. */
+@media(max-width:430px){
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .visit-card summary{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-rows:auto auto!important;
+    align-items:start!important;row-gap:9px!important
+  }
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .visit-card summary .visit-icon{
+    grid-row:1!important;grid-column:1 / -1!important
+  }
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .visit-card summary .visit-summary-copy{
+    grid-row:2!important;grid-column:1!important;
+    min-width:0!important
+  }
+  html:is([data-display-scale="140"],[data-display-scale="150"]) .visit-card summary .visit-plus{
+    grid-row:2!important;grid-column:2!important
+  }
+}
+/* Longer headings may use the full available width instead of clipping. */
+@media(max-width:700px){
+  .hero h1,.section-heading h2,.first-visit-head h2{max-width:100%!important}
+}
+
+/* Natural word boundaries for all editorial headings and card names. */
+h1,h2,h3,h4,.visit-summary-copy strong,.tariff-copy strong{
+  hyphens:none!important;word-break:normal!important;overflow-wrap:normal!important
+}
