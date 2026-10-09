@@ -15,7 +15,8 @@ jobs:
         run: |
           /usr/bin/safaridriver --version || true
           sudo /usr/bin/safaridriver --enable
-          python3 -m pip install --user selenium >/dev/null
+          python3 -m venv .safari-venv
+          .safari-venv/bin/pip install selenium >/dev/null
       - name: Start local website
         run: |
           python3 -m http.server 4173 >/tmp/popnwash-native-safari.log 2>&1 &
@@ -60,7 +61,7 @@ jobs:
           print(json.dumps({'total':len(results['cases']),'failures':results['failures'][:15]},indent=2))
           if results['failures']:raise SystemExit(1)
           PY
-          python3 qa_safari.py
+          .safari-venv/bin/python qa_safari.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
