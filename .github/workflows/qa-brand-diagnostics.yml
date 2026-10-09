@@ -1,0 +1,52 @@
+name: QA brand-size diagnostics
+on:
+  push:
+    branches: ["feat/display-size-80-150-responsive"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  brand:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Chromium
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+      - name: Diagnose at full and enlarged sizes
+        run: |
+          python3 -m http.server 4173 >/tmp/site-http.log 2>&1 &
+          sleep 2
+          cat > brand.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          const b=await chromium.launch({headless:true});
+          const pg=await b.newPage();
+          for(const width of [1280,1440,1920,2560,3440]){
+            await pg.setViewportSize({width,height:900});
+            await pg.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
+            for(const lang of ['fr','nl','ro']){
+              for(const scale of [110,140,150]){
+                const m=await pg.evaluate(({lang,scale})=>{
+                  document.querySelector('[data-lang="'+lang+'"]').click();
+                  document.querySelector('[data-display-size="'+scale+'"]').click();
+                  const q=s=>document.querySelector(s),r=s=>{
+                    const el=q(s),b=el.getBoundingClientRect(),c=getComputedStyle(el);
+                    return {x:Math.round(b.x),right:Math.round(b.right),width:Math.round(b.width),
+                      font:c.fontSize,transform:c.transform,display:c.display,overflow:c.overflow}
+                  };
+                  return {data:document.documentElement.dataset.displayScale,
+                    brand:r('.brand-title'),main:r('.brand-main'),place:r('.brand-place'),
+                    label:r('.brand-label'),link:r('.brand-lockup'),aaa:r('#displaySizeButton'),
+                    nav:r('.desktop-nav'),compact:q('.site-header').classList.contains('nav-fit-compact'),
+                    css:CSS.supports('font-size: calc(18px * 1.5)')};
+                },{lang,scale});
+                console.log('BRAND '+JSON.stringify({width,lang,scale,...m}));
+              }
+            }
+          }
+          await b.close();
+          EOF
+          node brand.mjs
