@@ -1858,8 +1858,8 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
 }
 
 </style>
-  <link rel="stylesheet" href="display-scale.css" />
-  <link rel="stylesheet" href="mobile-landing.css" />
+  <link rel="stylesheet" href="display-scale.css?v=slider-20261009" />
+  <link rel="stylesheet" href="mobile-landing.css?v=mobile-links-20261009" />
 </head>
 <body>
   <div class="page-noise" aria-hidden="true"></div>
@@ -1893,17 +1893,15 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
           aria-modal="false" aria-labelledby="displaySizeTitle" hidden>
           <h2 id="displaySizeTitle">Taille d’affichage</h2>
           <p id="displaySizeDescription">Ajustez la taille des textes et de la présentation.</p>
-          <div id="displaySizeCurrent" class="display-size-current" aria-live="polite">Taille actuelle : 110 %</div>
-          <div class="display-size-options" role="group" aria-label="Tailles d’affichage">
-            <button type="button" data-display-size="80" aria-pressed="false">80 %</button>
-            <button type="button" data-display-size="90" aria-pressed="false">90 %</button>
-            <button type="button" data-display-size="100" aria-pressed="false">100 %</button>
-            <button type="button" data-display-size="110" aria-pressed="true">110 %</button>
-            <button type="button" data-display-size="120" aria-pressed="false">120 %</button>
-            <button type="button" data-display-size="130" aria-pressed="false">130 %</button>
-            <button type="button" data-display-size="140" aria-pressed="false">140 %</button>
-            <button type="button" data-display-size="150" aria-pressed="false">150 %</button>
+          <div class="display-size-slider-caption">
+            <span aria-hidden="true">A−</span>
+            <output id="displaySizeCurrent" class="display-size-current" for="displaySizeRange" aria-live="polite">110 %</output>
+            <span aria-hidden="true">A+</span>
           </div>
+          <input id="displaySizeRange" class="display-size-range" type="range"
+            min="80" max="150" step="10" value="110"
+            aria-label="Réglage de la taille d’affichage" aria-valuetext="110 %" />
+          <div class="display-size-range-limits" aria-hidden="true"><small>80 %</small><small>150 %</small></div>
           <button class="display-size-reset" id="displaySizeReset" type="button">Réinitialiser à 110 %</button>
           <p class="display-size-hint" id="displaySizeHint">Votre préférence est enregistrée sur cet appareil.</p>
         </section>
@@ -1960,15 +1958,18 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
       <nav class="mobile-quick-links" aria-label="Accès rapides">
         <a class="mobile-quick-link route" href="https://www.google.com/maps/search/?api=1&query=POP%27n%20WASH%20Wavre&query_place_id=ChIJ616yFqB9wUcRf55Cp9uBEM0" target="_blank" rel="noopener" data-i18n-aria="mobileRouteAria">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg>
-          <span data-i18n="mobileRoute">Itinéraire</span>
+          <span class="mobile-quick-title" data-i18n="mobileRoute">Itinéraire</span>
+          <small class="mobile-quick-detail" data-i18n="mobileRouteDetail">Nous rejoindre</small>
         </a>
         <a class="mobile-quick-link machines" href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener" data-i18n-aria="mobileMachinesAria">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="3"/><path d="M8 6.5h8"/><circle cx="12" cy="14" r="4"/></svg>
-          <span data-i18n="mobileMachines">Machines</span>
+          <span class="mobile-quick-title" data-i18n="mobileMachines">Machines</span>
+          <small class="mobile-quick-detail" data-i18n="mobileMachinesDetail">Disponibilité en direct</small>
         </a>
         <a class="mobile-quick-link invoices" href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener" data-i18n-aria="mobileInvoicesAria">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2Z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
-          <span data-i18n="mobileInvoices">Factures</span>
+          <span class="mobile-quick-title" data-i18n="mobileInvoices">Factures</span>
+          <small class="mobile-quick-detail" data-i18n="mobileInvoicesDetail">Récupérer une facture</small>
         </a>
       </nav>
       <div class="hero-copy">
@@ -2580,7 +2581,7 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
     </div>
   </dialog>
 
-  <script src="app.js" defer></script>
-  <script src="display-scale.js" defer></script>
+  <script src="app.js?v=mobile-links-20261009" defer></script>
+  <script src="display-scale.js?v=slider-20261009" defer></script>
 </body>
 </html>

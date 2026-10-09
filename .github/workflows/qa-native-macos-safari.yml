@@ -40,7 +40,7 @@ jobs:
               for scale in [80,110,150]:
                 r=driver.execute_script("""
                   document.querySelector('[data-lang="fr"]').click();
-                  document.querySelector('[data-display-size="'+arguments[0]+'"]').click();
+                  {const control=document.getElementById('displaySizeRange');control.value=String(arguments[0]);control.dispatchEvent(new Event('input',{bubbles:true}));};
                   document.querySelector('[data-theme-choice="dark"]').click();
                   const root=document.documentElement;
                   const a=document.querySelector('.brand-title').getBoundingClientRect();
