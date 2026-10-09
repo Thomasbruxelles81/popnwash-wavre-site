@@ -65,7 +65,7 @@
       if(!Number.isFinite(fontSize)||fontSize<=0)return;
       fitContext.font=style.fontStyle+' '+style.fontWeight+' '+fontSize+'px '+style.fontFamily;
       const spacing=parseFloat(style.letterSpacing)||0;
-      const words=(el.textContent||'').match(/[\p{L}\p{N}][\p{L}\p{N}’'-]{3,}/gu)||[];
+      const words=(el.textContent||'').match(/[\p{L}\p{N}][\p{L}\p{N}’'\-‑]{3,}/gu)||[];
       const maxWord=words.reduce((max,word)=>Math.max(max,
         fitContext.measureText(word).width+Math.max(0,word.length-1)*spacing),0);
       if(maxWord<=available-4)return;
