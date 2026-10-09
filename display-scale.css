@@ -249,9 +249,9 @@ body.display-size-open .mobile-actionbar{display:none!important}
   }
   html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .theme-option-label span{white-space:nowrap!important}
   html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .brand-main{
-    font-size:calc(18px * var(--display-scale))!important
+    font-size:clamp(22px,calc(18px * var(--display-scale)),25px)!important
   }
   html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .brand-place{
-    font-size:calc(10px * var(--display-scale))!important
+    font-size:clamp(12px,calc(10px * var(--display-scale)),13px)!important
   }
 }
