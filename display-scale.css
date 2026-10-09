@@ -236,3 +236,22 @@ body.display-size-open .mobile-actionbar{display:none!important}
   .brand-lockup{width:118px!important;max-width:118px!important}
   .brand-label{min-width:0!important;flex:1 1 auto!important}
 }
+
+/* Final visual review: enlarged translated theme names and POP'n WASH wordmark. */
+@media(min-width:1025px){
+  html[data-display-scale="110"] .theme-slider-shell{width:210px!important}
+  html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .theme-slider-shell{
+    width:clamp(215px,calc(188px * var(--display-scale)),288px)!important
+  }
+  html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .theme-option-label{
+    font-size:clamp(11px,calc(10px * var(--display-scale)),14px)!important;
+    white-space:nowrap!important
+  }
+  html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .theme-option-label span{white-space:nowrap!important}
+  html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .brand-main{
+    font-size:calc(18px * var(--display-scale))!important
+  }
+  html:is([data-display-scale="120"],[data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"]) .brand-place{
+    font-size:calc(10px * var(--display-scale))!important
+  }
+}
