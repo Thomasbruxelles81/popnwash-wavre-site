@@ -1,0 +1,149 @@
+name: QA mobile landing, Safari controls and first-visit order
+on:
+  push:
+    branches: [feat/display-size-80-150-responsive]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mobile-ux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install browsers
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium firefox webkit >/dev/null
+      - name: Serve candidate
+        run: |
+          python3 -m http.server 4173 >/tmp/popnwash-server.log 2>&1 &
+          sleep 2
+      - name: Verify mobile UX in Chromium, Firefox and WebKit
+        run: |
+          mkdir -p mobile-qa
+          cat > mobile-qa.mjs <<'EOF'
+          import {chromium,firefox,webkit} from 'playwright';
+          import fs from 'node:fs';
+          const cases=[
+            ['iPhoneSE',320,568],['smallAndroid',360,740],['iPhone13mini',375,812],
+            ['iPhoneLarge',390,844],['largePhone',430,932],
+            ['iPhone13miniLandscape',812,375],['phoneLandscape',568,320],
+            ['tabletPortrait',768,1024],['tabletLandscape',1024,768],
+            ['tabletLargePortrait',820,1180],['desktopCompact',1280,800],
+            ['desktop1440',1440,900]
+          ];
+          const result={tests:0,screenshots:[],issues:[],browserStatuses:{}};
+          const fail=(name,message)=>result.issues.push(name+': '+message);
+          const base='http://127.0.0.1:4173/';
+          for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
+            const browser=await engine.launch({headless:true});
+            const page=await browser.newPage({viewport:{width:375,height:812},deviceScaleFactor:3,hasTouch:true,isMobile:true});
+            page.on('pageerror',e=>fail(engineName,'JS '+e.message));
+            for(const [label,width,height] of cases){
+              await page.setViewportSize({width,height});
+              await page.goto(base,{waitUntil:'domcontentloaded'});
+              await page.waitForTimeout(150);
+              for(const size of [80,110,150]){
+                await page.evaluate(s=>document.querySelector('[data-display-size="'+s+'"]').click(),size);
+                for(const lang of ['fr','nl','de']){
+                  await page.evaluate(l=>document.querySelector('[data-lang="'+l+'"]').click(),lang);
+                  const k=engineName+'/'+label+'/'+size+'/'+lang;
+                  const report=await page.evaluate(({width,height})=>{
+                    const box=s=>{const el=document.querySelector(s);
+                      if(!el)return null;
+                      const r=el.getBoundingClientRect(),st=getComputedStyle(el);
+                      return {x:r.x,right:r.right,y:r.y,bottom:r.bottom,w:r.width,h:r.height,display:st.display}};
+                    const qs=[...document.querySelectorAll('.mobile-quick-link')];
+                    const quicks=qs.map(a=>{const r=a.getBoundingClientRect();return {x:r.x,right:r.right,y:r.y,w:r.width,h:r.height,text:a.innerText.trim(),href:a.href}});
+                    const top=document.querySelector('.first-visit-showcase').getBoundingClientRect().top;
+                    const heading=document.querySelector('.hero h1').getBoundingClientRect();
+                    const nav=document.querySelector('.site-header').getBoundingClientRect();
+                    const logo=document.querySelector('.brand-lockup').getBoundingClientRect();
+                    const aa=document.querySelector('#displaySizeButton').getBoundingClientRect();
+                    const theme=document.querySelector('.theme-slider-shell').getBoundingClientRect();
+                    const first=document.querySelector('.first-visit-showcase').getBoundingClientRect();
+                    const photo=document.querySelector('.hero-photo-stack').getBoundingClientRect();
+                    const root=document.documentElement;
+                    const isPhone=width<=700||(height<=550&&width<=1000&&width>height);
+                    return {
+                      scrollWidth:Math.max(root.scrollWidth,document.body.scrollWidth),
+                      state:{lang:root.lang,size:root.dataset.displayScale,theme:root.dataset.theme},
+                      isPhone,quicks,header:box('.site-header'),logo:box('.brand-lockup'),
+                      aa:box('#displaySizeButton'),theme:box('.theme-slider-shell'),
+                      headerOverlap:logo.right>aa.left+2,
+                      firstBeforeHero:first.top<heading.top-4,
+                      quickBeforeHero:quicks.length>0&&quicks[0].y<heading.top-4,
+                      photoAfterHero:photo.top>heading.bottom-8,
+                      sticky:box('.mobile-actionbar'),shortIntro:box('.hero-mobile-sub'),
+                      imageLoaded:document.querySelector('.hero-photo.active').naturalWidth>0
+                    };
+                  },{width,height});
+                  result.tests++;
+                  if(report.scrollWidth>width+2)fail(k,'horizontal scroll '+report.scrollWidth+' > '+width);
+                  if(report.headerOverlap)fail(k,'brand overlaps AAA');
+                  if(report.firstBeforeHero)fail(k,'First visit shown before hero headline');
+                  if(report.isPhone){
+                    if(report.quicks.length!==3)fail(k,'three quick links missing');
+                    if(!report.quickBeforeHero)fail(k,'quick actions not below header and before hero');
+                    for(const q of report.quicks){
+                      if(q.w<55||q.h<43||q.x<0||q.right>width+2)
+                        fail(k,'bad quick action bounds '+q.text+' '+JSON.stringify(q));
+                    }
+                    if(report.quicks[0]?.y < report.header.bottom-4)
+                      fail(k,'quick actions overlap header');
+                    if(report.shortIntro.display==='none')fail(k,'mobile intro hidden');
+                    if(report.sticky.display!=='none')fail(k,'redundant sticky bottom bar still visible');
+                  }
+                  if(!report.imageLoaded)fail(k,'hero image missing');
+                }
+              }
+              if(['iPhone13mini','phoneLandscape','tabletPortrait','desktop1440'].includes(label)){
+                await page.evaluate(()=>{
+                  document.querySelector('[data-lang="fr"]').click();
+                  document.querySelector('[data-display-size="110"]').click();
+                  document.querySelector('[data-theme-choice="light"]').click();
+                });
+                await page.waitForTimeout(350);
+                const file='mobile-qa/'+engineName+'-'+label+'.png';
+                await page.screenshot({path:file,fullPage:false});
+                result.screenshots.push(file);
+              }
+              // Explicit touch selection must move the knob to the intended HALF.
+              for(const choice of ['dark','light']){
+                await page.locator('[data-theme-choice="'+choice+'"]').click();
+                const state=await page.evaluate(()=>{
+                  const knob=document.querySelector('.theme-knob').getBoundingClientRect();
+                  const shell=document.querySelector('.theme-slider-shell').getBoundingClientRect();
+                  return {mode:document.querySelector('#themeControl').dataset.mode,
+                    theme:document.documentElement.dataset.theme,
+                    knobCenter:knob.x+knob.width/2,
+                    shellMiddle:shell.x+shell.width/2,
+                    aria:document.querySelector('[data-theme-choice="'+document.documentElement.dataset.theme+'"]').getAttribute('aria-pressed')};
+                });
+                if(state.mode!==choice||state.theme!==choice||state.aria!=='true')
+                  fail(engineName+'/'+label,'wrong theme state after '+choice+': '+JSON.stringify(state));
+                if(choice==='dark'&&state.knobCenter<=state.shellMiddle)
+                  fail(engineName+'/'+label,'dark knob stuck on left');
+                if(choice==='light'&&state.knobCenter>=state.shellMiddle)
+                  fail(engineName+'/'+label,'light knob stuck on right');
+              }
+            }
+            result.browserStatuses[engineName]='done';
+            await browser.close();
+          }
+          fs.writeFileSync('mobile-qa/report.json',JSON.stringify(result,null,2));
+          console.log(JSON.stringify({cases:result.tests,issues:result.issues.slice(0,60),
+            issueCount:result.issues.length,screenshots:result.screenshots},null,2));
+          if(result.issues.length)process.exit(1);
+          EOF
+          node mobile-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mobile-landing-screenshots-and-report
+          path: mobile-qa/
+          retention-days: 14
