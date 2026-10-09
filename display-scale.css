@@ -9,7 +9,7 @@
 .display-size-button:hover,.display-size-control.is-open .display-size-button{
   background:#fff;border-color:#3e8740;box-shadow:0 4px 14px rgba(24,77,35,.12)
 }
-.display-size-button:focus-visible,.display-size-panel button:focus-visible{
+.display-size-button:focus-visible,.display-size-panel button:focus-visible,.display-size-range:focus-visible{
   outline:3px solid #328743;outline-offset:3px
 }
 .display-size-button img{display:block;width:42px;max-width:100%;height:35px;object-fit:contain}
@@ -26,17 +26,44 @@ html[data-theme="dark"] .display-size-button{background:#fff4da;color:#161c1b;bo
   letter-spacing:-.015em;color:inherit!important}
 .display-size-panel p{font-size:calc(12px * var(--display-scale));line-height:1.45;
   margin:0 0 12px;color:#56645b}
-.display-size-current{font-size:calc(12px * var(--display-scale));font-weight:800;color:#2c7139;
-  margin:8px 0 12px}
-.display-size-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.display-size-options button{
-  min-width:0;min-height:44px;padding:7px 3px;font:800 calc(12px * var(--display-scale))/1.2 system-ui,sans-serif;
-  background:#fff;border:1px solid #d8d6cb;color:#18211b;border-radius:12px;
-  cursor:pointer;white-space:nowrap
+/* The AAA panel uses one tactile slider instead of percentage tiles. */
+.display-size-slider-caption{
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  gap:8px;margin:7px 0 2px;color:#607266;font-size:13px;font-weight:750
 }
-.display-size-options button:hover{border-color:#4d9b48;background:#f0f8eb}
-.display-size-options button[aria-pressed="true"]{
-  background:#327b35;color:#fff;border-color:#327b35;box-shadow:0 5px 12px rgba(31,96,37,.17)
+.display-size-slider-caption>span:last-child{text-align:right}
+.display-size-current{
+  font-size:11px!important;line-height:1.2;font-weight:800;color:#2c7139;
+  text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums
+}
+.display-size-range{
+  --range-progress:42.857%;
+  display:block;width:100%;height:40px;margin:0;padding:0;
+  appearance:none;-webkit-appearance:none;
+  background:transparent;cursor:pointer;touch-action:pan-y
+}
+.display-size-range::-webkit-slider-runnable-track{
+  height:8px;border-radius:99px;
+  background:linear-gradient(to right,#327b35 var(--range-progress),#d8e0d5 var(--range-progress))
+}
+.display-size-range::-moz-range-track{
+  height:8px;border-radius:99px;
+  background:linear-gradient(to right,#327b35 var(--range-progress),#d8e0d5 var(--range-progress))
+}
+.display-size-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:26px;height:26px;margin-top:-9px;
+  border:3px solid #fff;border-radius:50%;background:#327b35;
+  box-shadow:0 2px 8px rgba(22,66,35,.27),0 0 0 1px #2a692f
+}
+.display-size-range::-moz-range-thumb{
+  width:20px;height:20px;
+  border:3px solid #fff;border-radius:50%;background:#327b35;
+  box-shadow:0 2px 8px rgba(22,66,35,.27),0 0 0 1px #2a692f
+}
+.display-size-range-limits{
+  display:flex;justify-content:space-between;
+  margin:0 1px 5px;font-size:10px;line-height:1.2;color:#66716b
 }
 .display-size-reset{
   width:100%;min-height:46px;margin:12px 0 7px;padding:9px 10px;
@@ -52,9 +79,16 @@ html[data-theme="dark"] .display-size-panel{
 html[data-theme="dark"] .display-size-panel p,
 html[data-theme="dark"] .display-size-panel .display-size-hint{color:#d2dfd6}
 html[data-theme="dark"] .display-size-current{color:#a4eca3}
-html[data-theme="dark"] .display-size-options button:not([aria-pressed="true"]){
-  background:#263a2f;border-color:#56705d;color:#f9fbf6
+html[data-theme="dark"] .display-size-slider-caption,
+html[data-theme="dark"] .display-size-range-limits{color:#d2dfd6}
+html[data-theme="dark"] .display-size-range::-webkit-slider-runnable-track{
+  background:linear-gradient(to right,#a4eca3 var(--range-progress),#56705d var(--range-progress))
 }
+html[data-theme="dark"] .display-size-range::-moz-range-track{
+  background:linear-gradient(to right,#a4eca3 var(--range-progress),#56705d var(--range-progress))
+}
+html[data-theme="dark"] .display-size-range::-webkit-slider-thumb{background:#78cc83;border-color:#192820}
+html[data-theme="dark"] .display-size-range::-moz-range-thumb{background:#78cc83;border-color:#192820}
 html[data-theme="dark"] .display-size-reset{background:#355741;color:#f7fff7}
 /* Safe content sizing: every grid cell can shrink; text grows its card vertically. */
 main,.hero,.hero-copy,.hero-visual,.section-shell,.section-heading,
@@ -73,7 +107,7 @@ main img,main svg{max-width:100%}
 :where(.hero-route-cta,.hero-wiline-card,.visit-card summary,.quick-item){min-width:0}
 :where(.hero-route-copy,.visit-summary-copy,.hero-wiline-copy,.connected-copy){min-width:0}
 :where(.faq-answer,.faq-item summary,.contact-copy,.first-visit-steps){max-width:100%}
-.btn,.form-submit,.display-size-options button{touch-action:manipulation}
+.btn,.form-submit{touch-action:manipulation}
 .btn{min-height:max(44px,calc(46px * var(--display-scale)))!important}
 :where(.machine-card,.tariff-card,.pro-card,.service-feature,.faq-group){
   padding:clamp(12px,calc(16px * var(--display-scale)),28px)
@@ -149,7 +183,6 @@ main img,main svg{max-width:100%}
   .theme-slider-shell{width:54px!important}
   .lang-button{width:41px!important;min-width:41px!important}
   .menu-button{width:33px!important}
-  .display-size-options{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 /* At the larger settings, reflow columns before text becomes cramped. */
 @media(min-width:701px) and (max-width:1400px){
@@ -259,7 +292,6 @@ body.display-size-open .mobile-actionbar{display:none!important}
 /* Readability floor: keep the display settings themselves legible at 80%. */
 .display-size-panel h2{font-size:max(17px,calc(18px * var(--display-scale)))}
 .display-size-panel p{font-size:max(11px,calc(12px * var(--display-scale)))}
-.display-size-options button{font-size:max(11px,calc(12px * var(--display-scale)))}
 .display-size-reset{font-size:max(11px,calc(12px * var(--display-scale)))}
 .display-size-panel .display-size-hint{font-size:max(10.5px,calc(10px * var(--display-scale)))}
 

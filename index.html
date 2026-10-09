@@ -1858,7 +1858,7 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
 }
 
 </style>
-  <link rel="stylesheet" href="display-scale.css" />
+  <link rel="stylesheet" href="display-scale.css?v=slider-20261009" />
   <link rel="stylesheet" href="mobile-landing.css" />
 </head>
 <body>
@@ -1893,17 +1893,15 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
           aria-modal="false" aria-labelledby="displaySizeTitle" hidden>
           <h2 id="displaySizeTitle">Taille d’affichage</h2>
           <p id="displaySizeDescription">Ajustez la taille des textes et de la présentation.</p>
-          <div id="displaySizeCurrent" class="display-size-current" aria-live="polite">Taille actuelle : 110 %</div>
-          <div class="display-size-options" role="group" aria-label="Tailles d’affichage">
-            <button type="button" data-display-size="80" aria-pressed="false">80 %</button>
-            <button type="button" data-display-size="90" aria-pressed="false">90 %</button>
-            <button type="button" data-display-size="100" aria-pressed="false">100 %</button>
-            <button type="button" data-display-size="110" aria-pressed="true">110 %</button>
-            <button type="button" data-display-size="120" aria-pressed="false">120 %</button>
-            <button type="button" data-display-size="130" aria-pressed="false">130 %</button>
-            <button type="button" data-display-size="140" aria-pressed="false">140 %</button>
-            <button type="button" data-display-size="150" aria-pressed="false">150 %</button>
+          <div class="display-size-slider-caption">
+            <span aria-hidden="true">A−</span>
+            <output id="displaySizeCurrent" class="display-size-current" for="displaySizeRange" aria-live="polite">110 %</output>
+            <span aria-hidden="true">A+</span>
           </div>
+          <input id="displaySizeRange" class="display-size-range" type="range"
+            min="80" max="150" step="10" value="110"
+            aria-label="Réglage de la taille d’affichage" aria-valuetext="110 %" />
+          <div class="display-size-range-limits" aria-hidden="true"><small>80 %</small><small>150 %</small></div>
           <button class="display-size-reset" id="displaySizeReset" type="button">Réinitialiser à 110 %</button>
           <p class="display-size-hint" id="displaySizeHint">Votre préférence est enregistrée sur cet appareil.</p>
         </section>
@@ -2581,6 +2579,6 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
   </dialog>
 
   <script src="app.js" defer></script>
-  <script src="display-scale.js" defer></script>
+  <script src="display-scale.js?v=slider-20261009" defer></script>
 </body>
 </html>

@@ -33,7 +33,7 @@ jobs:
             await page.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
             const result=await page.evaluate(({w,size,lang})=>{
               document.querySelector('[data-lang="'+lang+'"]').click();
-              document.querySelector('[data-display-size="'+size+'"]').click();
+              {const control=document.getElementById('displaySizeRange');control.value=String(size);control.dispatchEvent(new Event('input',{bubbles:true}));};
               const nodes=[...document.querySelectorAll('body *')];
               const overflow=nodes.map(el=>{
                 const b=el.getBoundingClientRect(),css=getComputedStyle(el);

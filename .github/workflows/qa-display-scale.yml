@@ -70,7 +70,7 @@ jobs:
               const before=await page.locator('.hero-sub').evaluate(e=>parseFloat(getComputedStyle(e).fontSize));
               await page.locator('#displaySizeButton').click();
               if(!await page.locator('#displaySizePanel').isVisible())errors.push('panel not open on 320');
-              await page.locator('[data-display-size="150"]').click();
+              await page.locator('#displaySizeRange').evaluate(e=>{e.value='150';e.dispatchEvent(new Event('input',{bubbles:true}));});
               const after=await page.locator('.hero-sub').evaluate(e=>parseFloat(getComputedStyle(e).fontSize));
               if(!(after>before))errors.push('font size unchanged after selecting 150: '+before+'/'+after);
               if(await page.locator('#displaySizePanel').getAttribute('aria-label')===null)errors.push('missing panel label');
@@ -91,7 +91,7 @@ jobs:
                   const found=await page.evaluate(({lang,scale,theme,width})=>{
                     const choose=document.querySelector('[data-lang="'+lang+'"]');
                     choose.click();
-                    document.querySelector('[data-display-size="'+scale+'"]').click();
+                    {const control=document.getElementById('displaySizeRange');control.value=String(scale);control.dispatchEvent(new Event('input',{bubbles:true}));};
                     const slider=document.querySelector('#themeSlider');
                     slider.value=theme==='dark'?'1':'0';
                     slider.dispatchEvent(new Event('input',{bubbles:true}));
@@ -148,7 +148,7 @@ jobs:
               const scale=Number(vals[1]),lang=vals[2],theme=vals[3];
               await page.evaluate(({lang,scale,theme})=>{
                 document.querySelector('[data-lang="'+lang+'"]').click();
-                document.querySelector('[data-display-size="'+scale+'"]').click();
+                {const control=document.getElementById('displaySizeRange');control.value=String(scale);control.dispatchEvent(new Event('input',{bubbles:true}));};
                 const slider=document.querySelector('#themeSlider');
                 slider.value=theme==='dark'?'1':'0';slider.dispatchEvent(new Event('input',{bubbles:true}));
               },{lang,scale,theme});
@@ -174,7 +174,7 @@ jobs:
             await before.close();
             await page.setViewportSize({width,height});
             await page.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
-            await page.locator('[data-display-size="100"]').evaluate(e=>e.click());
+            await page.locator('#displaySizeRange').evaluate(e=>{e.value='100';e.dispatchEvent(new Event('input',{bubbles:true}));});
             await page.locator('#themeSlider').evaluate(el=>{
               el.value='0';el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));
             });

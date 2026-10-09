@@ -48,7 +48,7 @@ jobs:
               await page.goto(base,{waitUntil:'domcontentloaded'});
               await page.waitForTimeout(150);
               for(const size of [80,110,150]){
-                await page.evaluate(s=>document.querySelector('[data-display-size="'+s+'"]').click(),size);
+                await page.evaluate(s=>{const control=document.getElementById('displaySizeRange');control.value=String(s);control.dispatchEvent(new Event('input',{bubbles:true}));},size);
                 for(const lang of ['fr','nl','de']){
                   await page.evaluate(l=>document.querySelector('[data-lang="'+l+'"]').click(),lang);
                   const k=engineName+'/'+label+'/'+size+'/'+lang;
@@ -104,7 +104,7 @@ jobs:
               if(['iPhone13mini','phoneLandscape','tabletPortrait','desktop1440'].includes(label)){
                 await page.evaluate(()=>{
                   document.querySelector('[data-lang="fr"]').click();
-                  document.querySelector('[data-display-size="110"]').click();
+                  {const control=document.getElementById('displaySizeRange');control.value='110';control.dispatchEvent(new Event('input',{bubbles:true}));};
                   document.querySelector('[data-theme-choice="light"]').click();
                 });
                 await page.waitForTimeout(350);

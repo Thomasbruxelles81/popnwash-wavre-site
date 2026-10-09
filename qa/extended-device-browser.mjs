@@ -64,7 +64,7 @@ for(const src of [...new Set(refs.src)]){
 function stateChecks({lang,size,theme,width,height,deep}){
  const root=document.documentElement;
  document.querySelector('[data-lang="'+lang+'"]').click();
- document.querySelector('[data-display-size="'+size+'"]').click();
+ {const control=document.getElementById('displaySizeRange');control.value=String(size);control.dispatchEvent(new Event('input',{bubbles:true}));};
  document.querySelector('[data-theme-choice="'+theme+'"]').click();
  const rect=e=>{const r=e.getBoundingClientRect();return {x:r.left,right:r.right,top:r.top,bottom:r.bottom,w:r.width,h:r.height};};
  const sel=s=>document.querySelector(s);
@@ -184,7 +184,7 @@ for(const [name,width,height] of devices){
     if(!panel.hidden)errors.push(id+' does not close');
    };
    document.querySelector('[data-lang="fr"]').click();
-   document.querySelector('[data-display-size="110"]').click();
+   {const control=document.getElementById('displaySizeRange');control.value='110';control.dispatchEvent(new Event('input',{bubbles:true}));};
    document.querySelector('[data-theme-choice="light"]').click();
    check('display-size','displaySizeButton','displaySizePanel');
    check('language','langButton','langMenu');

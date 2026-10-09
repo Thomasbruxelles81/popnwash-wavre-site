@@ -7,13 +7,13 @@
   const wrapper=document.getElementById('displaySizeControl');
   const trigger=document.getElementById('displaySizeButton');
   const panel=document.getElementById('displaySizePanel');
-  const buttons=[...document.querySelectorAll('[data-display-size]')];
+  const slider=document.getElementById('displaySizeRange');
   const reset=document.getElementById('displaySizeReset');
   const title=document.getElementById('displaySizeTitle');
   const description=document.getElementById('displaySizeDescription');
   const current=document.getElementById('displaySizeCurrent');
   const hint=document.getElementById('displaySizeHint');
-  if(!wrapper||!trigger||!panel||buttons.length!==8||!reset)return;
+  if(!wrapper||!trigger||!panel||!slider||!reset)return;
   const locales={
     fr:['Taille d’affichage','Ajustez la taille des textes et de la présentation.','Taille actuelle : ','Réinitialiser à 110 %','Votre préférence est enregistrée sur cet appareil.','Réglage de la taille d’affichage'],
     nl:['Weergavegrootte','Pas de tekst- en weergavegrootte aan.','Huidige grootte: ','Terugzetten naar 110 %','Uw voorkeur wordt op dit apparaat bewaard.','Weergavegrootte instellen'],
@@ -80,11 +80,12 @@
   function translate(){
     const t=locales[root.lang]||locales.fr;
     title.textContent=t[0];description.textContent=t[1];hint.textContent=t[4];
-    reset.textContent=t[3];current.textContent=t[2]+value+' %';
+    reset.textContent=t[3];current.textContent=value+' %';
     trigger.setAttribute('aria-label',t[5]+' : '+value+' %');
     trigger.title=t[5]+' : '+value+' %';
     panel.setAttribute('aria-label',t[0]);
-    buttons.forEach(b=>b.setAttribute('aria-label',t[5]+' : '+b.dataset.displaySize+' %'));
+    slider.setAttribute('aria-label',t[5]);
+    slider.setAttribute('aria-valuetext',value+' %');
     synchronizeDesktopNavigation();
     fitHeadingWords();
   }
@@ -93,11 +94,8 @@
     value=n;
     root.style.setProperty('--display-scale',String(n/100));
     root.dataset.displayScale=String(n);
-    buttons.forEach(b=>{
-      const active=Number(b.dataset.displaySize)===n;
-      b.setAttribute('aria-pressed',String(active));
-      b.classList.toggle('is-selected',active);
-    });
+    slider.value=String(n);
+    slider.style.setProperty('--range-progress',((n-80)*100/70)+'%');
     if(persist)try{localStorage.setItem(STORAGE,String(n));}catch(e){}
     translate();
   }
@@ -117,7 +115,7 @@
     if(restoreFocus)trigger.focus();
   }
   trigger.addEventListener('click',()=>show(panel.hidden));
-  buttons.forEach(b=>b.addEventListener('click',()=>setSize(Number(b.dataset.displaySize))));
+  slider.addEventListener('input',()=>setSize(Number(slider.value)));
   reset.addEventListener('click',()=>setSize(110));
   document.addEventListener('pointerdown',e=>{
     if(!panel.hidden&&!wrapper.contains(e.target))show(false);

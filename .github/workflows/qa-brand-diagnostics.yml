@@ -31,7 +31,7 @@ jobs:
               for(const scale of [110,140,150]){
                 const m=await pg.evaluate(({lang,scale})=>{
                   document.querySelector('[data-lang="'+lang+'"]').click();
-                  document.querySelector('[data-display-size="'+scale+'"]').click();
+                  {const control=document.getElementById('displaySizeRange');control.value=String(scale);control.dispatchEvent(new Event('input',{bubbles:true}));};
                   const q=s=>document.querySelector(s),r=s=>{
                     const el=q(s),b=el.getBoundingClientRect(),c=getComputedStyle(el);
                     return {x:Math.round(b.x),right:Math.round(b.right),width:Math.round(b.width),

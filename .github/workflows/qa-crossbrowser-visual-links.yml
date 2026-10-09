@@ -81,7 +81,7 @@ jobs:
                 const key=engineName+'/'+viewport+'/'+lang+'/'+scale+'/'+theme;
                 const data=await page.evaluate(({lang,scale,theme,w})=>{
                   document.querySelector('[data-lang="'+lang+'"]').click();
-                  document.querySelector('[data-display-size="'+scale+'"]').click();
+                  {const control=document.getElementById('displaySizeRange');control.value=String(scale);control.dispatchEvent(new Event('input',{bubbles:true}));};
                   const sl=document.querySelector('#themeSlider');
                   sl.value=theme==='dark'?'1':'0';
                   sl.dispatchEvent(new Event('input',{bubbles:true}));
@@ -174,7 +174,7 @@ jobs:
                 const screenshotKey=engineName+'-'+viewport;
                 await page.evaluate(()=>{
                   document.querySelector('[data-lang="de"]').click();
-                  document.querySelector('[data-display-size="150"]').click();
+                  {const control=document.getElementById('displaySizeRange');control.value='150';control.dispatchEvent(new Event('input',{bubbles:true}));};
                   const sl=document.querySelector('#themeSlider');
                   sl.value='0';sl.dispatchEvent(new Event('input',{bubbles:true}));
                 });
@@ -187,7 +187,7 @@ jobs:
             await page.goto(base,{waitUntil:'domcontentloaded'});
             await page.locator('#displaySizeButton').click();
             if(!await page.locator('#displaySizePanel').isVisible())fail(engineName,'AAA panel does not open');
-            await page.locator('[data-display-size="150"]').click();
+            await page.locator('#displaySizeRange').evaluate(e=>{e.value='150';e.dispatchEvent(new Event('input',{bubbles:true}));});
             if((await page.evaluate(()=>document.documentElement.dataset.displayScale))!=='150')fail(engineName,'150% not selectable');
             await page.locator('#displaySizeReset').click();
             if((await page.evaluate(()=>document.documentElement.dataset.displayScale))!=='110')fail(engineName,'reset to 110 failed');
