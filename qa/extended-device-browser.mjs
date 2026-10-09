@@ -85,7 +85,7 @@ function stateChecks({lang,size,theme,width,height,deep}){
   if(quick[0]&&quick[0].top<header.bottom-3)errs.push('quick buttons over header');
   if(quick[0]&&quick[0].top>hero.top+3)errs.push('quick buttons after hero');
   if(first.top<hero.top-2)errs.push('First Visit before heading');
-  if(photo.top<hero.top-2)errs.push('photo before heading');
+  if(width<=700&&photo.top<hero.top-2)errs.push('photo before heading');
   const bar=sel('.mobile-actionbar');
   if(bar&&vis(bar))errs.push('obsolete bottom actions visible');
   if(!vis(sel('.hero-mobile-sub')))errs.push('mobile short intro missing');

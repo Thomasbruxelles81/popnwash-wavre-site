@@ -194,7 +194,7 @@
   .theme-slider-shell{width:56px!important}
   .lang-button{width:40px!important;min-width:40px!important}
   .mobile-quick-links{gap:5px!important}
-  .mobile-quick-link{padding:6px 1px!important;font-size:clamp(9.5px,calc(10px * var(--display-scale)),12px)!important}
+  .mobile-quick-link{padding:6px 1px!important;font-size:clamp(11px,calc(11px * var(--display-scale)),12px)!important}
   .hero-copy h1{font-size:clamp(29px,calc(31px * var(--display-scale)),41px)!important}
 }
 /* Landscape phone: same quick access, but a shorter landing, never mixed order. */
