@@ -216,3 +216,26 @@
 @media(prefers-reduced-motion:reduce){
   .mobile-quick-link{transition:none!important}
 }
+
+/* Extra-narrow phones: keep the entire wordmark inside its own label. */
+@media(max-width:370px){
+  .brand-lockup{
+    width:clamp(116px,38vw,126px)!important;
+    max-width:clamp(116px,38vw,126px)!important;
+    gap:3px!important;
+  }
+  .brand-logo-wrap,.brand-logo-wrap img{
+    width:29px!important;height:29px!important;flex-basis:29px!important
+  }
+  .brand-label{flex:1 1 auto!important;min-width:0!important}
+  .brand-label .brand-title{
+    font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif!important;
+    font-weight:850!important;letter-spacing:-.045em!important;
+    transform:none!important
+  }
+  .brand-label .brand-main{
+    font-size:clamp(9.5px,calc(9.2px * var(--display-scale)),11.5px)!important;
+    letter-spacing:-.05em!important;white-space:nowrap!important;
+  }
+  .brand-label .brand-place{font-size:clamp(7.5px,calc(7.6px * var(--display-scale)),9px)!important}
+}
