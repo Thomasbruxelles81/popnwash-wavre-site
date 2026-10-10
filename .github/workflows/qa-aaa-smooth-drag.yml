@@ -1,0 +1,34 @@
+name: QA AAA smooth pointer drag 80-200
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  real-slider:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install actual browsers
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium firefox webkit >/dev/null
+      - name: Start local preview
+        run: |
+          python3 -m http.server 4173 >/tmp/popaaa-server.log 2>&1 &
+          sleep 2
+      - name: Drag continuously across 80-200 with real mouse
+        run: node qa/aaa-smooth-drag.mjs
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aaa-smooth-drag
+          path: qa-aaa-drag/
+          retention-days: 14
