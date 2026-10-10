@@ -103,7 +103,46 @@ function preventFrenchOrphans(){
   }
  }
 }
-const applyLocale=()=>{render();preventFrenchOrphans()};
+
+/* V5C intelligent tariff column fitting:
+   measure the actual content area, user font enlargement and language.
+   Never keep an almost-empty final row when another balanced layout fits. */
+let tariffFrame=0;
+function fitTariffColumns(){
+ if(!tariffs)return;
+ const width=tariffs.getBoundingClientRect().width;
+ const cards=[...tariffs.querySelectorAll(':scope > .tariff-card')];
+ if(width<=0||!cards.length)return;
+ const style=getComputedStyle(tariffs);
+ const gap=parseFloat(style.columnGap)||12;
+ const zoom=Number(html.dataset.displayScale||110)/100;
+ /* Tiny phones keep two compact cards if legible. Larger screens increase
+    density continuously, and high AAA text receives more width per card. */
+ const minWidth= Math.max(128,130*zoom+(width>600?15:0));
+ const fits= Math.max(1,Math.min(cards.length,Math.floor((width+gap)/(minWidth+gap))));
+ let columns=fits;
+ if(cards.length>columns&&columns>1&&cards.length%columns===1)columns--;
+ const previous=Number(tariffs.style.getPropertyValue('--rf-tariff-columns'));
+ if(previous!==columns)tariffs.style.setProperty('--rf-tariff-columns',String(columns));
+ const compact=columns===1&&width<700;
+ if(tariffs.dataset.compactRows!==String(compact))tariffs.dataset.compactRows=String(compact);
+}
+function scheduleTariffFit(){
+ if(tariffFrame)return;
+ tariffFrame=requestAnimationFrame(()=>{tariffFrame=0;fitTariffColumns()});
+}
+if(tariffs){
+ if(typeof ResizeObserver!=='undefined'){
+  new ResizeObserver(scheduleTariffFit).observe(tariffs);
+ }else{
+  window.addEventListener('resize',scheduleTariffFit,{passive:true});
+ }
+ new MutationObserver(scheduleTariffFit).observe(html,{attributes:true,attributeFilter:['lang','data-display-scale']});
+ if(document.fonts?.ready)document.fonts.ready.then(scheduleTariffFit);
+ scheduleTariffFit();
+}
+
+const applyLocale=()=>{render();preventFrenchOrphans();scheduleTariffFit()};
 new MutationObserver(applyLocale).observe(html,{attributes:true,attributeFilter:["lang"]});
 applyLocale();
 })();
