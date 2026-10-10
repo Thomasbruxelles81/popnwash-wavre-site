@@ -34,7 +34,7 @@
     requested=false;
     localize();
     // At small and medium widths the labelled Browse button is always used.
-    if(window.innerWidth<=1359){
+    if(window.innerWidth<=1600){
       header.classList.add('nav-fit-compact');
       return;
     }
