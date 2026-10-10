@@ -506,7 +506,11 @@ jobs:
             });
             if(contrastFailures.length) failures.push('dark contrast: '+contrastFailures.join(' | '));
             await p.screenshot({path:'qa-screenshots/dark-desktop.png',fullPage:true});
-            const nav=p.locator('.desktop-nav a').first();await nav.hover();await p.waitForTimeout(350);
+            const navLink=p.locator('.desktop-nav a').first();
+            const navVisible=await navLink.isVisible();
+            const nav=navVisible?navLink:p.locator('#menuButton');
+            if(!await nav.isVisible())failures.push('dark screenshot: no visible navigation control');
+            else{await nav.hover();await p.waitForTimeout(350);}
             await p.screenshot({path:'qa-screenshots/dark-hover-header.png',fullPage:false});
             const social=p.locator('.social-link.instagram');await social.hover();await p.waitForTimeout(350);
             await p.screenshot({path:'qa-screenshots/dark-hover-instagram.png',fullPage:false});
