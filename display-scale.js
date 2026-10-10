@@ -157,6 +157,9 @@
       else el.style.removeProperty('line-height');
     }
     frozen.length=0;
+    // Persist synchronously at pointer release even if WebKit postpones rAF
+    // while the entire page is reflowing. Visual fitting may finish later.
+    try{localStorage.setItem(STORAGE,String(value));}catch(e){}
     queueFinish();
     window.dispatchEvent(new Event('scroll'));
   }
