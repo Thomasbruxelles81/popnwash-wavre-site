@@ -49,6 +49,9 @@
  }
  function sync(){
   requested=false;
+  // Do not move the existing controls between header and floating dock
+  // while a finger or mouse is dragging the AAA slider.
+  if(document.body.classList.contains('pop-aaa-dragging'))return;
   setFloating(window.scrollY>cutoff);
  }
  function schedule(){

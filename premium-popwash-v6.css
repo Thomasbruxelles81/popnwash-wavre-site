@@ -461,3 +461,21 @@ html[data-theme="dark"] body>.display-size-panel :is(p,.display-size-hint,.displ
   color:#d2dfd6!important;
 }
 html[data-theme="dark"] body>.display-size-panel .display-size-current {color:#a4eca3!important}
+
+
+/* Keep the AAA slider stationary during live changes of the page layout.
+   Typography above the slider is frozen in JS until pointerup. */
+body.pop-aaa-dragging>.display-size-panel {
+  height:var(--pop-locked-dialog-height,auto)!important;
+  min-height:var(--pop-locked-dialog-height,0px)!important;
+  max-height:min(var(--pop-locked-dialog-height,100dvh),calc(100dvh - var(--pop-size-dialog-top,80px) - 12px))!important;
+  overflow-y:auto!important;
+  contain:layout!important;
+}
+body.pop-aaa-dragging>.display-size-panel .display-size-range {
+  touch-action:none!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+}
+body.pop-aaa-dragging {overscroll-behavior:contain}
+html:has(body.pop-aaa-dragging) {overflow-anchor:none!important}
