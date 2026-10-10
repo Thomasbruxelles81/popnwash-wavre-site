@@ -263,3 +263,13 @@ a.social-link.facebook:is(:hover,:focus-visible,.rf-hover-active){
  border-color:#b5d7ff!important;box-shadow:0 0 0 2px rgba(106,176,255,.3),0 14px 26px rgba(17,78,165,.34)!important;
  color:white!important;filter:brightness(1.07)!important;
 }
+
+/* Balanced short headings and thoughtful paragraph line breaks. */
+@supports (text-wrap:pretty){
+ .section-shell :is(p,li,h2,h3,h4),.site-header .desktop-nav a,.faq-item summary{ text-wrap:pretty }
+}
+@supports (text-wrap:balance){
+ .section-shell :is(h2,h3){text-wrap:balance}
+}
+/* Never let a French punctuation mark be stranded by an ordinary space.
+   JS progressively upgrades existing French text to a narrow no-break space. */

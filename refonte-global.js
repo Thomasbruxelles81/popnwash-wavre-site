@@ -9,7 +9,7 @@ const keys=['navHow','navLoyalty','navPrices','navPro','quickPrices','rfDispense
 const words={
 fr:["Mode d'emploi","Fidélité","Tarifs","Espace Pro","Voir tous les prix","Distributeur","Lessive & produits","Dès 1 €","Assouplissant : 0,50 €","Mode d'emploi ↗","Centrale de paiement","Choisissez · vérifiez · payez",
 "Choisissez le service : machine, séchoir, calandre ou produits.","Vérifiez le numéro et la durée.","Payez par pièces, billets, carte ou smartphone.","Suivez les consignes affichées pour démarrer.","Facture : notez les 4 caractères affichés brièvement après paiement.",
-"Carte fidélité","Première carte · crédit · lessive offerte","À la centrale, ouvrez la rubrique Produits.","Sélectionnez le code 70, selon les indications de la laverie.","Payez 40 € : recevez 40 € de crédit et la carte offerte.","Un premier sachet de lessive est également offert.","Les recharges suivantes bénéficient de bonus.",
+"Carte fidélité","Première carte · crédit · lessive offerte","À la centrale, ouvrez la rubrique Produits.","Sélectionnez le code 70 à la centrale pour obtenir la carte.","Payez 40 € : recevez 40 € de crédit et la carte offerte.","Un premier sachet de lessive est également offert.","Les recharges suivantes bénéficient de bonus.",
 "VOTRE FIDÉLITÉ RAPPORTE","Une carte, des bonus, du crédit supplémentaire.","Première carte offerte pour 40 € de crédit achetés, avec un sachet de lessive offert. Puis profitez d'un crédit bonus lors des recharges suivantes.","Comment obtenir ma carte ? ↗","Simulez votre prochaine recharge","La première offre de 40 € et les recharges bonifiées sont distinctes. Carte seule / duplicata : 10 €.","▤ Récupérer une facture ↗","◉ Machines en direct ↗","✦ Fidélité et recharges ↗"],
 nl:["Gebruiksaanwijzing","Klantenkaart","Prijzen","Voor professionals","Alle prijzen bekijken","Automaat","Wasmiddel & producten","Vanaf € 1","Wasverzachter: € 0,50","Gebruiksaanwijzing ↗","Betaalautomaat","Kies · controleer · betaal",
 "Kies wasmachine, droger, mangel of producten.","Controleer het nummer en de duur.","Betaal met munten, biljetten, kaart of smartphone.","Volg de startinstructies.","Factuur: noteer de 4 tekens die kort na betaling verschijnen.",
@@ -90,6 +90,20 @@ document.querySelectorAll('a.social-link.facebook').forEach(link=>{
   link.addEventListener('pointerleave',()=>link.classList.remove('rf-hover-active'));
   link.addEventListener('mouseleave',()=>link.classList.remove('rf-hover-active'));
 });
-new MutationObserver(render).observe(html,{attributes:true,attributeFilter:["lang"]});
-render();
+/* Prevent isolated French punctuation on a new line. A narrow no-break space
+   links ? ! : ; to the preceding word while preserving screen-reader text. */
+function preventFrenchOrphans(){
+ if((html.lang||"fr").split("-")[0]!=="fr")return;
+ for(const region of document.querySelectorAll(".refonte-utility,.site-header,.mobile-menu,main,footer")){
+  const walker=document.createTreeWalker(region,NodeFilter.SHOW_TEXT);
+  for(let node=walker.nextNode();node;node=walker.nextNode()){
+   if(/[ \\t]+[?!;:]/.test(node.nodeValue||"")){
+     node.nodeValue=node.nodeValue.replace(/[ \\t]+([?!;:])/g,"\u202f$1");
+   }
+  }
+ }
+}
+const applyLocale=()=>{render();preventFrenchOrphans()};
+new MutationObserver(applyLocale).observe(html,{attributes:true,attributeFilter:["lang"]});
+applyLocale();
 })();
