@@ -97,8 +97,8 @@ function preventFrenchOrphans(){
  for(const region of document.querySelectorAll(".refonte-utility,.site-header,.mobile-menu,main,footer")){
   const walker=document.createTreeWalker(region,NodeFilter.SHOW_TEXT);
   for(let node=walker.nextNode();node;node=walker.nextNode()){
-   if(/[ \\t]+[?!;:]/.test(node.nodeValue||"")){
-     node.nodeValue=node.nodeValue.replace(/[ \\t]+([?!;:])/g,"\u202f$1");
+   if(/[ \t]+[?!;:]/.test(node.nodeValue||"")){
+     node.nodeValue=node.nodeValue.replace(/[ \t]+([?!;:])/g,"\u202f$1");
    }
   }
  }
