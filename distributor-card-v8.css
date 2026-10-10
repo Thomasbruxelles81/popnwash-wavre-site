@@ -180,3 +180,67 @@
     text-align:center!important;
   }
 }
+
+
+/* V8.1 — High-specificity FIX after the 3234-scenario product-level audit.
+   Earlier low-specificity @container rules were overridden by the base
+   .services-secondary-grid > .products-card .product-chips-v2 selector.
+   At <=560px actual CARD width, use one real column at every AAA level. */
+@container pop-distributor (max-width:560px) {
+  .services-secondary-grid > .products-card .product-chips-v2 {
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:9px!important;
+  }
+  .services-secondary-grid > .products-card .product-chips-v2 > span,
+  .services-secondary-grid > .products-card .product-chips-v2 > span:last-child {
+    grid-column:auto!important;
+    grid-row:auto!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:72px!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    justify-self:stretch!important;
+    gap:10px!important;
+    padding:11px 9px!important;
+  }
+  .services-secondary-grid > .products-card .product-chips-v2 > span > strong {
+    width:100%!important;
+    flex:1 1 auto!important;
+    text-align:left!important;
+    font-size:clamp(12px,calc(10.5px * var(--display-scale)),18px)!important;
+    line-height:1.35!important;
+    letter-spacing:-.025em!important;
+  }
+  .services-secondary-grid > .products-card > h3 {
+    font-size:clamp(20px,calc(19px * var(--display-scale)),34px)!important;
+    line-height:1.21!important;
+  }
+}
+@container pop-distributor (min-width:561px) {
+  .services-secondary-grid > .products-card .product-chips-v2 {
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:12px!important;
+  }
+  .services-secondary-grid > .products-card .product-chips-v2 > span > strong {
+    font-size:clamp(12px,calc(11px * var(--display-scale)),20px)!important;
+    letter-spacing:-.025em!important;
+  }
+}
+@container pop-distributor (max-width:390px) {
+  .services-secondary-grid > .products-card .product-chips-v2 > span > strong {
+    font-size:clamp(12px,calc(10px * var(--display-scale)),17px)!important;
+  }
+}
+/* Flex children can have min-content widths. Prevent them from extending
+   their label into a neighboring tile despite the correct grid geometry. */
+.services-secondary-grid > .products-card .product-chips-v2 > span > strong {
+  min-width:0!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+  hyphens:none!important;
+}
