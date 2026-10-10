@@ -52,7 +52,17 @@
     if(getComputedStyle(nav).display==='none')return;
     const links=[...nav.querySelectorAll('a')];
     const collides=nav.getBoundingClientRect().right>trigger.getBoundingClientRect().left-8;
-    const wraps=links.some(a=>a.getBoundingClientRect().height>44||a.scrollWidth>a.clientWidth+2);
+    // A 44px total-height limit was incorrectly treating a single tall
+    // (accessible) navigation row as two lines, particularly in Dutch at
+    // 1920px and 110%. Compare true line height + padding instead.
+    const wraps=links.some(a=>{
+      const style=getComputedStyle(a);
+      if(a.scrollWidth>a.clientWidth+2)return true;
+      if(style.whiteSpace==='nowrap')return false;
+      const line=parseFloat(style.lineHeight)||parseFloat(style.fontSize)*1.4;
+      const verticalPadding=(parseFloat(style.paddingTop)||0)+(parseFloat(style.paddingBottom)||0);
+      return a.getBoundingClientRect().height>line*1.5+verticalPadding+2;
+    });
     header.classList.toggle('nav-fit-compact',collides||wraps);
   }
 
