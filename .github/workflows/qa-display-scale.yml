@@ -1,4 +1,4 @@
-name: QA display size 80-150 (draft only)
+name: QA display size 80-200 (draft only)
 
 on:
   push:
@@ -81,19 +81,19 @@ jobs:
                 await page.mouse.down();
                 await page.mouse.move(rail.x+rail.width-14,rail.y+rail.height/2,{steps:12});
                 await page.mouse.up();
-                if(await range.inputValue()!=='150')errors.push('pointer drag to 150% failed: '+await range.inputValue());
+                if(await range.inputValue()!=='200')errors.push('pointer drag to 200% failed: '+await range.inputValue());
               }
               await range.focus();
               await page.keyboard.press('Home');
               if(await range.inputValue()!=='80')errors.push('keyboard Home must select 80%');
               await page.keyboard.press('End');
-              if(await range.inputValue()!=='150')errors.push('keyboard End must select 150%');
+              if(await range.inputValue()!=='200')errors.push('keyboard End must select 200%');
               const after=await page.locator('.hero-sub').evaluate(e=>parseFloat(getComputedStyle(e).fontSize));
-              if(!(after>before))errors.push('font size unchanged after selecting 150: '+before+'/'+after);
+              if(!(after>before))errors.push('font size unchanged after selecting 200: '+before+'/'+after);
               if(await page.locator('#displaySizePanel').getAttribute('aria-label')===null)errors.push('missing panel label');
               await page.reload({waitUntil:'domcontentloaded'});
               const restored=await page.evaluate(()=>document.documentElement.dataset.displayScale);
-              if(restored!=='150')errors.push('persistence failed after reload');
+              if(restored!=='200')errors.push('persistence at 200% failed after reload');
               await page.locator('#displaySizeButton').click();
               await page.locator('#displaySizeReset').click();
               if((await page.evaluate(()=>document.documentElement.dataset.displayScale))!=='110')errors.push('reset failed');

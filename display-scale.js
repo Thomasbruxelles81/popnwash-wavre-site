@@ -2,7 +2,7 @@
 (()=>{
   'use strict';
   const STORAGE='popnwash-display-size';
-  const levels=[80,90,100,110,120,130,140,150];
+  const levels=[80,90,100,110,120,130,140,150,160,170,180,190,200];
   const root=document.documentElement;
   const wrapper=document.getElementById('displaySizeControl');
   const trigger=document.getElementById('displaySizeButton');
@@ -95,7 +95,7 @@
     root.style.setProperty('--display-scale',String(n/100));
     root.dataset.displayScale=String(n);
     slider.value=String(n);
-    slider.style.setProperty('--range-progress',((n-80)*100/70)+'%');
+    slider.style.setProperty('--range-progress',((n-80)*100/120)+'%');
     if(persist)try{localStorage.setItem(STORAGE,String(n));}catch(e){}
     translate();
   }

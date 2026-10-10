@@ -1,0 +1,578 @@
+
+/* POP'n WASH — refonte customer-first V5. Preserve existing brand/SEO/translations.
+   Loaded last to replace contradictory breakpoint rules, not to add page-wide zoom. */
+:root{--rf-content:1360px;--rf-card-gap:12px}
+*,*::before,*::after{box-sizing:border-box}
+:where(img,svg,video){max-width:100%}
+html{scroll-padding-top:105px}
+body{min-width:0}
+main{overflow:clip}
+.section-shell{width:min(var(--rf-content),calc(100% - 34px))!important;max-width:none!important;container-type:inline-size}
+.section-shell :where(h1,h2,h3,p,a,button,strong,span){overflow-wrap:break-word}
+.section-shell :where(h1,h2,h3){hyphens:auto}
+.section-shell :where(p){line-height:1.62}
+.section-shell :where(a,button,summary,input,select,textarea){touch-action:manipulation}
+:where(#machines,#fidelite,#first-visit,#services,#pros,#reviews,#faq,#contact){scroll-margin-top:110px}
+/* Always-visible utility line. Remains independently wrapped and is not sticky. */
+.refonte-utility{width:min(1560px,calc(100% - 32px));margin:12px auto 0;padding:7px 16px;
+ background:#1b432d;color:#fff;display:flex;gap:7px 24px;align-items:center;
+ justify-content:center;flex-wrap:wrap;border-radius:12px;min-height:38px;
+ font:750 max(12px,calc(12px * var(--display-scale)))/1.45 system-ui,sans-serif}
+.refonte-utility a{color:#fff;text-decoration:none}
+.refonte-utility a:hover{text-decoration:underline;text-underline-offset:3px}
+.refonte-utility>*{min-width:0;text-align:center}
+html[data-theme="dark"] .refonte-utility{background:#24533a;color:#f9fff9}
+.site-header{margin-top:8px!important}
+@media (min-width:1360px){
+ .site-header{width:min(1560px,calc(100% - 34px))!important;min-height:78px!important;height:auto!important;
+   display:flex!important;align-items:center!important;gap:clamp(10px,1vw,20px)!important;
+   padding:9px 16px!important}
+ .site-header .brand-lockup{flex:0 0 auto!important;width:auto!important;max-width:230px!important;min-width:0!important}
+ .site-header .brand-label{min-width:0!important}
+ .site-header .desktop-nav{display:flex!important;flex:1 1 auto!important;min-width:0!important;
+   justify-content:center!important;gap:clamp(7px,.95vw,18px)!important;
+   align-items:center!important}
+ .site-header .desktop-nav a{white-space:nowrap!important;
+   font-size:clamp(12px,calc(12px * var(--display-scale)),18px)!important;padding:10px 0!important}
+ .site-header .header-actions{display:flex!important;flex:0 0 auto!important;gap:7px!important;align-items:center!important}
+ .site-header .menu-button{display:none!important}
+ .site-header.nav-fit-compact .desktop-nav{display:none!important}
+ .site-header.nav-fit-compact .menu-button{display:block!important}
+}
+@media (min-width:1201px) and (max-width:1359px){
+ .site-header .desktop-nav{display:none!important}
+ .site-header .menu-button{display:block!important}
+}
+html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"]) .site-header .desktop-nav{display:none!important}
+html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"]) .site-header .menu-button{display:block!important}
+/* Header controls stay readable on light and dark while keeping brand beige. */
+html[data-theme] .site-header{background:#ffe6bc!important;color:#1c2821!important}
+html[data-theme] :is(.site-header .lang-button,.site-header .display-size-button){color:#1b2721!important}
+html[data-theme] .site-header .desktop-nav a{color:#1b2721!important}
+.site-header .lang-button,.site-header .display-size-button{min-height:44px}
+.site-header .header-actions{min-width:0!important}
+.mobile-menu{scrollbar-width:thin}
+.mobile-menu a{min-height:44px;display:flex;align-items:center;font-size:max(14px,calc(13px * var(--display-scale)))!important}
+.display-size-range-limits{font-size:12px!important}
+.display-size-current{font-size:14px!important}
+.display-size-panel .display-size-hint{font-size:max(12px,calc(11px * var(--display-scale)))!important}
+.display-size-panel{width:min(380px,calc(100vw - 20px))!important}
+/* Customer actions: four cards in two rows on narrow phones, not one giant item. */
+.mobile-quick-links{min-width:0}
+.mobile-quick-link{min-width:0;overflow-wrap:anywhere}
+.mobile-quick-link .mobile-quick-title{font-size:max(14px,calc(12px * var(--display-scale)))!important;line-height:1.25}
+.mobile-quick-link .mobile-quick-detail{font-size:max(12px,calc(11px * var(--display-scale)))!important;line-height:1.35}
+.hero :is(.hero-sub,.hero-mobile-sub,.hero-wiline-copy small){font-size:max(15px,calc(13px * var(--display-scale)))!important;line-height:1.6!important}
+.hero-meta span{font-size:max(12px,calc(11px * var(--display-scale)))!important}
+/* Intrinsic, centered tariff layout: no stretched fifth or last card. */
+.tariff-grid{display:flex!important;flex-flow:row wrap!important;justify-content:center!important;align-items:stretch!important;gap:var(--rf-card-gap)!important}
+.tariff-grid>.tariff-card{flex:0 0 calc((100% - 4*var(--rf-card-gap))/5)!important;
+ width:calc((100% - 4*var(--rf-card-gap))/5)!important;max-width:100%!important;
+ grid-column:auto!important;min-width:0!important;min-height:180px!important;
+ text-decoration:none!important;color:var(--ink)!important;cursor:pointer!important;
+ display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;
+ gap:8px!important;overflow:visible!important;border-radius:19px!important;padding:clamp(12px,calc(13px * var(--display-scale)),23px)!important;
+ overflow-wrap:normal!important;hyphens:none;transition:border-color .2s,box-shadow .2s!important}
+.tariff-grid>.tariff-card:is(:hover,:focus-visible){border-color:var(--green2)!important;box-shadow:0 0 0 2px rgba(25,160,57,.25)!important}
+.tariff-grid>.tariff-card .tariff-copy{display:grid!important;gap:3px!important;min-width:0!important}
+.tariff-grid>.tariff-card .tariff-copy strong{font-size:max(15px,calc(14px * var(--display-scale)))!important;line-height:1.3!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important}
+.tariff-grid>.tariff-card .tariff-copy small{font-size:max(12px,calc(11px * var(--display-scale)))!important}
+.tariff-grid>.tariff-card .tariff-price{margin-top:auto!important;min-width:0!important}
+.tariff-grid>.tariff-card .tariff-price b{font-size:clamp(22px,calc(24px * var(--display-scale)),40px)!important;line-height:1.1!important;white-space:nowrap!important}
+.tariff-grid>.tariff-card .tariff-price span{font-size:max(12px,calc(10px * var(--display-scale)))!important;line-height:1.4!important}
+.tariff-grid>.tariff-card .rf-tariff-cta{font-size:max(12px,calc(11px * var(--display-scale)))!important;font-weight:800!important;color:var(--green2)!important}
+html[data-theme="dark"] .tariff-grid>.tariff-card{color:#f7fff4!important}
+html[data-theme="dark"] .rf-tariff-cta{color:#8ee09e!important}
+.refonte-extra-guides{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.refonte-extra-guides>*{min-width:0}
+.visit-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+.visit-card summary,.refonte-extra-guides summary{min-height:64px!important}
+.visit-summary-copy strong{font-size:max(15px,calc(14px * var(--display-scale)))!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important}
+.visit-summary-copy small{font-size:max(12px,calc(11px * var(--display-scale)))!important}
+.visit-card-inner :is(li,p){font-size:max(14px,calc(13px * var(--display-scale)))!important;line-height:1.6!important}
+.rf-guide-fidelity .visit-icon,.rf-guide-terminal .visit-icon{font-weight:800;font-size:26px;display:grid;place-items:center}
+/* Loyalty showcase: relocate original card, preserve its modal and bonuses. */
+.refonte-loyalty{margin:clamp(30px,4vw,60px) auto!important;
+ padding:clamp(18px,3vw,30px)!important;
+ display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:16px 26px;
+ border-radius:28px;border:1px solid #c6e7c7;
+ background:linear-gradient(120deg,#e1f4de 0%,#fff9e9 62%,#ffe8e6 100%);color:#193424}
+.refonte-loyalty :is(h2,p){color:#193424}
+.refonte-loyalty h2{font-size:clamp(27px,calc(33px * var(--display-scale)),48px)!important;line-height:1.14;margin:8px 0 11px}
+.refonte-loyalty .rf-loyalty-intro p{font-size:max(15px,calc(14px * var(--display-scale)))!important;line-height:1.58}
+.refonte-loyalty .rf-loyalty-original{min-width:0;align-self:stretch}
+.refonte-loyalty .rf-loyalty-original .loyalty-card{height:100%;margin:0!important;min-width:0!important;border-radius:19px!important}
+.refonte-loyalty .rf-loyalty-original .loyalty-card .loyalty-copy :is(h3,p){color:#1b3724!important}
+.refonte-loyalty .rf-loyalty-bonus{grid-column:1/-1;background:#ffffffcf;border:1px solid #d6ebd8;padding:14px 16px;border-radius:15px}
+.refonte-loyalty .rf-loyalty-bonus strong{font-size:max(16px,calc(15px * var(--display-scale)))}
+.refonte-loyalty .rf-bonus-choices{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
+.refonte-loyalty .rf-bonus-choices button{border-radius:10px;border:1px solid #bfdcc3;background:#fff;color:#164a28;
+ min-height:43px;padding:9px 13px;font-size:max(13px,calc(12px * var(--display-scale)));font-weight:800}
+.refonte-loyalty .rf-bonus-choices button.is-active{background:#1b873e;color:white}
+.refonte-loyalty .rf-bonus-result{display:block;font-weight:900;font-size:max(17px,calc(17px * var(--display-scale)));color:#17552d;margin:8px 0}
+.refonte-loyalty .rf-loyalty-bonus p{font-size:max(13px,calc(12px * var(--display-scale)));margin:3px 0}
+html[data-theme="dark"] .refonte-loyalty{background:linear-gradient(120deg,#1e3628,#253929 70%,#36282b);border-color:#43674a}
+html[data-theme="dark"] .refonte-loyalty :is(h2,p){color:#f3fff4}
+html[data-theme="dark"] .refonte-loyalty .rf-loyalty-bonus{background:#1b2e23;border-color:#49624e}
+html[data-theme="dark"] .refonte-loyalty .rf-loyalty-bonus :is(strong,output,p){color:#f3fff4}
+html[data-theme="dark"] .refonte-loyalty .rf-loyalty-original .loyalty-card .loyalty-copy :is(h3,p){color:#f3fff4!important}
+.services-secondary-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))!important}
+.services-secondary-grid .parcel-service{grid-column:1/-1}
+/* Large content blocks respond to their section width, not a hard-coded device class. */
+.pro-grid,.parking-grid,.faq-groups,.services-secondary-grid,.services-main-grid{gap:clamp(10px,1.3cqw,18px)!important}
+.refonte-pro-shortcuts{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0 20px}
+.refonte-pro-shortcuts a{background:#e5f5e0;color:#1d4b2a;border:1px solid #b8d6ba;text-decoration:none;
+ border-radius:12px;padding:13px 16px;font-size:max(14px,calc(13px * var(--display-scale)));font-weight:800}
+html[data-theme="dark"] .refonte-pro-shortcuts a{background:#294535;color:#f5fff4;border-color:#506e56}
+:where(.service-feature-copy p,.pro-card p,.pro-copy p,.products-card p,.parcel-copy p,.contact-info-copy p,.faq-answer p,.parking-card p){
+ font-size:max(15px,calc(13px * var(--display-scale)))!important;line-height:1.58!important}
+:where(.service-feature h3,.products-card h3,.pro-copy h2,.section-heading h2){line-height:1.16!important}
+:where(.pro-card strong,.parking-card strong,.service-pill,.product-chips strong){font-size:max(14px,calc(12px * var(--display-scale)))!important}
+.contact-form-card :is(input,select,textarea){font-size:max(16px,calc(14px * var(--display-scale)))!important}
+.contact-form-card :is(input,select,button){min-height:44px!important}
+/* Container queries work even in split-screen desktops. */
+@container(max-width:1170px){
+ .tariff-grid>.tariff-card{flex-basis:calc((100% - 3*var(--rf-card-gap))/4)!important;width:calc((100% - 3*var(--rf-card-gap))/4)!important}
+}
+@container(max-width:890px){
+ .tariff-grid>.tariff-card{flex-basis:calc((100% - 2*var(--rf-card-gap))/3)!important;width:calc((100% - 2*var(--rf-card-gap))/3)!important}
+}
+@container(max-width:610px){
+ .tariff-grid>.tariff-card{flex-basis:calc((100% - var(--rf-card-gap))/2)!important;width:calc((100% - var(--rf-card-gap))/2)!important}
+ .visit-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@container(max-width:425px){
+ .tariff-grid>.tariff-card{min-height:156px!important;padding:11px!important}
+ .tariff-grid>.tariff-card .tariff-price b{font-size:clamp(20px,calc(20px * var(--display-scale)),32px)!important}
+ .refonte-extra-guides{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .visit-card summary{padding:9px!important}
+}
+@media(max-width:800px){
+ .refonte-loyalty{grid-template-columns:1fr}
+ .refonte-loyalty .rf-loyalty-original{grid-column:1}
+ .refonte-loyalty .rf-loyalty-bonus{grid-column:1}
+}
+@media(max-width:700px){
+ .refonte-utility{width:calc(100% - 12px);gap:2px 9px;padding:7px 10px;border-radius:9px}
+ .refonte-utility>*{font-size:max(11px,calc(10px * var(--display-scale)))}
+ .site-header{margin-top:5px!important}
+ .mobile-quick-links{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ .hero>.hero-copy{padding-top:15px!important}
+ .hero-mobile-sub{display:block!important}
+ .refonte-loyalty{width:calc(100% - 20px)!important;padding:15px!important}
+ .refonte-extra-guides{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .services-main-grid,.services-secondary-grid{gap:12px!important}
+ .pro-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .faq-groups{grid-template-columns:1fr!important}
+}
+@media(max-width:410px){
+ .refonte-utility{flex-direction:row;justify-content:center}
+ .refonte-utility .rf-utility-address{flex-basis:100%}
+ .section-shell{width:calc(100% - 20px)!important}
+ .mobile-quick-links{gap:7px!important}
+ .mobile-quick-link{padding:10px!important;min-height:96px!important}
+ .tariff-grid{--rf-card-gap:8px}
+ .tariff-grid>.tariff-card .tariff-copy strong{font-size:max(13px,calc(12px * var(--display-scale)))!important}
+ .refonte-extra-guides .visit-card summary{align-items:flex-start}
+ .visit-card-grid .visit-card summary,.refonte-extra-guides .visit-card summary{padding:8px!important;gap:5px!important}
+ .visit-card-grid .visit-card .visit-icon,.refonte-extra-guides .visit-card .visit-icon{width:26px!important;min-width:26px!important;height:26px!important}
+ .visit-summary-copy strong{font-size:max(13px,calc(12px * var(--display-scale)))!important}
+}
+@media(max-width:360px){
+ .tariff-grid>.tariff-card{padding:9px!important;min-height:153px!important}
+ .tariff-grid>.tariff-card .tariff-price b{font-size:max(20px,calc(17px * var(--display-scale)))!important}
+ .mobile-quick-link .mobile-quick-title{font-size:max(13px,calc(11px * var(--display-scale)))!important}
+}
+/* Reflow before cards become unreadable at extreme AAA settings. */
+html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"]) .section-shell{--rf-card-gap:12px}
+@media(max-width:540px){
+ html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"]) .tariff-grid>.tariff-card{
+   flex-basis:100%!important;width:100%!important;min-height:130px!important}
+ html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"]) :is(.pro-grid,.visit-card-grid,.refonte-extra-guides){grid-template-columns:1fr!important}
+}
+@media(max-width:420px){
+ html:is([data-display-scale="150"],[data-display-scale="160"]) .tariff-grid>.tariff-card{
+ flex-basis:calc((100% - var(--rf-card-gap))/2)!important;width:calc((100% - var(--rf-card-gap))/2)!important}
+}
+@media(prefers-reduced-motion:reduce){.tariff-grid>.tariff-card{transition:none!important}}
+
+/* Keep guide headings whole: tiny screens prioritize legible, unbroken labels. */
+@media(max-width:365px){
+  .visit-card-grid,.refonte-extra-guides{grid-template-columns:1fr!important}
+}
+@media(max-width:460px){
+ html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"]) :is(.visit-card-grid,.refonte-extra-guides){grid-template-columns:1fr!important}
+}
+/* Long new product titles need natural height, not legacy clipping. */
+.tariff-grid>.refonte-tariff-product{overflow:visible!important;height:auto!important;max-height:none!important}
+.tariff-grid>.refonte-tariff-product :is(.tariff-copy,.tariff-price,small,strong,span){overflow:visible!important;text-overflow:clip!important;white-space:normal!important}
+
+/* Loyalty follows the tariff grid directly: no giant repeated fleet photo in between. */
+#machines>.refonte-loyalty{width:100%!important;max-width:100%!important;margin:clamp(16px,2.8cqw,34px) 0!important}
+
+/* Normal-sized 390px phones have room for two tariff cards, but the fuller
+   instructional titles need one column to avoid splitting at punctuation. */
+@media(max-width:410px){
+  .visit-card-grid,.refonte-extra-guides{grid-template-columns:1fr!important}
+}
+/* Clear social hover affordance in both modes, not only a subtle transform. */
+html[data-theme="light"] .social-link.facebook:hover{
+  background-color:#136cdb!important;background-image:none!important;
+  border-color:#8fc2ff!important;box-shadow:0 13px 27px #1777ee48!important
+}
+html[data-theme="dark"] .social-link.facebook:hover{
+  background-color:#2c83ed!important;background-image:none!important;
+  border-color:#a7cdff!important;box-shadow:0 0 0 2px #8fc2ff50,0 13px 27px #1777ee4d!important
+}
+
+/* Six clear tariffs on wide screens; never leave the sixth alone on a desktop. */
+@container (min-width:1291px){
+ .tariff-grid>.tariff-card{
+   flex-basis:calc((100% - 5*var(--rf-card-gap))/6)!important;
+   width:calc((100% - 5*var(--rf-card-gap))/6)!important;
+ }
+}
+@media(min-width:1291px){
+ html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"]) .tariff-grid>.tariff-card{
+   flex-basis:calc((100% - 4*var(--rf-card-gap))/5)!important;
+   width:calc((100% - 4*var(--rf-card-gap))/5)!important;
+ }
+}
+
+/* Release review: readable logo without legacy hidden label crop at 1366px. */
+@media(min-width:1201px){
+ .site-header .brand-lockup{width:auto!important;min-width:0!important;max-width:none!important;flex:0 0 auto!important;gap:8px!important}
+ .site-header .brand-label{width:auto!important;min-width:clamp(158px,calc(153px * var(--display-scale)),310px)!important;
+   max-width:none!important;overflow:visible!important;flex:0 0 auto!important}
+ .site-header .brand-title{transform:none!important;overflow:visible!important;
+   max-width:none!important;text-overflow:clip!important;white-space:normal!important}
+ .site-header .brand-main{display:block!important;white-space:nowrap!important;letter-spacing:-.025em!important}
+ .site-header .brand-place{display:block!important}
+}
+@media(min-width:1360px){
+ .site-header .brand-lockup{max-width:none!important;width:auto!important}
+}
+/* The how-to panel needs enough width for entire words on mid-sized phones.
+   The *tariff cards* remain two per row as requested. */
+@media(max-width:500px){
+ .visit-card-grid,.refonte-extra-guides{grid-template-columns:1fr!important}
+}
+/* Always-visible hover / keyboard feedback for the real social link. */
+a.social-link.facebook:is(:hover,:focus-visible,.rf-hover-active){
+ background:#1673ed!important;background-color:#1673ed!important;background-image:none!important;
+ border-color:#b5d7ff!important;box-shadow:0 0 0 2px rgba(106,176,255,.3),0 14px 26px rgba(17,78,165,.34)!important;
+ color:white!important;filter:brightness(1.07)!important;
+}
+
+/* Balanced short headings and thoughtful paragraph line breaks. */
+@supports (text-wrap:pretty){
+ .section-shell :is(p,li,h2,h3,h4),.site-header .desktop-nav a,.faq-item summary{ text-wrap:pretty }
+}
+@supports (text-wrap:balance){
+ .section-shell :is(h2,h3){text-wrap:balance}
+}
+/* Never let a French punctuation mark be stranded by an ordinary space.
+   JS progressively upgrades existing French text to a narrow no-break space. */
+
+/* V5B fluid-layout safeguards — legible, compact, truly responsive.
+   Never cure horizontal overflow by making phone visitors scroll through 6 huge cards. */
+:root{
+  --rf-content:3000px;
+  --rf-outer-gutter:clamp(20px,3vw,96px);
+  --rf-card-gap:clamp(9px,1.05vw,20px);
+}
+.section-shell{
+  width:min(var(--rf-content),calc(100% - var(--rf-outer-gutter)))!important;
+  min-width:0;
+}
+.refonte-utility{width:min(var(--rf-content),calc(100% - var(--rf-outer-gutter)))!important}
+@media(min-width:701px){
+  .site-header{width:min(var(--rf-content),calc(100% - var(--rf-outer-gutter)))!important}
+}
+/* 6 cards: one neat row on wide desktops, two rows of 3 on tablets,
+   and three rows of 2 on ordinary phones, never a tall 6-card stack. */
+.tariff-grid{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:var(--rf-card-gap)!important;
+  justify-content:stretch!important;
+  align-items:stretch!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card{
+  width:100%!important;
+  max-width:100%!important;
+  flex:none!important;
+  grid-column:auto!important;
+  min-width:0!important;
+  min-height:clamp(134px,11vw,192px)!important;
+  height:auto!important;
+  padding:clamp(10px,1vw,21px)!important;
+  border-radius:clamp(13px,1.25vw,19px)!important;
+  gap:clamp(4px,.6vw,9px)!important;
+  overflow:visible!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card :is(.tariff-copy,.tariff-price){
+  min-width:0!important;
+  max-width:100%;
+}
+html[data-display-scale] .tariff-grid>.tariff-card :is(strong,small,span){
+  text-overflow:clip!important;
+  white-space:normal!important;
+  overflow-wrap:normal!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card .tariff-price b{
+  white-space:nowrap!important;
+  font-size:clamp(20px,calc(23px * var(--display-scale)),40px)!important;
+}
+@container(max-width:1250px){
+  .tariff-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@container(max-width:750px){
+  .tariff-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+/* On typical phones, a shorter 2-column tariff grid instead of 6 full-height rows. */
+@container(max-width:520px){
+  html[data-display-scale] .tariff-grid>.tariff-card{
+    min-height:130px!important;
+    padding:10px!important;
+    gap:5px!important;
+  }
+  html[data-display-scale] .tariff-grid>.tariff-card .tariff-icon{
+    width:30px!important;height:30px!important;min-width:30px!important;
+  }
+  html[data-display-scale] .tariff-grid>.tariff-card .tariff-copy strong{
+    font-size:max(14px,calc(12px * var(--display-scale)))!important;
+    line-height:1.2!important;
+  }
+  html[data-display-scale] .tariff-grid>.tariff-card .tariff-price b{
+    font-size:clamp(20px,calc(19px * var(--display-scale)),32px)!important;
+  }
+  html[data-display-scale] .tariff-grid>.tariff-card .tariff-copy small,
+  html[data-display-scale] .tariff-grid>.tariff-card .tariff-price span{
+    font-size:max(11px,calc(10px * var(--display-scale)))!important;
+    line-height:1.3!important;
+  }
+}
+/* One-column is only a fallback when a 2-up arrangement cannot be read at
+   a very narrow viewport or high accessibility scale. Render each as a
+   compact horizontal price row, rather than a giant portrait card. */
+@container(max-width:285px){
+  .tariff-grid{grid-template-columns:minmax(0,1fr)!important}
+}
+html:is([data-display-scale="160"],[data-display-scale="170"],[data-display-scale="180"],
+[data-display-scale="190"],[data-display-scale="200"]) .tariff-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+@container(max-width:1150px){
+  html:is([data-display-scale="160"],[data-display-scale="170"],[data-display-scale="180"],
+  [data-display-scale="190"],[data-display-scale="200"]) .tariff-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@container(max-width:650px){
+  html:is([data-display-scale="170"],[data-display-scale="180"],
+  [data-display-scale="190"],[data-display-scale="200"]) .tariff-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+@container(max-width:380px){
+  html:is([data-display-scale="150"],[data-display-scale="160"]) .tariff-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+@container(max-width:285px){
+  html[data-display-scale] .tariff-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+@container(max-width:650px){
+  html:is([data-display-scale="150"],[data-display-scale="160"],[data-display-scale="170"],
+  [data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"])
+  .tariff-grid[style]{
+    /* Layout stays CSS-driven even if a browser caches older inline widths. */
+    width:100%!important;
+  }
+}
+@container(max-width:650px){
+  html:is([data-display-scale="150"],[data-display-scale="160"],[data-display-scale="170"],
+  [data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"])
+  .tariff-grid:has(> .tariff-card:first-child:last-child){
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+/* Compact single-column rows at extreme settings: icon | description | price. */
+@container(max-width:285px){
+  html[data-display-scale] .tariff-grid>.tariff-card{
+    display:grid!important;
+    grid-template-columns:30px minmax(0,1fr) minmax(68px,max-content)!important;
+    gap:7px!important;
+    align-items:center!important;
+    justify-items:start!important;
+    min-height:78px!important;
+    padding:9px!important;
+  }
+}
+@container(max-width:650px){
+  html:is([data-display-scale="170"],[data-display-scale="180"],
+  [data-display-scale="190"],[data-display-scale="200"]) .tariff-grid>.tariff-card{
+    display:grid!important;
+    grid-template-columns:34px minmax(0,1fr) auto!important;
+    gap:clamp(6px,2vw,12px)!important;
+    align-items:center!important;
+    justify-items:start!important;
+    min-height:88px!important;
+    padding:clamp(10px,2.2vw,15px)!important;
+  }
+}
+@container(max-width:380px){
+  html:is([data-display-scale="150"],[data-display-scale="160"]) .tariff-grid>.tariff-card{
+    display:grid!important;
+    grid-template-columns:30px minmax(0,1fr) auto!important;
+    gap:7px!important;
+    align-items:center!important;
+    min-height:83px!important;
+    padding:9px!important;
+  }
+}
+html:is([data-display-scale="150"],[data-display-scale="160"],[data-display-scale="170"],
+[data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"])
+.tariff-grid>.tariff-card .tariff-price{margin-top:auto!important}
+@container(max-width:650px){
+  html:is([data-display-scale="170"],[data-display-scale="180"],
+  [data-display-scale="190"],[data-display-scale="200"]) .tariff-grid>.tariff-card .tariff-price{
+    margin-top:0!important;
+    justify-self:end!important;
+    text-align:right!important;
+  }
+}
+@container(max-width:380px){
+  html:is([data-display-scale="150"],[data-display-scale="160"]) .tariff-grid>.tariff-card .tariff-price{
+    margin-top:0!important;
+    justify-self:end!important;
+    text-align:right!important;
+  }
+}
+/* Larger information cards are allowed to reflow, with a readable minimum width. */
+.pro-grid,.parking-grid,.services-secondary-grid,.machine-grid{
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,max(265px,calc(215px * var(--display-scale)))),1fr))!important;
+}
+.pro-grid>*,.parking-grid>*,.services-secondary-grid>*,.machine-grid>*{
+  min-width:0!important;max-width:100%;
+}
+@media(max-width:430px){
+  .pro-grid,.parking-grid,.services-secondary-grid,.machine-grid,
+  .visit-card-grid,.refonte-extra-guides{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+/* The four essential short actions remain 2×2, not a vertical 4-card pile. */
+@media(max-width:700px){
+  .mobile-quick-links{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+:where(.pro-card,.parking-card,.machine-card,.service-feature,.visit-card,.refonte-loyalty){
+  min-width:0;overflow-wrap:break-word;
+}
+@media(prefers-reduced-motion:reduce){
+  .tariff-grid>.tariff-card{transition:none!important}
+}
+
+/* V5C: genuinely fluid tariff card layout; the available width, not a fixed breakpoint, chooses density.
+   Incomplete rows are centered, and enlarged-type one-column cards are compact. */
+.tariff-grid{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:wrap!important;
+  justify-content:center!important;
+  align-items:stretch!important;
+  column-gap:var(--rf-card-gap)!important;
+  row-gap:var(--rf-card-gap)!important;
+  width:100%!important;
+  --rf-tariff-columns:3;
+}
+html[data-display-scale] .tariff-grid>.tariff-card{
+  flex:0 0 calc((100% - (var(--rf-tariff-columns) - 1)*var(--rf-card-gap))/var(--rf-tariff-columns))!important;
+  width:calc((100% - (var(--rf-tariff-columns) - 1)*var(--rf-card-gap))/var(--rf-tariff-columns))!important;
+  max-width:100%!important;
+  min-width:0!important;
+  min-height:clamp(130px,10.5vw,195px)!important;
+  height:auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:clamp(5px,.65vw,10px)!important;
+  padding:clamp(10px,1vw,22px)!important;
+  text-align:center!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card :is(.tariff-copy,.tariff-price){
+  width:auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  text-align:center!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card .tariff-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:4px!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card .tariff-price{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:0!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card .tariff-icon{
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card .rf-tariff-cta{
+  text-align:center!important;
+  margin-inline:auto!important;
+}
+@media(max-width:600px){
+  html[data-display-scale] .tariff-grid>.tariff-card{
+    min-height:118px!important;
+    padding:9px!important;
+    gap:3px!important;
+  }
+}
+/* Only show compact horizontal rows at genuine one-column density,
+   never six big vertical cards. The JS owns this state. */
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card{
+  display:grid!important;
+  grid-template-columns:clamp(26px,7vw,36px) minmax(0,1fr) max-content!important;
+  grid-auto-rows:auto!important;
+  align-items:center!important;
+  justify-items:stretch!important;
+  column-gap:clamp(7px,2vw,14px)!important;
+  row-gap:2px!important;
+  min-height:76px!important;
+  padding:clamp(8px,2vw,13px)!important;
+}
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card .tariff-icon{
+  grid-column:1!important;
+  grid-row:1 / span 2!important;
+}
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card .tariff-copy{
+  grid-column:2!important;
+  text-align:left!important;
+  align-items:flex-start!important;
+}
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card .tariff-price{
+  grid-column:3!important;
+  text-align:right!important;
+  align-items:flex-end!important;
+}
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card .rf-tariff-cta{
+  grid-column:2 / 4!important;
+  justify-self:center!important;
+  margin:0!important;
+}
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card .tariff-price b{
+  font-size:clamp(19px,calc(17px * var(--display-scale)),32px)!important;
+}
+

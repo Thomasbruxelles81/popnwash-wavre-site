@@ -95,7 +95,7 @@ jobs:
                   if(report.headerOverlap)fail(k,'brand overlaps AAA');
                   if(report.firstBeforeHero)fail(k,'First visit shown before hero headline');
                   if(report.isPhone){
-                    if(report.quicks.length!==3)fail(k,'three quick links missing');
+                    if(report.quicks.length!==4)fail(k,'four quick links missing');
                     for(const [i,d] of report.details.entries()){
                       if(d.missing||!d.text)fail(k,'quick link '+i+' is not explained');
                       if(d.font<10.4)fail(k,'quick link '+i+' too small '+d.font);

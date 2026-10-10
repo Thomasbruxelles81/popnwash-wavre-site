@@ -23,7 +23,7 @@
   </script>
   <script>
   /* Apply saved display size before first paint (never disable browser zoom). */
-  (()=>{let n=110;try{const saved=Number(localStorage.getItem('popnwash-display-size'));if([80,90,100,110,120,130,140,150].includes(saved))n=saved;}catch(e){}
+  (()=>{let n=110;try{const saved=Number(localStorage.getItem('popnwash-display-size'));if([80,90,100,110,120,130,140,150,160,170,180,190,200].includes(saved))n=saved;}catch(e){}
     document.documentElement.style.setProperty('--display-scale',String(n/100));
     document.documentElement.dataset.displayScale=String(n);
   })();
@@ -1860,9 +1860,16 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
 </style>
   <link rel="stylesheet" href="display-scale.css?v=slider-20261009" />
   <link rel="stylesheet" href="mobile-landing.css?v=mobile-links-20261009" />
+  <link rel="stylesheet" href="refonte-global.css?v=v5c-20261010" />
+  <link rel="stylesheet" href="premium-popwash-v6.css?v=v6-20261010" />
 </head>
 <body>
   <div class="page-noise" aria-hidden="true"></div>
+  <div class="refonte-utility" aria-label="Informations pratiques POP'n WASH">
+    <a class="rf-utility-address" href="https://www.google.com/maps/search/?api=1&amp;query=POP%27n%20WASH%20Wavre&amp;query_place_id=ChIJ616yFqB9wUcRf55Cp9uBEM0" target="_blank" rel="noopener">⌖ <span>Rue de Namur 72 · 1300 Wavre</span></a>
+    <span class="rf-utility-hours">◷ <span data-i18n="hoursContact">7j/7 · 07h–22h</span></span>
+    <a class="rf-utility-phone" href="tel:+32486999251">☎ <span>+32 486 999 251</span></a>
+  </div>
   <header class="site-header" id="top">
     <a class="brand brand-lockup" href="#top" aria-label="POP'n WASH Wavre">
       <span class="brand-logo-wrap" aria-hidden="true">
@@ -1875,6 +1882,8 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
 
     <nav class="desktop-nav" aria-label="Navigation principale">
       <a href="#machines" data-i18n="navPrices">Tarifs</a>
+      <a href="#first-visit" data-rf="navHow">Mode d'emploi</a>
+      <a href="#fidelite" data-rf="navLoyalty">Fidélité</a>
       <a href="#services" data-i18n="navServices">Services</a>
       <a href="#pros" data-i18n="navPros">Pros</a>
       <a href="#reviews" data-i18n="navReviews">Avis</a>
@@ -1899,9 +1908,9 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
             <span aria-hidden="true">A+</span>
           </div>
           <input id="displaySizeRange" class="display-size-range" type="range"
-            min="80" max="150" step="10" value="110"
+            min="80" max="200" step="10" value="110"
             aria-label="Réglage de la taille d’affichage" aria-valuetext="110 %" />
-          <div class="display-size-range-limits" aria-hidden="true"><small>80 %</small><small>150 %</small></div>
+          <div class="display-size-range-limits" aria-hidden="true"><small>80 %</small><small>200 %</small></div>
           <button class="display-size-reset" id="displaySizeReset" type="button">Réinitialiser à 110 %</button>
           <p class="display-size-hint" id="displaySizeHint">Votre préférence est enregistrée sur cet appareil.</p>
         </section>
@@ -1946,6 +1955,8 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
 
   <div class="mobile-menu" id="mobileMenu" hidden>
     <a href="#machines" data-i18n="navPrices">Tarifs</a>
+      <a href="#first-visit" data-rf="navHow">Mode d'emploi</a>
+      <a href="#fidelite" data-rf="navLoyalty">Fidélité</a>
     <a href="#services" data-i18n="navServices">Services</a>
     <a href="#pros" data-i18n="navPros">Pros</a>
     <a href="#reviews" data-i18n="navReviews">Avis</a>
@@ -1960,6 +1971,11 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg>
           <span class="mobile-quick-title" data-i18n="mobileRoute">Itinéraire</span>
           <small class="mobile-quick-detail" data-i18n="mobileRouteDetail">Nous rejoindre</small>
+        </a>
+        <a class="mobile-quick-link tariffs" href="#machines" aria-label="Voir les tarifs POP'n WASH">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M6 12h12M8 17h8"/><circle cx="18" cy="18" r="3"/></svg>
+          <span class="mobile-quick-title" data-rf="navPrices">Tarifs</span>
+          <small class="mobile-quick-detail" data-rf="quickPrices">Voir tous les prix</small>
         </a>
         <a class="mobile-quick-link machines" href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener" data-i18n-aria="mobileMachinesAria">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="3"/><path d="M8 6.5h8"/><circle cx="12" cy="14" r="4"/></svg>
@@ -2046,7 +2062,7 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
         </div>
 
         <div class="visit-card-grid">
-          <details class="visit-card visit-washer">
+          <details class="visit-card visit-washer" data-guide-panel="wash">
             <summary>
               <span class="visit-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.1 14c1.1-1.2 2.1-.7 3 0s2 .9 2.9-.1"/></svg></span>
               <span class="visit-summary-copy"><strong data-i18n="visitWasherTitle">Lave-linge</strong><small data-i18n="visitWasherShort">N° machine · chargez · lessive + programme · payez</small></span>
@@ -2055,7 +2071,7 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
             <div class="visit-card-body"><div class="visit-card-inner" data-i18n="visitWasherBody"><ol><li>Choisissez le lave-linge et regardez son numéro.</li><li>Chargez le linge, ajoutez la lessive et choisissez le programme.</li><li>À la centrale, sélectionnez ce même numéro et payez.</li></ol><strong class="visit-result">→ Démarrage automatique</strong></div></div>
           </details>
 
-          <details class="visit-card visit-dryer">
+          <details class="visit-card visit-dryer" data-guide-panel="dry">
             <summary>
               <span class="visit-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.2 15.5c1.8 1.2 4.3.9 5.6-.8"/></svg></span>
               <span class="visit-summary-copy"><strong data-i18n="visitDryerTitle">Séchoir</strong><small data-i18n="visitDryerShort">N° séchoir · chargez · payez · température</small></span>
@@ -2064,7 +2080,7 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
             <div class="visit-card-body"><div class="visit-card-inner" data-i18n="visitDryerBody"><ol><li>Choisissez le séchoir et regardez son numéro.</li><li>Chargez le linge.</li><li>À la centrale, sélectionnez ce même numéro, choisissez le temps et payez.</li><li>Sur le séchoir, appuyez sur HIGH, MEDIUM ou LOW.</li></ol><small class="visit-temp">HIGH = coton/serviettes · MEDIUM = linge courant · LOW = synthétique/délicat</small><strong class="visit-result">→ Le séchage démarre</strong></div></div>
           </details>
 
-          <details class="visit-card visit-ironer">
+          <details class="visit-card visit-ironer" data-guide-panel="iron">
             <summary>
               <span class="visit-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.5h18v8H3z"/><path d="M6 11.2h12M7 5.5h10v3H7zM5 19h14"/></svg></span>
               <span class="visit-summary-copy"><strong data-i18n="visitIronerTitle">Calandre</strong><small data-i18n="visitIronerShort">Autre → Calandre · payez · chauffe 3–4 min</small></span>
@@ -2073,13 +2089,23 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
             <div class="visit-card-body"><div class="visit-card-inner" data-i18n="visitIronerBody"><ol><li>À la centrale : choisissez Autre → Calandre.</li><li>Choisissez le temps et payez.</li><li>Attendez environ 3 à 4 minutes de chauffe.</li></ol><strong class="visit-result">→ Démarrage automatique</strong></div></div>
           </details>
 
-          <details class="visit-card visit-products">
+          <details class="visit-card visit-products" data-guide-panel="products">
             <summary>
               <span class="visit-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6v3l2 2v11.5A1.5 1.5 0 0 1 15.5 21h-7A1.5 1.5 0 0 1 7 19.5V8l2-2z"/><path d="M9 11h6M10 3v3h4V3"/></svg></span>
               <span class="visit-summary-copy"><strong data-i18n="visitProductsTitle">Produits</strong><small data-i18n="visitProductsShort">Produits · choisissez · payez · récupérez</small></span>
               <span class="visit-plus">+</span>
             </summary>
             <div class="visit-card-body"><div class="visit-card-inner" data-i18n="visitProductsBody"><ol><li>À la centrale : choisissez Produits.</li><li>Sélectionnez votre lessive, assouplissant ou autre produit.</li><li>Payez.</li></ol><strong class="visit-result">→ Récupérez votre produit au distributeur</strong></div></div>
+          </details>
+        </div>
+        <div class="refonte-extra-guides">
+          <details class="visit-card rf-guide-terminal" data-guide-panel="terminal">
+            <summary><span class="visit-icon" aria-hidden="true">▤</span><span class="visit-summary-copy"><strong data-rf="rfTerminal">Centrale de paiement</strong><small data-rf="rfTerminalShort">Choisissez · vérifiez · payez</small></span><span class="visit-plus">+</span></summary>
+            <div class="visit-card-body"><div class="visit-card-inner"><ol><li data-rf="rfTerminal1">Choisissez le service : machine, séchoir, calandre ou produits.</li><li data-rf="rfTerminal2">Vérifiez le numéro et la durée.</li><li data-rf="rfTerminal3">Payez par pièces, billets, carte ou smartphone.</li><li data-rf="rfTerminal4">Suivez les consignes affichées pour démarrer.</li></ol><strong class="visit-result" data-rf="rfTerminalTip">Facture : notez les 4 caractères affichés brièvement après paiement.</strong></div></div>
+          </details>
+          <details class="visit-card rf-guide-fidelity" data-guide-panel="fidelity">
+            <summary><span class="visit-icon" aria-hidden="true">✦</span><span class="visit-summary-copy"><strong data-rf="rfFidelity">Carte fidélité</strong><small data-rf="rfFidelityShort">Première carte · crédit · lessive offerte</small></span><span class="visit-plus">+</span></summary>
+            <div class="visit-card-body"><div class="visit-card-inner"><ol><li data-rf="rfFidelity1">À la centrale, ouvrez la rubrique Produits.</li><li data-rf="rfFidelity2">Sélectionnez le code 77 à la centrale pour obtenir la carte.</li><li data-rf="rfFidelity3">Payez 40 € : recevez 40 € de crédit et la carte offerte.</li><li data-rf="rfFidelity4">Un premier sachet de lessive est également offert.</li></ol><strong class="visit-result" data-rf="rfFidelityTip">Les recharges suivantes bénéficient de bonus.</strong></div></div>
           </details>
         </div>
         <div class="first-visit-tips" aria-label="Bon à savoir">
@@ -2104,25 +2130,18 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
         <div><span class="section-kicker" data-i18n="pricesKicker">Simple & transparent</span><h2 data-i18n="machinesTitle">Petite, moyenne ou grande capacité.</h2></div>
         <p data-i18n="machinesIntro">19 lave-linge, 16 séchoirs, une calandre professionnelle et un distributeur complet : tout est réuni au même endroit.</p>
       </div>
-      <div class="fleet-showcase reveal">
-        <div class="fleet-photo"><img src="assets/img_2221.webp" width="2048" height="1536" loading="eager" decoding="async" alt="Vue des lave-linge POP'n WASH Wavre"></div>
-        <div class="fleet-copy">
-          <span class="section-kicker" data-i18n="fleetKicker">19 lave-linge</span>
-          <h3 data-i18n="fleetTitle">Une capacité adaptée à chaque lessive.</h3>
-          <p data-i18n="fleetText">Du linge du quotidien aux couettes et grands volumes, choisissez simplement la capacité dont vous avez besoin.</p>
-          <div class="fleet-capacities">
-            <div><strong>7 kg</strong><span data-i18n="smallCapacity">Petite capacité</span></div>
-            <div><strong>14 kg</strong><span data-i18n="mediumCapacity">Moyenne capacité</span></div>
-            <div><strong>20 kg</strong><span data-i18n="largeCapacity">Grande capacité</span></div>
-          </div>
-        </div>
-      </div>
       <div class="tariff-grid">
-        <article class="tariff-card reveal"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.1 14c1.1-1.2 2.1-.7 3 0s2 .9 2.9-.1"/></svg></span><div class="tariff-copy"><small data-i18n="smallCapacity">Petite capacité</small><strong>7 kg</strong></div><div class="tariff-price"><b>4,00 €</b><span data-i18n="perCycle">par cycle</span></div></article>
-        <article class="tariff-card reveal" data-delay="60"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.1 14c1.1-1.2 2.1-.7 3 0s2 .9 2.9-.1"/></svg></span><div class="tariff-copy"><small data-i18n="mediumCapacity">Moyenne capacité</small><strong>14 kg</strong></div><div class="tariff-price"><b>7,00 €</b><span data-i18n="perCycle">par cycle</span></div></article>
-        <article class="tariff-card reveal" data-delay="120"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.1 14c1.1-1.2 2.1-.7 3 0s2 .9 2.9-.1"/></svg></span><div class="tariff-copy"><small data-i18n="largeCapacity">Grande capacité</small><strong>20 kg</strong></div><div class="tariff-price"><b>14,00 €</b><span data-i18n="perCycle">par cycle</span></div></article>
-        <article class="tariff-card reveal" data-delay="180"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.2 15.5c1.8 1.2 4.3.9 5.6-.8"/></svg></span><div class="tariff-copy"><small data-i18n="dryer">Séchoir</small><strong data-i18n="drying">Séchage</strong></div><div class="tariff-price"><b>0,50 €</b><span>/ 5 min</span></div></article>
-        <article class="tariff-card reveal" data-delay="240"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.5h18v8H3z"/><path d="M6 11.2h12M7 5.5h10v3H7zM5 19h14"/></svg></span><div class="tariff-copy"><small data-i18n="ironer">Calandre</small><strong data-i18n="ironing">Repassage</strong></div><div class="tariff-price"><b>2,00 €</b><span>/ 6 min</span></div></article>
+        <a href="#first-visit" data-guide="wash" class="tariff-card reveal"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.1 14c1.1-1.2 2.1-.7 3 0s2 .9 2.9-.1"/></svg></span><div class="tariff-copy"><small data-i18n="smallCapacity">Petite capacité</small><strong>7 kg</strong></div><div class="tariff-price"><b>4,00 €</b><span data-i18n="perCycle">par cycle</span></div></a>
+        <a href="#first-visit" data-guide="wash" class="tariff-card reveal" data-delay="60"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.1 14c1.1-1.2 2.1-.7 3 0s2 .9 2.9-.1"/></svg></span><div class="tariff-copy"><small data-i18n="mediumCapacity">Moyenne capacité</small><strong>14 kg</strong></div><div class="tariff-price"><b>7,00 €</b><span data-i18n="perCycle">par cycle</span></div></a>
+        <a href="#first-visit" data-guide="wash" class="tariff-card reveal" data-delay="120"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.1 14c1.1-1.2 2.1-.7 3 0s2 .9 2.9-.1"/></svg></span><div class="tariff-copy"><small data-i18n="largeCapacity">Grande capacité</small><strong>20 kg</strong></div><div class="tariff-price"><b>14,00 €</b><span data-i18n="perCycle">par cycle</span></div></a>
+        <a href="#first-visit" data-guide="dry" class="tariff-card reveal" data-delay="180"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.8" width="16" height="18.4" rx="3"/><path d="M7.5 6.5h.01M11 6.5h5.5"/><circle cx="12" cy="14" r="4.4"/><path d="M9.2 15.5c1.8 1.2 4.3.9 5.6-.8"/></svg></span><div class="tariff-copy"><small data-i18n="dryer">Séchoir</small><strong data-i18n="drying">Séchage</strong></div><div class="tariff-price"><b>0,50 €</b><span>/ 5 min</span></div></a>
+        <a href="#first-visit" data-guide="iron" class="tariff-card reveal" data-delay="240"><span class="tariff-icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.5h18v8H3z"/><path d="M6 11.2h12M7 5.5h10v3H7zM5 19h14"/></svg></span><div class="tariff-copy"><small data-i18n="ironer">Calandre</small><strong data-i18n="ironing">Repassage</strong></div><div class="tariff-price"><b>2,00 €</b><span>/ 6 min</span></div></a>
+        <a href="#first-visit" data-guide="products" class="tariff-card reveal refonte-tariff-product">
+          <span class="tariff-icon" aria-hidden="true">✿</span>
+          <div class="tariff-copy"><small data-rf="rfDispenser">Distributeur</small><strong data-rf="rfProducts">Lessive &amp; produits</strong></div>
+          <div class="tariff-price"><b data-rf="rfFrom">Dès 1 €</b><span data-rf="rfSoftener">Assouplissant : 0,50 €</span></div>
+          <small class="rf-tariff-cta" data-rf="rfGuide">Mode d'emploi ↗</small>
+        </a>
       </div>
       <article class="payment-easy reveal">
         <div class="payment-easy-icon">
@@ -2142,6 +2161,24 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
         <div class="pet-copy"><span class="badge"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="15.5" rx="4.5" ry="3.8"/><circle cx="7.2" cy="10" r="1.7"/><circle cx="16.8" cy="10" r="1.7"/><circle cx="10.1" cy="7.4" r="1.6"/><circle cx="13.9" cy="7.4" r="1.6"/></svg><span data-i18n="popular">Très apprécié</span></span><h3 data-i18n="petTitle">Des machines vraiment réservées au linge des animaux.</h3><p data-i18n="petText">Textiles de chevaux, chiens, chats, couvertures et paniers : utilisez les machines dédiées 7 kg et 14 kg, sans mélanger avec le linge courant.</p><div class="pet-pills"><span>7 kg · 4,00 €</span><span>14 kg · 7,00 €</span></div></div>
         <div class="pet-photo"><img src="assets/img_2239.webp" width="2048" height="1536" loading="lazy" decoding="async" alt="Machine réservée au linge des animaux chez POP'n WASH Wavre" /></div>
       </article>
+    </section>
+
+    <section id="fidelite" class="refonte-loyalty section-shell" aria-labelledby="rfLoyaltyHeading">
+      <div class="rf-loyalty-intro">
+        <span class="section-kicker" data-rf="rfLoyaltyKicker">VOTRE FIDÉLITÉ RAPPORTE</span>
+        <h2 id="rfLoyaltyHeading" data-rf="rfLoyaltyHeading">Une carte, des bonus, du crédit supplémentaire.</h2>
+        <p data-rf="rfLoyaltyDescription">Première carte offerte pour 40 € de crédit achetés, avec un sachet de lessive offert. Puis profitez d'un crédit bonus lors des recharges suivantes.</p>
+        <button type="button" class="btn btn-primary rf-fidelity-guide" data-guide-open="fidelity" data-rf="rfGetCard">Comment obtenir ma carte ? ↗</button>
+      </div>
+      <div id="refonteLoyaltyMount" class="rf-loyalty-original"></div>
+      <div class="rf-loyalty-bonus">
+        <strong data-rf="rfRecharge">Simulez votre prochaine recharge</strong>
+        <div class="rf-bonus-choices" role="group" aria-label="Montants de recharge">
+          <button type="button" data-bonus="10">10 €</button><button type="button" data-bonus="20">20 €</button><button type="button" data-bonus="30">30 €</button><button type="button" data-bonus="40" class="is-active">40 €</button><button type="button" data-bonus="50">50 €</button><button type="button" data-bonus="100">100 €</button>
+        </div>
+        <output class="rf-bonus-result" id="refonteBonusResult" aria-live="polite">40 € → 43,50 € de crédit</output>
+        <p data-rf="rfLoyaltyNote">La première offre de 40 € et les recharges bonifiées sont différentes. Carte seule / duplicata : 10 €.</p>
+      </div>
     </section>
 
     <section class="section section-shell services-hub" id="services">
@@ -2222,6 +2259,11 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
         <article class="pro-card reveal" data-delay="60"><span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span><strong data-i18n="proInvoiceTitle">Factures simples</strong><p data-i18n="proInvoiceText">Après paiement, récupérez votre facture via WiLine grâce au code de 4 caractères affiché sur la centrale, valable 24 h.</p></article>
         <article class="pro-card reveal" data-delay="120"><span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 9h18M7 15h4"/></svg></span><strong data-i18n="proLoyaltyTitle">Fidélité & recharges</strong><p data-i18n="proLoyaltyText">Pour les passages réguliers, la carte fidélité permet de centraliser votre crédit et de bénéficier des bonus de recharge.</p></article>
         <article class="pro-card reveal" data-delay="180"><span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V4h6v3M3 12h18M10 12v2h4v-2"/></svg></span><strong data-i18n="proRatesTitle">Tarifs professionnels</strong><p data-i18n="proRatesText">Pour une utilisation régulière, des volumes importants ou un besoin spécifique, contactez-nous afin de trouver la formule la plus adaptée.</p></article>
+      </div>
+      <div class="refonte-pro-shortcuts" aria-label="Outils pour professionnels">
+        <a href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener" data-rf="rfProInvoices">▤ Récupérer une facture ↗</a>
+        <a href="https://status.wi-line.fr/82973c2800815407e4de7ffc45cd77b8" target="_blank" rel="noopener" data-rf="rfProMachines">◉ Machines en direct ↗</a>
+        <a href="#fidelite" data-rf="rfProLoyalty">✦ Fidélité et recharges ↗</a>
       </div>
       <div class="pro-contact reveal"><div><strong data-i18n="proContactTitle">Vous venez souvent ?</strong><span data-i18n="proContactText">Expliquez-nous votre activité et vos volumes : nous vous répondons avec une proposition adaptée.</span></div><div class="pro-buttons"><a class="btn btn-primary" href="#contact" id="proContactButton" data-i18n="proContactButton">Demander un tarif pro</a><a class="btn btn-whatsapp" href="https://wa.me/32486999251" target="_blank" rel="noopener">WhatsApp</a></div></div>
     </section>
@@ -2583,5 +2625,7 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
 
   <script src="app.js?v=mobile-links-20261009" defer></script>
   <script src="display-scale.js?v=slider-20261009" defer></script>
+  <script src="refonte-global.js?v=v5c-20261010" defer></script>
+  <script src="premium-popwash-v6.js?v=v6-20261010" defer></script>
 </body>
 </html>

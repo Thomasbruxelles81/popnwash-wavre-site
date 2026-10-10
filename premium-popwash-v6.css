@@ -1,0 +1,268 @@
+/* POP'n WASH — V6 brand/motion layer. Additive; preserves V5 responsive grid.
+   Asset palette from the official POP'n WASH logo. No QR code injected. */
+:root {
+  --pop-cream:#fff0d0;
+  --pop-coral:#e95060;
+  --pop-green:#409020;
+  --pop-forest:#064b30;
+  --pop-ink:#171a17;
+  --pop-curve:cubic-bezier(.22,1,.36,1);
+}
+html[data-theme="light"] {
+  --cream:#f7f0df;
+  --cream2:#fff8e9;
+  --ink:#161c1b;
+  --muted:#526257;
+  --red:#d82d4b;
+  --red2:#bf2641;
+  --green:#32881c;
+  --green2:#176738;
+  --softgreen:#e3f4d9;
+  --softred:#ffe4df;
+  --card:#fffaf0;
+  --surface:#fffaf0;
+  --surface2:#fff6e5;
+  --line:rgba(6,75,48,.17);
+}
+html[data-theme="dark"] {
+  --cream:#101b17;
+  --cream2:#15241d;
+  --ink:#f7f5eb;
+  --muted:#bdcbc0;
+  --red:#ff7185;
+  --red2:#ff869a;
+  --green:#83d77a;
+  --green2:#9ae397;
+  --softgreen:#203d2b;
+  --softred:#42262c;
+  --card:#1b2c23;
+  --surface:#1b2c23;
+  --surface2:#203629;
+  --line:rgba(230,255,229,.17);
+}
+html[data-theme="light"] body {background:#f7f0df!important;color:#161c1b!important}
+html[data-theme="dark"] body {background:#0d1714!important;color:#f7f5eb!important}
+html[data-theme="light"] .site-header,
+html[data-theme="dark"] .site-header {
+  background:#ffe6bc!important;
+  border-color:rgba(6,75,48,.14)!important;
+  box-shadow:0 12px 36px rgba(6,75,48,.10)!important;
+}
+html[data-theme] .site-header :is(.brand-title,.brand-place,.desktop-nav a,.menu-button,.lang-button) {color:#161c1b!important}
+html[data-theme] .brand-logo-wrap img {object-fit:contain!important;filter:none!important}
+html[data-theme] .site-header .brand-lockup {transition:filter .32s var(--pop-curve)}
+html[data-theme] .site-header .brand-lockup:hover {filter:saturate(1.1)}
+/* The same card tokens work in either theme without sacrificing AA text contrast. */
+:where(.tariff-card,.pro-card,.parking-card,.service-feature,.faq-item,.refonte-extra-guides .visit-card,.rf-bonus-choices button) {
+  -webkit-tap-highlight-color:transparent;
+  transition:
+    border-color .35s ease, background-color .35s ease,
+    background-position .65s var(--pop-curve),
+    box-shadow .4s var(--pop-curve),
+    transform .48s var(--pop-curve),
+    filter .38s ease!important;
+}
+html[data-theme="light"] :is(.pro-card,.parking-card,.service-feature,.faq-item,.review-card) {
+  background-color:#fffaf0!important;
+  border-color:rgba(6,75,48,.12)!important;
+  color:#171a17!important;
+}
+html[data-theme="dark"] :is(.pro-card,.parking-card,.service-feature,.faq-item,.review-card) {
+  background-color:#1b2c23!important;
+  border-color:rgba(230,255,229,.17)!important;
+  color:#f7f5eb!important;
+}
+html[data-theme="light"] .tariff-grid>.tariff-card {
+  background-color:#fffaf0!important;
+  border:1px solid rgba(6,75,48,.16)!important;
+}
+html[data-theme="dark"] .tariff-grid>.tariff-card {
+  background-color:#1b2c23!important;
+  border:1px solid rgba(230,255,229,.18)!important;
+  color:#f7f5eb!important;
+}
+html[data-theme] .tariff-grid>.tariff-card {
+  background-image:linear-gradient(118deg,transparent 12%,rgba(93,183,72,.085) 38%,rgba(233,80,96,.08) 58%,transparent 88%)!important;
+  background-size:240% 100%!important;
+  background-position:0 50%!important;
+  box-shadow:0 8px 25px rgba(6,48,28,.07)!important;
+}
+/* Beyond ordinary shadow/zoom: a branded light sweep, playful icon bubbles
+   and a purposeful colored edge. */
+@media(hover:hover) and (pointer:fine) {
+  html[data-theme] .tariff-grid>.tariff-card:is(:hover,:focus-visible) {
+    background-position:100% 50%!important;
+    border-color:var(--red)!important;
+    box-shadow:0 0 0 1px color-mix(in srgb,var(--red) 35%,transparent),0 18px 38px rgba(5,50,29,.16)!important;
+    transform:translateY(-4px)!important;
+  }
+  :is(.pro-card,.service-feature,.parking-card):hover {
+    transform:translateY(-5px) rotate(-.12deg)!important;
+    border-color:var(--green2)!important;
+    box-shadow:0 18px 38px rgba(7,53,35,.17)!important;
+    filter:saturate(1.08);
+  }
+  :is(.faq-item,.visit-card):hover {border-color:var(--green)!important}
+}
+.tariff-grid .tariff-icon, .pro-card>span, .visit-icon, .service-pill .ui-icon {
+  transform-origin:center;
+  transition:transform .55s var(--pop-curve),background-color .3s ease, color .3s ease,box-shadow .4s ease!important;
+}
+.tariff-grid .tariff-icon,.pro-card>span,.visit-icon {position:relative;isolation:isolate}
+.tariff-grid .tariff-icon::before,.tariff-grid .tariff-icon::after {
+  content:"";position:absolute;z-index:-1;pointer-events:none;
+  width:11px;height:11px;aspect-ratio:1;border:2px solid currentColor;
+  border-radius:50%;opacity:0;transition:opacity .3s ease;
+}
+.tariff-grid .tariff-icon::before {left:4px;top:-5px}
+.tariff-grid .tariff-icon::after {right:-4px;bottom:3px;width:7px;height:7px}
+@media(hover:hover) and (pointer:fine) {
+ .tariff-card:is(:hover,:focus-visible) .tariff-icon {
+   transform:rotate(-12deg) scale(1.09) translateY(-2px);
+   box-shadow:0 8px 18px rgba(6,75,48,.12);
+ }
+ .tariff-card:is(:hover,:focus-visible) .tariff-icon::before {
+   opacity:.75;animation:pop-bubble-a .8s var(--pop-curve) both;
+ }
+ .tariff-card:is(:hover,:focus-visible) .tariff-icon::after {
+   opacity:.65;animation:pop-bubble-b .72s var(--pop-curve) both;
+ }
+ :is(.pro-card,.service-feature):hover :is(.ui-icon,.product-svg) {transform:rotate(-8deg) scale(1.09)}
+}
+@keyframes pop-bubble-a {from{transform:translate(0,8px) scale(.4);opacity:0}60%{opacity:.9}to{transform:translate(-8px,-15px) scale(1.1);opacity:0}}
+@keyframes pop-bubble-b {from{transform:translate(0,5px) scale(.45);opacity:0}60%{opacity:.8}to{transform:translate(8px,-12px) scale(1);opacity:0}}
+/* A moving ink-underline marks navigation, without obscuring the label. */
+.site-header .desktop-nav a, .mobile-menu a {
+  transition:color .28s ease,background-color .28s ease!important;
+  text-decoration:none!important;
+}
+.site-header .desktop-nav a::after {
+  background:linear-gradient(90deg,#409020 0%,#e95060 55%,#409020 100%)!important;
+  background-size:190% 100%!important;
+  height:3px!important;border-radius:20px!important;
+  transform:scaleX(0)!important;
+  transform-origin:center!important;
+  transition:transform .43s var(--pop-curve),background-position .7s ease!important;
+}
+.site-header .desktop-nav a:is(:hover,:focus-visible)::after {
+  transform:scaleX(1)!important;
+  background-position:100% 50%!important;
+}
+.mobile-menu a {border-radius:10px}
+.mobile-menu a:is(:hover,:focus-visible) {
+  background:color-mix(in srgb,#409020 15%,transparent)!important;
+  color:var(--green2)!important;
+}
+/* Buttons have a diagonal coral-to-leaf gradient that shifts under the pointer,
+   plus a compact pressure ripple on click (the JS never changes button labels). */
+.btn, .rf-bonus-choices button, .display-size-button, .lang-button {
+  position:relative;
+  transition:background-position .45s var(--pop-curve),border-color .3s ease,
+    box-shadow .36s ease,transform .32s var(--pop-curve),filter .32s ease!important;
+}
+.btn-primary {
+  color:#fff!important;
+  background-image:linear-gradient(110deg,#ca2b49 0%,#e95060 42%,#176738 100%)!important;
+  background-size:220% 100%!important;background-position:0% 50%!important;
+  border-color:transparent!important;
+}
+.btn-primary:is(:hover,:focus-visible) {
+  background-position:100% 50%!important;
+  box-shadow:0 11px 29px rgba(6,75,48,.25)!important;
+  transform:translateY(-2px)!important;
+}
+:where(.rf-bonus-choices button,.display-size-button,.lang-button) {overflow:hidden}
+/* Allow long translated submit labels to wrap in narrow WebKit viewports. */
+.form-submit.btn {height:auto;min-height:52px;padding-block:12px;white-space:normal;overflow:visible;max-width:100%;text-align:center}
+.popwash-ripple {
+  position:absolute!important;display:block!important;z-index:3;pointer-events:none!important;
+  width:18px;height:18px;border-radius:50%;
+  background:rgba(255,255,255,.48);
+  transform:translate(-50%,-50%) scale(0);
+  animation:popwash-press .62s ease-out forwards;
+}
+@keyframes popwash-press {
+  from{opacity:.8;transform:translate(-50%,-50%) scale(0)}
+  to{opacity:0;transform:translate(-50%,-50%) scale(16)}
+}
+/* Accordion feedback is functional: color wave and rotating icon. */
+.first-visit-showcase {
+  background:linear-gradient(138deg,#0e2b1d 0%,#143525 68%,#153a2a 100%)!important;
+  border:1px solid rgba(171,227,162,.22);
+}
+.first-visit-showcase::before {
+  background:linear-gradient(90deg,#409020,#e95060,#fff0d0,#409020)!important;
+  background-size:250% 100%;animation:popwash-stripe 9s linear infinite;
+}
+@keyframes popwash-stripe {to{background-position:250% 0}}
+.first-visit-showcase :is(.visit-card,.rf-guide-terminal,.rf-guide-fidelity) {
+  border-color:rgba(234,255,230,.18)!important;
+  background:rgba(255,255,255,.06)!important;
+}
+.first-visit-showcase .visit-card[open] {
+  background:rgba(235,255,224,.12)!important;border-color:rgba(145,232,150,.60)!important;
+}
+.first-visit-showcase .visit-card summary, .refonte-extra-guides .visit-card summary {
+  transition:background-color .32s ease!important;
+}
+.first-visit-showcase .visit-card summary:is(:hover,:focus-visible) {
+  background:rgba(161,231,143,.12)!important;
+}
+.first-visit-showcase .visit-card[open] .visit-card-inner,
+.refonte-extra-guides .visit-card[open] .visit-card-inner,
+.faq-item[open] .faq-answer {animation:popwash-unfold .35s var(--pop-curve) both}
+@keyframes popwash-unfold {
+  from{opacity:.35;transform:translateY(-7px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.faq-item[open] summary {color:var(--green2)!important}
+.faq-item summary b, .visit-card .visit-plus {
+  transition:transform .45s var(--pop-curve),background-color .4s ease,color .35s ease!important;
+}
+.faq-item[open] summary b {transform:rotate(135deg) scale(1.07)!important}
+/* Loyalty keeps the familiar logo and offers a dedicated consistent module. */
+html[data-theme="light"] .refonte-loyalty {
+  background:linear-gradient(125deg,#dff4d8,#fff7e7 50%,#ffe4df)!important;
+  border-color:rgba(6,75,48,.20)!important;
+}
+html[data-theme="dark"] .refonte-loyalty {
+  background:linear-gradient(125deg,#193d2a,#243429 55%,#3e272c)!important;
+  border-color:rgba(196,237,197,.20)!important;
+}
+html[data-theme="light"] .rf-loyalty-bonus {background:#fffaf0!important}
+html[data-theme="dark"] .rf-loyalty-bonus {background:#1a3024!important}
+.rf-bonus-choices button:is(:hover,:focus-visible) {
+  border-color:#409020!important;
+  box-shadow:inset 0 0 0 1px rgba(64,144,32,.32)!important;
+  transform:translateY(-2px);
+}
+.rf-bonus-choices button.is-active {
+  background:linear-gradient(110deg,#176738,#409020)!important;
+  color:#fff!important;
+}
+/* Icon and text contrast in dark theme; do not repaint the always-beige header. */
+html[data-theme="dark"] .tariff-grid>.tariff-card :is(.tariff-copy strong,.tariff-price b) {color:#f9fff4!important}
+html[data-theme="dark"] .tariff-grid>.tariff-card :is(.tariff-copy small,.tariff-price span) {color:#c9e0ce!important}
+html[data-theme="dark"] :is(.pro-card,.parking-card,.service-feature,.faq-item) p,
+html[data-theme="dark"] :is(.pro-card,.parking-card,.service-feature,.faq-item) small {color:#c8d8cc!important}
+html[data-theme="dark"] .refonte-loyalty .rf-bonus-result {color:#a4f0ad!important}
+html[data-theme="dark"] .site-header .desktop-nav a {color:#1b2721!important}
+:where(a,button,input,summary,select,textarea):focus-visible {
+  outline:3px solid #e95060!important;outline-offset:3px!important;
+}
+html[data-theme="dark"] :where(a,button,input,summary,select,textarea):focus-visible {
+  outline-color:#a4efa8!important;
+}
+@media(hover:none) {
+  html[data-theme] :is(.tariff-card,.pro-card,.service-feature,.parking-card):hover {
+    transform:none!important;filter:none!important;
+  }
+  .tariff-grid .tariff-icon::before,.tariff-grid .tariff-icon::after {animation:none!important}
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important;
+  }
+  .popwash-ripple {display:none!important}
+}

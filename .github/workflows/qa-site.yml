@@ -367,10 +367,26 @@ jobs:
 
               const fb=p.locator('.social-link.facebook');
               const ig=p.locator('.social-link.instagram');
-              const fbBefore=await fb.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor);
+              // Real site uses html{scroll-behavior:smooth}. Playwright auto-scroll
+              // may continue AFTER hover(), leaving the cursor off the moving element.
+              // Let scrolling finish, then check CSS hover on a stationary link.
+              await p.evaluate(()=>{document.documentElement.style.scrollBehavior='auto';document.body.style.scrollBehavior='auto'});
+              await fb.scrollIntoViewIfNeeded();
+              await p.waitForTimeout(500);
+              await p.mouse.move(2,2);await p.waitForTimeout(150);
+              const inspectFacebook=el=>{
+                const st=getComputedStyle(el),before=getComputedStyle(el,'::before'),after=getComputedStyle(el,'::after');
+                return [st.backgroundImage,st.backgroundColor,st.boxShadow,st.transform,st.filter,
+                  st.borderColor,before.transform,after.transform].join('|');
+              };
+              const fbBefore=await fb.evaluate(inspectFacebook);
               await fb.hover();await p.waitForTimeout(320);
-              const fbAfter=await fb.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor);
-              if(fbBefore===fbAfter) failures.push(mode+': Facebook hover not visually changing');
+              const fbAfter=await fb.evaluate(inspectFacebook);
+              const fbMeta=await fb.evaluate(el=>({hover:el.matches(':hover'),className:el.className,
+                 pointerEvents:getComputedStyle(el).pointerEvents}));
+              console.log('FACEBOOK-HOVER',mode,'before',fbBefore,'after',fbAfter,'details',JSON.stringify(fbMeta));
+              if(!fbMeta.hover) failures.push(mode+': pointer not over Facebook after stabilized hover');
+              if(fbBefore===fbAfter) failures.push(mode+': Facebook hover has no visual effect');
               const igBefore=await ig.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor+'|'+getComputedStyle(el).boxShadow+'|'+getComputedStyle(el).transform);
               await ig.hover();await p.waitForTimeout(320);
               const igAfter=await ig.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor+'|'+getComputedStyle(el).boxShadow+'|'+getComputedStyle(el).transform);
