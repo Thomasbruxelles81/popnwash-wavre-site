@@ -41,7 +41,7 @@ html[data-theme="dark"] {
   --line:rgba(230,255,229,.17);
 }
 html[data-theme="light"] body {background:#f7f0df!important;color:#161c1b!important}
-html[data-theme="dark"] body {background:#101b17!important;color:#f7f5eb!important}
+html[data-theme="dark"] body {background:#0d1714!important;color:#f7f5eb!important}
 html[data-theme="light"] .site-header,
 html[data-theme="dark"] .site-header {
   background:#ffe6bc!important;
@@ -171,7 +171,9 @@ html[data-theme] .tariff-grid>.tariff-card {
   box-shadow:0 11px 29px rgba(6,75,48,.25)!important;
   transform:translateY(-2px)!important;
 }
-:where(.btn,.rf-bonus-choices button,.display-size-button,.lang-button) {overflow:hidden}
+:where(.rf-bonus-choices button,.display-size-button,.lang-button) {overflow:hidden}
+/* Allow long translated submit labels to wrap in narrow WebKit viewports. */
+.form-submit.btn {height:auto;min-height:52px;padding-block:12px;white-space:normal;overflow:visible;max-width:100%;text-align:center}
 .popwash-ripple {
   position:absolute!important;display:block!important;z-index:3;pointer-events:none!important;
   width:18px;height:18px;border-radius:50%;
