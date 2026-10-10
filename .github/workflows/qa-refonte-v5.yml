@@ -96,10 +96,15 @@ jobs:
                   results.push(k);
                 }
               }
-              if(['mini320','iphone390','tablet768','desktop1920'].includes(id)){
+              if(['mini320','iphone390','tablet768','laptop1440','desktop1920'].includes(id)){
                 await page.evaluate(()=>document.querySelector('#langMenu button[data-lang="fr"]').click());
                 await page.evaluate(()=>{const s=document.querySelector('#displaySizeRange');s.value=110;s.dispatchEvent(new Event('input',{bubbles:true}));});
                 await page.screenshot({path:'qa-screenshots/'+name+'-'+id+'.png',fullPage:true,animations:'disabled'});
+                if(id==='laptop1440'){
+                  await page.evaluate(()=>{const s=document.querySelector('#displaySizeRange');s.value=200;s.dispatchEvent(new Event('input',{bubbles:true}));});
+                  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+                  await page.screenshot({path:'qa-screenshots/'+name+'-'+id+'-aaa200.png',fullPage:true,animations:'disabled'});
+                }
               }
             }
             await page.evaluate(()=>{document.querySelector('#langMenu button[data-lang="fr"]').click();const s=document.querySelector('#displaySizeRange');s.value=110;s.dispatchEvent(new Event('input',{bubbles:true}));});
