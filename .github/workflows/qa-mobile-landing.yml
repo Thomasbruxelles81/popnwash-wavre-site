@@ -79,6 +79,11 @@ jobs:
                     const isPhone=width<=700||(height<=550&&width<=1000&&width>height);
                     return {
                       scrollWidth:Math.max(root.scrollWidth,document.body.scrollWidth),
+                      overflowAtMeasurement:[...document.body.querySelectorAll('*')]
+                        .filter(el=>{const r=el.getBoundingClientRect(),cs=getComputedStyle(el);
+                          return cs.display!=='none'&&r.width>1&&(r.right>width+2||r.left< -2);})
+                        .slice(0,12).map(el=>{const r=el.getBoundingClientRect();
+                          return [el.tagName.toLowerCase(),el.id,typeof el.className==='string'?el.className.slice(0,48):'',Math.round(r.left),Math.round(r.right)];}),
                       state:{lang:root.lang,size:root.dataset.displayScale,theme:root.dataset.theme},
                       isPhone,quicks,details,header:box('.site-header'),logo:box('.brand-lockup'),
                       aa:box('#displaySizeButton'),theme:box('.theme-slider-shell'),
@@ -114,6 +119,7 @@ jobs:
                         menu:outer(document.querySelector('#menuButton')),beyond};
                     },width);
                     console.log('OVERFLOW-TRACE '+k+' '+JSON.stringify(trace));
+                    console.log('OVERFLOW-INSTANT '+k+' '+JSON.stringify(report.overflowAtMeasurement));
                     fail(k,'horizontal scroll '+report.scrollWidth+' > '+width);
                   }
                   if(report.headerOverlap)fail(k,'brand overlaps AAA');

@@ -595,20 +595,10 @@ html:has(body.pop-aaa-dragging) {overflow-anchor:none!important}
    grid-column:auto!important;grid-row:auto!important;
  }
 }
-/* Restore the real desktop navigation when French short labels fit.
-   For longer locales and large font scales the hamburger is safer. */
-@media(min-width:1360px) and (max-width:1600px){
- html[lang="fr"]:is([data-display-scale="80"],[data-display-scale="90"],
-  [data-display-scale="100"],[data-display-scale="110"],[data-display-scale="120"])
-  .site-header:not(.nav-fit-compact) .desktop-nav {
-   display:flex!important;
- }
- html[lang="fr"]:is([data-display-scale="80"],[data-display-scale="90"],
-  [data-display-scale="100"],[data-display-scale="110"],[data-display-scale="120"])
-  .site-header:not(.nav-fit-compact) .menu-button {
-   display:none!important;
- }
-}
+/* Medium-width headers: always use the explicitly labelled navigation menu.
+   Keeping French temporarily expanded while switching to a longer locale
+   caused a one-frame overflow in Firefox (especially 1440px / NL / 80%).
+   Full horizontal navigation remains available above 1600px when it fits. */
 
 
 /* V7.4 — do not leave an orphaned fifth card when the sixth
