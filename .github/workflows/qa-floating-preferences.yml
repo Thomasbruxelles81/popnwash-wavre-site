@@ -1,0 +1,34 @@
+name: QA floating preferences — mobile/tablet/desktop
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  floating-preferences:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Chromium Firefox WebKit
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium firefox webkit >/dev/null
+      - name: Serve candidate
+        run: |
+          python3 -m http.server 4173 >/tmp/pop-floating-http.log 2>&1 &
+          sleep 2
+      - name: Test scrolling, AAA slider, theme and 11-language selector controls
+        run: node qa/floating-preferences.mjs
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: floating-preferences-screenshots
+          path: qa-floating/
+          retention-days: 14
