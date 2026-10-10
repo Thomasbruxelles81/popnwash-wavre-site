@@ -46,7 +46,7 @@ html[data-theme="dark"] .refonte-utility{background:#24533a;color:#f9fff9}
 html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"]) .site-header .desktop-nav{display:none!important}
 html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"]) .site-header .menu-button{display:block!important}
 /* Header controls stay readable on light and dark while keeping brand beige. */
-html[data-theme] .site-header{background:rgba(255,230,188,.96)!important;color:#1c2821!important}
+html[data-theme] .site-header{background:#ffe6bc!important;color:#1c2821!important}
 html[data-theme] :is(.site-header .lang-button,.site-header .display-size-button){color:#1b2721!important}
 html[data-theme] .site-header .desktop-nav a{color:#1b2721!important}
 .site-header .lang-button,.site-header .display-size-button{min-height:44px}
@@ -116,6 +116,8 @@ html[data-theme="dark"] .refonte-loyalty :is(h2,p){color:#f3fff4}
 html[data-theme="dark"] .refonte-loyalty .rf-loyalty-bonus{background:#1b2e23;border-color:#49624e}
 html[data-theme="dark"] .refonte-loyalty .rf-loyalty-bonus :is(strong,output,p){color:#f3fff4}
 html[data-theme="dark"] .refonte-loyalty .rf-loyalty-original .loyalty-card .loyalty-copy :is(h3,p){color:#f3fff4!important}
+.services-secondary-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))!important}
+.services-secondary-grid .parcel-service{grid-column:1/-1}
 /* Large content blocks respond to their section width, not a hard-coded device class. */
 .pro-grid,.parking-grid,.faq-groups,.services-secondary-grid,.services-main-grid{gap:clamp(10px,1.3cqw,18px)!important}
 .refonte-pro-shortcuts{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0 20px}
