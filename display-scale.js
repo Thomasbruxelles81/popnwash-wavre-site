@@ -7,6 +7,17 @@
   const wrapper=document.getElementById('displaySizeControl');
   const trigger=document.getElementById('displaySizeButton');
   const panel=document.getElementById('displaySizePanel');
+  // Detach from the translucent sticky header: backdrop-filter makes
+  // position:fixed descendants move with that header during AAA reflow.
+  // A body-level dialog stays put under the user's thumb.
+  if(panel?.parentElement!==document.body)document.body.appendChild(panel);
+  function stableDialogPosition(){
+    if(!panel||!trigger)return;
+    const rect=trigger.getBoundingClientRect();
+    const top=Math.max(8,Math.min(Math.ceil(rect.bottom+12),Math.max(8,window.innerHeight-90)));
+    panel.style.setProperty('--pop-size-dialog-top',top+'px');
+  }
+
   const slider=document.getElementById('displaySizeRange');
   const reset=document.getElementById('displaySizeReset');
   const title=document.getElementById('displaySizeTitle');
@@ -105,6 +116,7 @@
     wrapper.classList.toggle('is-open',open);
     document.body.classList.toggle('display-size-open',open);
     if(open){
+      stableDialogPosition();
       const lang=document.getElementById('langMenu');
       const langButton=document.getElementById('langButton');
       if(lang){lang.hidden=true;if(langButton)langButton.setAttribute('aria-expanded','false');}
@@ -118,7 +130,7 @@
   slider.addEventListener('input',()=>setSize(Number(slider.value)));
   reset.addEventListener('click',()=>setSize(110));
   document.addEventListener('pointerdown',e=>{
-    if(!panel.hidden&&!wrapper.contains(e.target))show(false);
+    if(!panel.hidden&&!wrapper.contains(e.target)&&!panel.contains(e.target))show(false);
   });
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape'&&!panel.hidden){e.preventDefault();show(false,true);}
@@ -127,7 +139,7 @@
   document.getElementById('menuButton')?.addEventListener('click',()=>show(false));
   document.getElementById('themeSlider')?.addEventListener('input',()=>show(false));
   new MutationObserver(translate).observe(root,{attributes:true,attributeFilter:['lang']});
-  window.addEventListener('resize',()=>{synchronizeDesktopNavigation();fitHeadingWords();},{passive:true});
+  window.addEventListener('resize',()=>{synchronizeDesktopNavigation();fitHeadingWords();if(!panel.hidden)stableDialogPosition();},{passive:true});
   setSize(value,false);
   show(false);
 })();
