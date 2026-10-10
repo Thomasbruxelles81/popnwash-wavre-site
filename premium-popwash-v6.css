@@ -155,7 +155,7 @@ html[data-theme] .tariff-grid>.tariff-card {
 }
 /* Buttons have a diagonal coral-to-leaf gradient that shifts under the pointer,
    plus a compact pressure ripple on click (the JS never changes button labels). */
-.btn, .rf-bonus-choices button, .display-size-button, .lang-button, .theme-choice-button {
+.btn, .rf-bonus-choices button, .display-size-button, .lang-button {
   position:relative;
   transition:background-position .45s var(--pop-curve),border-color .3s ease,
     box-shadow .36s ease,transform .32s var(--pop-curve),filter .32s ease!important;
