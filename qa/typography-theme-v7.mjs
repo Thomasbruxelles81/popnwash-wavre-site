@@ -59,14 +59,16 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
       return {scroll:root.scrollWidth-root.clientWidth,theme:root.dataset.theme,
         labels,compact,mode:ctl.dataset.mode,faqClipped:faqLabels.filter(x=>x.clipped||x.bounds).slice(0,4),
         hasCorrectFrench:root.lang!=='fr'||(parcels.includes('bpost')&&/code après paiement/.test(code?.label||'')),
+        debugFAQ:{parcels,codeLabel:code?.label,lang:root.lang},
+        controlVisible:ctl.getBoundingClientRect().width>1&&getComputedStyle(ctl).display!=='none',
         shell:shellBox.width};
     });
     if(state.scroll>2)errors.push(mark+' horizontal overflow '+state.scroll);
     if(state.theme!==scheme||state.mode!==scheme)errors.push(mark+' theme state incorrect '+state.mode+'/'+state.theme);
     if(state.labels.some(x=>x.overflows))errors.push(mark+' truncated theme label '+JSON.stringify(state.labels));
-    if(state.compact&&state.labels.some(x=>!x.hidden||!x.svgVisible))errors.push(mark+' compact theme not icon-only');
+    if(state.compact&&state.controlVisible&&state.labels.some(x=>!x.hidden||!x.svgVisible))errors.push(mark+' compact theme not icon-only '+JSON.stringify(state.labels));
     if(state.faqClipped.length)errors.push(mark+' clipped FAQ '+JSON.stringify(state.faqClipped));
-    if(!state.hasCorrectFrench)errors.push(mark+' French FAQ heading or bpost not corrected');
+    if(!state.hasCorrectFrench)errors.push(mark+' French FAQ heading or bpost not corrected '+JSON.stringify(state.debugFAQ));
     if(pageErrors.length)errors.push(mark+' JS '+pageErrors.splice(0,2).join('|'));
     if(['fr','de','ru'].includes(lang)&&[110,200].includes(size)&&['iphone-mini','desktop'].includes(format)&&scheme==='dark'){
      const dir='qa-v7';fs.mkdirSync(dir,{recursive:true});
