@@ -224,3 +224,17 @@ html[data-theme="dark"] .social-link.facebook:hover{
   background-color:#2c83ed!important;background-image:none!important;
   border-color:#a7cdff!important;box-shadow:0 0 0 2px #8fc2ff50,0 13px 27px #1777ee4d!important
 }
+
+/* Six clear tariffs on wide screens; never leave the sixth alone on a desktop. */
+@container (min-width:1291px){
+ .tariff-grid>.tariff-card{
+   flex-basis:calc((100% - 5*var(--rf-card-gap))/6)!important;
+   width:calc((100% - 5*var(--rf-card-gap))/6)!important;
+ }
+}
+@media(min-width:1291px){
+ html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],[data-display-scale="200"]) .tariff-grid>.tariff-card{
+   flex-basis:calc((100% - 4*var(--rf-card-gap))/5)!important;
+   width:calc((100% - 4*var(--rf-card-gap))/5)!important;
+ }
+}

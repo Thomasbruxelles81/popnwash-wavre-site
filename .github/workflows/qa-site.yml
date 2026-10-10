@@ -367,9 +367,13 @@ jobs:
 
               const fb=p.locator('.social-link.facebook');
               const ig=p.locator('.social-link.instagram');
+              // Reset pointer before measuring the non-hover state. Playwright may
+              // leave it over a card after scrolling/full-page screenshots.
+              await p.mouse.move(2,2);await p.waitForTimeout(100);
               const fbBefore=await fb.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor);
               await fb.hover();await p.waitForTimeout(320);
               const fbAfter=await fb.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor);
+              console.log('FACEBOOK-HOVER',mode,'before',fbBefore,'after',fbAfter);
               if(fbBefore===fbAfter) failures.push(mode+': Facebook hover not visually changing');
               const igBefore=await ig.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor+'|'+getComputedStyle(el).boxShadow+'|'+getComputedStyle(el).transform);
               await ig.hover();await p.waitForTimeout(320);
