@@ -33,8 +33,8 @@
   function fit(){
     requested=false;
     localize();
-    // At small widths the visible, labelled Browse button is always used.
-    if(window.innerWidth<=1024){
+    // At small and medium widths the labelled Browse button is always used.
+    if(window.innerWidth<=1359){
       header.classList.add('nav-fit-compact');
       return;
     }
