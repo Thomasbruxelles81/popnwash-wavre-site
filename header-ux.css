@@ -129,6 +129,19 @@ html body #top.site-header .menu-button:focus-visible{
     display:flex!important;width:max-content!important;max-width:none!important;
     visibility:hidden!important;pointer-events:none!important;
   }
+  /* During the invisible full-nav measurement, the Browse button must NOT
+     consume 65px + its flex gap: it is absent when real nav is displayed. */
+  html body #top.site-header.pop-nav-measuring .menu-button {
+    display:none!important;
+  }
+}
+@media(min-width:1601px) {
+  /* Use the desktop canvas instead of wasting 320px at 1920px.
+     Still cap header width and let the JS fall back for long locales. */
+  html body #top.site-header {
+    width:calc(100% - 28px)!important;
+    max-width:1800px!important;
+  }
 }
 @media(min-width:1025px) and (max-width:1120px){
   html body #top.site-header .brand-lockup{flex-basis:175px!important;width:175px!important;max-width:175px!important}
