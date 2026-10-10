@@ -1,0 +1,34 @@
+name: QA typography / FAQ / theme V7
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  real-browsers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Chromium Firefox and WebKit
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium firefox webkit >/dev/null
+      - name: Serve candidate
+        run: |
+          python3 -m http.server 4173 > /tmp/popwash-v7.log 2>&1 &
+          sleep 2
+      - name: Test 11 languages, AAA, themes, FAQ and icon-only fallback
+        run: node qa/typography-theme-v7.mjs
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-v7-typography-and-theme
+          path: qa-v7/
+          retention-days: 14
