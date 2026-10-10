@@ -45,15 +45,10 @@
 
   /* Content-aware navigation: long translations must never collide with AAA. */
   function synchronizeDesktopNavigation(){
-    const header=document.querySelector('.site-header');
-    const nav=header?.querySelector('.desktop-nav');
-    if(!header||!nav)return;
-    header.classList.remove('nav-fit-compact');
-    if(getComputedStyle(nav).display==='none')return;
-    const links=[...nav.querySelectorAll('a')];
-    const collides=nav.getBoundingClientRect().right>trigger.getBoundingClientRect().left-8;
-    const wraps=links.some(a=>a.getBoundingClientRect().height>44||a.scrollWidth>a.clientWidth+2);
-    header.classList.toggle('nav-fit-compact',collides||wraps);
+    // Header size is fixed at 130% and independent of the AAA page slider.
+    // header-ux.js is the sole owner of nav-fit-compact and measures actual
+    // translated links with ResizeObserver and rAF. Competing class writes
+    // here caused a one-frame overflow and an incorrectly hidden Dutch menu.
   }
 
 
