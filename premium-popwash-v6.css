@@ -449,3 +449,15 @@ html[data-theme] .social-link.instagram:is(:hover,:focus-visible) {
   justify-content:center!important;
 }
 .contact-form-card .form-status {text-align:center!important}
+
+
+/* Consistent dark-mode AAA overlay after detaching it from the header. */
+html[data-theme="dark"] body>.display-size-panel {
+  background:#192820!important;
+  color:#f9fbf6!important;
+  border-color:rgba(255,255,255,.22)!important;
+}
+html[data-theme="dark"] body>.display-size-panel :is(p,.display-size-hint,.display-size-slider-caption,.display-size-range-limits) {
+  color:#d2dfd6!important;
+}
+html[data-theme="dark"] body>.display-size-panel .display-size-current {color:#a4eca3!important}
