@@ -9,9 +9,9 @@
   --pop-curve:cubic-bezier(.22,1,.36,1);
 }
 html[data-theme="light"] {
-  --cream:#fff0d0;
+  --cream:#f7f0df;
   --cream2:#fff8e9;
-  --ink:#171a17;
+  --ink:#161c1b;
   --muted:#526257;
   --red:#d82d4b;
   --red2:#bf2641;
@@ -40,15 +40,15 @@ html[data-theme="dark"] {
   --surface2:#203629;
   --line:rgba(230,255,229,.17);
 }
-html[data-theme="light"] body {background:#fff0d0!important;color:#171a17!important}
+html[data-theme="light"] body {background:#f7f0df!important;color:#161c1b!important}
 html[data-theme="dark"] body {background:#101b17!important;color:#f7f5eb!important}
 html[data-theme="light"] .site-header,
 html[data-theme="dark"] .site-header {
-  background:#ffe9c4!important;
+  background:#ffe6bc!important;
   border-color:rgba(6,75,48,.14)!important;
   box-shadow:0 12px 36px rgba(6,75,48,.10)!important;
 }
-html[data-theme="dark"] .site-header :is(.brand-title,.brand-place,.desktop-nav a,.menu-button,.lang-button) {color:#17221b!important}
+html[data-theme] .site-header :is(.brand-title,.brand-place,.desktop-nav a,.menu-button,.lang-button) {color:#161c1b!important}
 html[data-theme] .brand-logo-wrap img {object-fit:contain!important;filter:none!important}
 html[data-theme] .site-header .brand-lockup {transition:filter .32s var(--pop-curve)}
 html[data-theme] .site-header .brand-lockup:hover {filter:saturate(1.1)}
