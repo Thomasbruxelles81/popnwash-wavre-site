@@ -478,3 +478,101 @@ html:is([data-display-scale="150"],[data-display-scale="160"],[data-display-scal
   .tariff-grid>.tariff-card{transition:none!important}
 }
 
+/* V5C: genuinely fluid tariff card layout; the available width, not a fixed breakpoint, chooses density.
+   Incomplete rows are centered, and enlarged-type one-column cards are compact. */
+.tariff-grid{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:wrap!important;
+  justify-content:center!important;
+  align-items:stretch!important;
+  column-gap:var(--rf-card-gap)!important;
+  row-gap:var(--rf-card-gap)!important;
+  width:100%!important;
+  --rf-tariff-columns:3;
+}
+html[data-display-scale] .tariff-grid>.tariff-card{
+  flex:0 0 calc((100% - (var(--rf-tariff-columns) - 1)*var(--rf-card-gap))/var(--rf-tariff-columns))!important;
+  width:calc((100% - (var(--rf-tariff-columns) - 1)*var(--rf-card-gap))/var(--rf-tariff-columns))!important;
+  max-width:100%!important;
+  min-width:0!important;
+  min-height:clamp(130px,10.5vw,195px)!important;
+  height:auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:clamp(5px,.65vw,10px)!important;
+  padding:clamp(10px,1vw,22px)!important;
+  text-align:center!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card :is(.tariff-copy,.tariff-price){
+  width:auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  text-align:center!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card .tariff-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:4px!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card .tariff-price{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:0!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card .tariff-icon{
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+html[data-display-scale] .tariff-grid>.tariff-card .rf-tariff-cta{
+  text-align:center!important;
+  margin-inline:auto!important;
+}
+@media(max-width:600px){
+  html[data-display-scale] .tariff-grid>.tariff-card{
+    min-height:118px!important;
+    padding:9px!important;
+    gap:3px!important;
+  }
+}
+/* Only show compact horizontal rows at genuine one-column density,
+   never six big vertical cards. The JS owns this state. */
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card{
+  display:grid!important;
+  grid-template-columns:clamp(26px,7vw,36px) minmax(0,1fr) max-content!important;
+  grid-auto-rows:auto!important;
+  align-items:center!important;
+  justify-items:stretch!important;
+  column-gap:clamp(7px,2vw,14px)!important;
+  row-gap:2px!important;
+  min-height:76px!important;
+  padding:clamp(8px,2vw,13px)!important;
+}
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card .tariff-icon{
+  grid-column:1!important;
+  grid-row:1 / span 2!important;
+}
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card .tariff-copy{
+  grid-column:2!important;
+  text-align:left!important;
+  align-items:flex-start!important;
+}
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card .tariff-price{
+  grid-column:3!important;
+  text-align:right!important;
+  align-items:flex-end!important;
+}
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card .rf-tariff-cta{
+  grid-column:2 / 4!important;
+  justify-self:center!important;
+  margin:0!important;
+}
+html[data-display-scale] .tariff-grid[data-compact-rows="true"]>.tariff-card .tariff-price b{
+  font-size:clamp(19px,calc(17px * var(--display-scale)),32px)!important;
+}
+
