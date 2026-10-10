@@ -65,6 +65,10 @@ function render(){
 }
 const original=document.querySelector(".services-secondary-grid .loyalty-card"),mount=byId("refonteLoyaltyMount");
 if(mount&&original)mount.appendChild(original); // Existing click handlers and modal are preserved.
+/* Make the loyalty offer the very next section after prices, without replacing
+   any existing service blocks or disrupting their original event handlers. */
+const tariffs=document.querySelector(".tariff-grid"),loyalty=byId("fidelite");
+if(tariffs&&loyalty)tariffs.insertAdjacentElement("afterend",loyalty);
 function guide(key){
  const selected=document.querySelector('[data-guide-panel="'+key+'"]');if(!selected)return;
  document.querySelectorAll("[data-guide-panel]").forEach(el=>{if(el!==selected)el.open=false});

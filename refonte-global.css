@@ -206,3 +206,6 @@ html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scal
 /* Long new product titles need natural height, not legacy clipping. */
 .tariff-grid>.refonte-tariff-product{overflow:visible!important;height:auto!important;max-height:none!important}
 .tariff-grid>.refonte-tariff-product :is(.tariff-copy,.tariff-price,small,strong,span){overflow:visible!important;text-overflow:clip!important;white-space:normal!important}
+
+/* Loyalty follows the tariff grid directly: no giant repeated fleet photo in between. */
+#machines>.refonte-loyalty{width:100%!important;max-width:100%!important;margin:clamp(16px,2.8cqw,34px) 0!important}
