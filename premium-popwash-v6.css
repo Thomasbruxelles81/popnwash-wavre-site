@@ -561,3 +561,51 @@ html:has(body.pop-aaa-dragging) {overflow-anchor:none!important}
   text-align:center!important;
   justify-content:center!important;
 }
+
+
+/* V7.3 — A single long detergent title must never be forced into
+   the 90px centre cell of a compact icon | title | price tariff row. */
+@media(max-width:520px){
+ html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid>.tariff-card.refonte-tariff-product {
+   display:flex!important;
+   flex:0 0 100%!important;width:100%!important;max-width:100%!important;
+   min-height:155px!important;max-height:none!important;
+   flex-direction:column!important;align-items:center!important;
+   justify-content:center!important;
+   padding:14px!important;gap:8px!important;
+ }
+ html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid>.tariff-card.refonte-tariff-product .tariff-copy {
+   display:flex!important;flex-direction:column!important;align-items:center!important;
+   width:100%!important;max-width:100%!important;
+   grid-column:auto!important;grid-row:auto!important;
+ }
+ html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid>.tariff-card.refonte-tariff-product .tariff-price {
+   align-items:center!important;justify-self:center!important;text-align:center!important;
+   width:100%!important;grid-column:auto!important;grid-row:auto!important;
+ }
+ html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid>.tariff-card.refonte-tariff-product .rf-tariff-cta {
+   grid-column:auto!important;grid-row:auto!important;
+ }
+}
+/* Restore the real desktop navigation when French short labels fit.
+   For longer locales and large font scales the hamburger is safer. */
+@media(min-width:1360px) and (max-width:1600px){
+ html[lang="fr"]:is([data-display-scale="80"],[data-display-scale="90"],
+  [data-display-scale="100"],[data-display-scale="110"],[data-display-scale="120"])
+  .site-header:not(.nav-fit-compact) .desktop-nav {
+   display:flex!important;
+ }
+ html[lang="fr"]:is([data-display-scale="80"],[data-display-scale="90"],
+  [data-display-scale="100"],[data-display-scale="110"],[data-display-scale="120"])
+  .site-header:not(.nav-fit-compact) .menu-button {
+   display:none!important;
+ }
+}
