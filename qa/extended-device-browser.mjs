@@ -94,6 +94,7 @@ function stateChecks({lang,size,theme,width,height,deep}){
  if(desktopNav&&vis(desktopNav)&&rect(desktopNav).right>button.x+4)
    errs.push('desktop navigation overlaps display-size control');
  const mobileLinks=[['.mobile-quick-link.route','google.com/maps'],
+  ['.mobile-quick-link.tariffs','#machines'],
   ['.mobile-quick-link.machines','status.wi-line.fr'],
   ['.mobile-quick-link.invoices','status.wi-line.fr']];
  for(const [selector,target] of mobileLinks){
@@ -105,7 +106,7 @@ function stateChecks({lang,size,theme,width,height,deep}){
  if(theme==='dark'&&knobMiddle<=middle+1)errs.push('dark knob stuck left');
  if(theme==='light'&&knobMiddle>=middle-1)errs.push('light knob stuck right');
  if(mobile){
-  if(quick.length!==3)errs.push('quick buttons not all visible');
+  if(quick.length!==4)errs.push('four quick actions must be visible');
   for(const [i,a] of [...document.querySelectorAll('.mobile-quick-link')].entries()){
    if(!vis(a))continue;
    const title=a.querySelector('.mobile-quick-title'),detail=a.querySelector('.mobile-quick-detail');
