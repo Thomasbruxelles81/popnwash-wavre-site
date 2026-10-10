@@ -658,3 +658,116 @@ html:has(body.pop-aaa-dragging) {overflow-anchor:none!important}
    text-align:center!important;
  }
 }
+
+
+/* PR6 R1 — Header fitted by available space, not by accidental overflow.
+   The visible Dutch navigation gets the usable full desktop width;
+   translated small/medium headers reserve fixed control space. */
+.site-header {
+  box-sizing:border-box!important;
+  min-width:0!important;
+}
+.site-header .brand-lockup,
+.site-header .brand-logo-wrap,
+.site-header .brand-label,
+.site-header .header-actions {
+  box-sizing:border-box!important;
+}
+.site-header .header-actions{
+  max-width:100%!important;
+  min-width:0!important;
+  flex-shrink:0!important;
+}
+.site-header .lang-picker,
+.site-header #langButton,
+.site-header #themeControl,
+.site-header .display-size-control {
+  min-width:0!important;
+  flex-shrink:0!important;
+}
+@media(min-width:1601px){
+  html .site-header{
+    width:min(1880px,calc(100% - 34px))!important;
+    max-width:calc(100% - 34px)!important;
+    justify-content:space-between!important;
+    gap:clamp(8px,0.85vw,18px)!important;
+  }
+  html .site-header .desktop-nav{
+    min-width:0!important;
+    flex:1 1 auto!important;
+    gap:clamp(6px,.75vw,14px)!important;
+  }
+  html .site-header .desktop-nav a{
+    flex:0 0 auto!important;
+    white-space:nowrap!important;
+  }
+  html .site-header .brand-lockup{
+    flex:0 1 224px!important;
+    max-width:224px!important;
+  }
+}
+@media(min-width:1201px) and (max-width:1600px){
+  html .site-header{
+    width:calc(100% - 34px)!important;
+    max-width:calc(100% - 34px)!important;
+    padding-inline:clamp(9px,.95vw,16px)!important;
+    gap:clamp(6px,.8vw,12px)!important;
+    justify-content:space-between!important;
+  }
+  html .site-header .brand-lockup{
+    min-width:0!important;
+    width:auto!important;
+    max-width:min(220px,26vw)!important;
+    flex:0 1 min(220px,26vw)!important;
+  }
+  html .site-header .brand-label{
+    min-width:0!important;
+    flex:1 1 auto!important;
+  }
+  html .site-header .header-actions{
+    flex:0 0 auto!important;
+    width:auto!important;
+    gap:clamp(4px,.5vw,8px)!important;
+    margin-left:auto!important;
+  }
+  html .site-header .theme-slider-shell{
+    width:74px!important;
+    min-width:74px!important;
+  }
+  html .site-header .theme-option-label span{
+    display:none!important;
+  }
+  html .site-header #langButton{
+    min-width:48px!important;
+    width:auto!important;
+  }
+  html .site-header #menuButton{
+    flex:0 0 auto!important;
+    min-width:42px!important;
+  }
+}
+/* There is physically not room for both the name and six header controls
+   at 320px. Preserve the true POP'n WASH logo without clipping the wordmark. */
+@media(max-width:360px){
+  html .site-header .brand-label,
+  html .site-header .brand-title,
+  html .site-header .brand-main,
+  html .site-header .brand-place{
+    display:none!important;
+  }
+  html .site-header .brand-lockup{
+    flex:0 0 44px!important;
+    min-width:44px!important;
+    width:44px!important;
+    max-width:44px!important;
+    overflow:visible!important;
+  }
+  html .site-header .brand-logo-wrap{
+    max-width:44px!important;
+  }
+  html .site-header .header-actions{
+    flex:0 0 auto!important;
+    gap:2px!important;
+    min-width:0!important;
+  }
+}
