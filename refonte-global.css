@@ -23,7 +23,7 @@ main{overflow:clip}
 .refonte-utility>*{min-width:0;text-align:center}
 html[data-theme="dark"] .refonte-utility{background:#24533a;color:#f9fff9}
 .site-header{margin-top:8px!important}
-@media (min-width:1460px){
+@media (min-width:1360px){
  .site-header{width:min(1560px,calc(100% - 34px))!important;min-height:78px!important;height:auto!important;
    display:flex!important;align-items:center!important;gap:clamp(10px,1vw,20px)!important;
    padding:9px 16px!important}
@@ -39,7 +39,7 @@ html[data-theme="dark"] .refonte-utility{background:#24533a;color:#f9fff9}
  .site-header.nav-fit-compact .desktop-nav{display:none!important}
  .site-header.nav-fit-compact .menu-button{display:block!important}
 }
-@media (min-width:1201px) and (max-width:1459px){
+@media (min-width:1201px) and (max-width:1359px){
  .site-header .desktop-nav{display:none!important}
  .site-header .menu-button{display:block!important}
 }
@@ -71,11 +71,11 @@ html[data-theme] .site-header .desktop-nav a{color:#1b2721!important}
  grid-column:auto!important;min-width:0!important;min-height:180px!important;
  text-decoration:none!important;color:var(--ink)!important;cursor:pointer!important;
  display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;
- gap:8px!important;border-radius:19px!important;padding:clamp(12px,calc(13px * var(--display-scale)),23px)!important;
- overflow-wrap:anywhere!important;hyphens:auto;transition:border-color .2s,box-shadow .2s!important}
+ gap:8px!important;overflow:visible!important;border-radius:19px!important;padding:clamp(12px,calc(13px * var(--display-scale)),23px)!important;
+ overflow-wrap:normal!important;hyphens:none;transition:border-color .2s,box-shadow .2s!important}
 .tariff-grid>.tariff-card:is(:hover,:focus-visible){border-color:var(--green2)!important;box-shadow:0 0 0 2px rgba(25,160,57,.25)!important}
 .tariff-grid>.tariff-card .tariff-copy{display:grid!important;gap:3px!important;min-width:0!important}
-.tariff-grid>.tariff-card .tariff-copy strong{font-size:max(15px,calc(14px * var(--display-scale)))!important;line-height:1.3!important}
+.tariff-grid>.tariff-card .tariff-copy strong{font-size:max(15px,calc(14px * var(--display-scale)))!important;line-height:1.3!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important}
 .tariff-grid>.tariff-card .tariff-copy small{font-size:max(12px,calc(11px * var(--display-scale)))!important}
 .tariff-grid>.tariff-card .tariff-price{margin-top:auto!important;min-width:0!important}
 .tariff-grid>.tariff-card .tariff-price b{font-size:clamp(22px,calc(24px * var(--display-scale)),40px)!important;line-height:1.1!important;white-space:nowrap!important}
@@ -87,7 +87,7 @@ html[data-theme="dark"] .rf-tariff-cta{color:#8ee09e!important}
 .refonte-extra-guides>*{min-width:0}
 .visit-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
 .visit-card summary,.refonte-extra-guides summary{min-height:64px!important}
-.visit-summary-copy strong{font-size:max(15px,calc(14px * var(--display-scale)))!important}
+.visit-summary-copy strong{font-size:max(15px,calc(14px * var(--display-scale)))!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important}
 .visit-summary-copy small{font-size:max(12px,calc(11px * var(--display-scale)))!important}
 .visit-card-inner :is(li,p){font-size:max(14px,calc(13px * var(--display-scale)))!important;line-height:1.6!important}
 .rf-guide-fidelity .visit-icon,.rf-guide-terminal .visit-icon{font-weight:800;font-size:26px;display:grid;place-items:center}
@@ -174,6 +174,9 @@ html[data-theme="dark"] .refonte-pro-shortcuts a{background:#294535;color:#f5fff
  .tariff-grid{--rf-card-gap:8px}
  .tariff-grid>.tariff-card .tariff-copy strong{font-size:max(13px,calc(12px * var(--display-scale)))!important}
  .refonte-extra-guides .visit-card summary{align-items:flex-start}
+ .visit-card-grid .visit-card summary,.refonte-extra-guides .visit-card summary{padding:8px!important;gap:5px!important}
+ .visit-card-grid .visit-card .visit-icon,.refonte-extra-guides .visit-card .visit-icon{width:26px!important;min-width:26px!important;height:26px!important}
+ .visit-summary-copy strong{font-size:max(13px,calc(12px * var(--display-scale)))!important}
 }
 @media(max-width:360px){
  .tariff-grid>.tariff-card{padding:9px!important;min-height:153px!important}
@@ -192,3 +195,14 @@ html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scal
  flex-basis:calc((100% - var(--rf-card-gap))/2)!important;width:calc((100% - var(--rf-card-gap))/2)!important}
 }
 @media(prefers-reduced-motion:reduce){.tariff-grid>.tariff-card{transition:none!important}}
+
+/* Keep guide headings whole: tiny screens prioritize legible, unbroken labels. */
+@media(max-width:365px){
+  .visit-card-grid,.refonte-extra-guides{grid-template-columns:1fr!important}
+}
+@media(max-width:460px){
+ html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"]) :is(.visit-card-grid,.refonte-extra-guides){grid-template-columns:1fr!important}
+}
+/* Long new product titles need natural height, not legacy clipping. */
+.tariff-grid>.refonte-tariff-product{overflow:visible!important;height:auto!important;max-height:none!important}
+.tariff-grid>.refonte-tariff-product :is(.tariff-copy,.tariff-price,small,strong,span){overflow:visible!important;text-overflow:clip!important;white-space:normal!important}
