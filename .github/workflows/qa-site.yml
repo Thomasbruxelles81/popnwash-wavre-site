@@ -370,11 +370,18 @@ jobs:
               // Reset pointer before measuring the non-hover state. Playwright may
               // leave it over a card after scrolling/full-page screenshots.
               await p.mouse.move(2,2);await p.waitForTimeout(100);
-              const fbBefore=await fb.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor);
+              const inspectFacebook=el=>{
+                const st=getComputedStyle(el),before=getComputedStyle(el,'::before'),after=getComputedStyle(el,'::after');
+                return [st.backgroundImage,st.backgroundColor,st.boxShadow,st.transform,st.filter,
+                  st.borderColor,before.transform,after.transform].join('|');
+              };
+              const fbBefore=await fb.evaluate(inspectFacebook);
               await fb.hover();await p.waitForTimeout(320);
-              const fbAfter=await fb.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor);
-              console.log('FACEBOOK-HOVER',mode,'before',fbBefore,'after',fbAfter);
-              if(fbBefore===fbAfter) failures.push(mode+': Facebook hover not visually changing');
+              const fbAfter=await fb.evaluate(inspectFacebook);
+              const fbMeta=await fb.evaluate(el=>({hover:el.matches(':hover'),className:el.className,
+                 pointerEvents:getComputedStyle(el).pointerEvents}));
+              console.log('FACEBOOK-HOVER',mode,'before',fbBefore,'after',fbAfter,'details',JSON.stringify(fbMeta));
+              if(fbBefore===fbAfter) failures.push(mode+': Facebook hover has no visual effect');
               const igBefore=await ig.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor+'|'+getComputedStyle(el).boxShadow+'|'+getComputedStyle(el).transform);
               await ig.hover();await p.waitForTimeout(320);
               const igAfter=await ig.evaluate(el=>getComputedStyle(el).backgroundImage+'|'+getComputedStyle(el).backgroundColor+'|'+getComputedStyle(el).boxShadow+'|'+getComputedStyle(el).transform);
