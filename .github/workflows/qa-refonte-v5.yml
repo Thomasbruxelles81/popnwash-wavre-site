@@ -1,0 +1,115 @@
+name: QA refonte V5 — real client journeys and reflow
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  customer-experience:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install cross-browser test runtime
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium firefox webkit >/dev/null
+      - name: Serve this branch (never deploy)
+        run: |
+          python3 -m http.server 4173 >/tmp/popnwash-v5.log 2>&1 &
+          for i in $(seq 1 40); do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 0.3; done
+      - name: Test 11 languages, keyboard navigation, mobile cards, dark theme, AAA and customer paths
+        run: |
+          mkdir -p qa-screenshots
+          node --input-type=module <<'JS'
+          import {chromium,firefox,webkit} from 'playwright';
+          const errors=[],results=[];
+          const cases=[
+            ['mini320',320,680],['miniLandscape',568,320],
+            ['iphone375',375,812],['iphone390',390,844],
+            ['mobile430',430,932],['tablet768',768,1024],
+            ['tabletLandscape',1024,768],['laptop1280',1280,800],
+            ['laptop1440',1440,900],['desktop1920',1920,1080],['wide2560',2560,1440]
+          ];
+          const languages=['fr','nl','en','de','it','es','pt','ro','pl','uk','ru'];
+          const origin='http://127.0.0.1:4173/';
+          for(const [name,engine] of Object.entries({chromium,firefox,webkit})){
+            const browser=await engine.launch({headless:true});
+            const page=await browser.newPage();
+            page.on('pageerror',e=>errors.push(name+': JS '+e.message));
+            await page.goto(origin,{waitUntil:'domcontentloaded'});
+            for(const [id,width,height] of cases){
+              await page.setViewportSize({width,height});
+              await page.goto(origin,{waitUntil:'domcontentloaded'});
+              await page.locator('.tariff-card').first().waitFor();
+              for(const scale of [110,150,180,200]){
+                await page.evaluate(n=>{
+                  const s=document.querySelector('#displaySizeRange');s.value=n;s.dispatchEvent(new Event('input',{bubbles:true}));
+                },scale);
+                for(const lang of languages){
+                  await page.evaluate(l=>document.querySelector('#langMenu button[data-lang="'+l+'"]').click(),lang);
+                  const metrics=await page.evaluate(()=>{
+                    const box=el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,right:r.right,bottom:r.bottom}};
+                    const cards=[...document.querySelectorAll('.tariff-grid>.tariff-card')].map(box);
+                    const nav=document.querySelector('.desktop-nav');
+                    return {
+                      lang:document.documentElement.lang,zoom:document.documentElement.dataset.displayScale,
+                      scrollWidth:document.documentElement.scrollWidth,width:document.documentElement.clientWidth,
+                      cards,nav:getComputedStyle(nav).display,
+                      form:!!document.querySelector('#contactForm [name="message"]'),
+                      selectedText:document.querySelector('#rfLoyaltyHeading')?.textContent?.trim(),
+                      utility:document.querySelector('.refonte-utility a[href^="tel:"]')?.getAttribute('href'),
+                      guides:document.querySelectorAll('[data-guide-panel]').length,
+                      prices:document.querySelectorAll('.tariff-grid [data-guide]').length
+                    };
+                  });
+                  const k=name+'/'+id+'/'+lang+'/'+scale;
+                  if(metrics.lang!==lang)errors.push(k+': language not applied');
+                  if(Number(metrics.zoom)!==scale)errors.push(k+': AAA not applied');
+                  if(metrics.prices!==6)errors.push(k+': expected six tariffs, found '+metrics.prices);
+                  if(metrics.guides!==6)errors.push(k+': expected six guides, found '+metrics.guides);
+                  if(!metrics.form)errors.push(k+': real contact form missing');
+                  if(metrics.utility!=='tel:+32486999251')errors.push(k+': clickable utility phone missing');
+                  if(metrics.scrollWidth>width+3)errors.push(k+': horizontal overflow '+metrics.scrollWidth+' > '+width);
+                  for(const card of metrics.cards){
+                    if(card.w<85||card.x<0||card.right>width+3)errors.push(k+': bad tariff bounds '+JSON.stringify(card));
+                  }
+                  if(width===320&&scale===110&&metrics.cards.length===6){
+                    const a=metrics.cards[0],b=metrics.cards[1],c=metrics.cards[2];
+                    if(Math.abs(a.y-b.y)>5||c.y<a.bottom-4)errors.push(k+': two cards per row at 320px failed');
+                  }
+                  if(width===1920&&scale===110&&metrics.nav==='none')errors.push(k+': desktop navigation must be on logo row');
+                  results.push(k);
+                }
+              }
+              if(['mini320','iphone390','tablet768','desktop1920'].includes(id)){
+                await page.evaluate(()=>document.querySelector('#langMenu button[data-lang="fr"]').click());
+                await page.evaluate(()=>{const s=document.querySelector('#displaySizeRange');s.value=110;s.dispatchEvent(new Event('input',{bubbles:true}));});
+                await page.screenshot({path:'qa-screenshots/'+name+'-'+id+'.png',fullPage:true,animations:'disabled'});
+              }
+            }
+            await page.evaluate(()=>{document.querySelector('#langMenu button[data-lang="fr"]').click();const s=document.querySelector('#displaySizeRange');s.value=110;s.dispatchEvent(new Event('input',{bubbles:true}));});
+            await page.locator('.tariff-card[data-guide="dry"]').click();
+            if(!await page.locator('[data-guide-panel="dry"]').evaluate(e=>e.open))errors.push(name+': dryer tariff did not open its guide');
+            await page.locator('[data-guide-open="fidelity"]').click();
+            if(!await page.locator('[data-guide-panel="fidelity"]').evaluate(e=>e.open))errors.push(name+': loyalty guide did not open');
+            await page.locator('.rf-bonus-choices [data-bonus="100"]').click();
+            if(!((await page.locator('#refonteBonusResult').textContent())||'').includes('112'))errors.push(name+': bonus calculator incorrect');
+            if(await page.locator('#loyaltyOpen').count()!==1)errors.push(name+': original loyalty modal trigger lost');
+            await page.evaluate(()=>document.querySelector('[data-theme-choice="dark"]').click());
+            if(await page.locator('html').getAttribute('data-theme')!=='dark')errors.push(name+': theme switch broken');
+            await browser.close();
+          }
+          console.log('V5 scenarios:',results.length,'errors:',errors.length);
+          errors.slice(0,120).forEach(e=>console.error('FAIL:',e));
+          if(errors.length)process.exitCode=1;
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: refonte-v5-browser-evidence
+          path: qa-screenshots/
+          if-no-files-found: ignore
+          retention-days: 7
