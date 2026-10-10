@@ -241,3 +241,41 @@ html body #top.site-header .menu-button:focus-visible{
 }
 /* When the real header is hidden on scroll, the existing preferences dock
    keeps its own compact measurements from floating-preferences.css. */
+
+
+/* R11: stable widths across translated desktop navigation; never render an
+   oversized menu while a language/AAA change is awaiting animation frame. */
+@media (min-width:1025px) and (max-width:1599px){
+  html body #top.site-header:not(.pop-nav-measuring) .desktop-nav{display:none!important}
+  html body #top.site-header .menu-button{display:flex!important}
+}
+@media (min-width:1600px){
+  /* Expand into the real desktop width instead of forcing 8 translated links
+     into a 1560px capsule on 1920/2560px monitors. */
+  html body #top.site-header{
+    width:calc(100% - 28px)!important;
+    max-width:calc(100% - 28px)!important;
+  }
+  html body #top.site-header .desktop-nav{
+    flex:0 0 auto!important;
+    max-width:none!important;
+    min-width:0!important;
+    gap:clamp(3px,.35vw,8px)!important;
+  }
+}
+/* On 320px-class devices there is only room for the brand image plus the four
+   real controls. Keep the genuine accessible logo; never clip half the name. */
+@media(max-width:340px){
+  html body #top.site-header .brand-lockup{
+    flex:0 0 40px!important;
+    width:40px!important;min-width:40px!important;max-width:40px!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    justify-content:center!important;
+  }
+  html body #top.site-header .brand-label{display:none!important}
+  html body #top.site-header .brand-logo-wrap,
+  html body #top.site-header .brand-logo-wrap img{
+    width:40px!important;height:40px!important;min-width:40px!important;
+    flex-basis:40px!important;
+  }
+}
