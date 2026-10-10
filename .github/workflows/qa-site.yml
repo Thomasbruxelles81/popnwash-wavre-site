@@ -434,7 +434,12 @@ jobs:
                 if(rgbSum(base.formH3)<570) failures.push('dark: form heading '+base.formH3);
                 if(rgbSum(base.inputColor)<560||rgbSum(base.inputBg)>220) failures.push('dark: form input '+JSON.stringify(base));
               }
-              for(const sel of ['.desktop-nav a','.hero-wiline-card','.parking-card','.social-link.facebook','.social-link.instagram']){
+              const fullNavVisible=await p.locator('.desktop-nav a').first().isVisible();
+              const currentNavHover=fullNavVisible?'.desktop-nav a':'#menuButton';
+              if(!fullNavVisible&&!await p.locator('#menuButton').isVisible()){
+                failures.push(mode+': neither full navigation nor Browse button is visible');
+              }
+              for(const sel of [currentNavHover,'.hero-wiline-card','.parking-card','.social-link.facebook','.social-link.instagram']){
                 const el=p.locator(sel).first();
                 if(await el.count()){
                   const before=await el.evaluate(e=>getComputedStyle(e).backgroundColor+'|'+getComputedStyle(e).backgroundImage+'|'+getComputedStyle(e).boxShadow+'|'+getComputedStyle(e).transform);
