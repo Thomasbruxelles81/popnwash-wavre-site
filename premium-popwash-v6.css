@@ -266,3 +266,62 @@ html[data-theme="dark"] :where(a,button,input,summary,select,textarea):focus-vis
   }
   .popwash-ripple {display:none!important}
 }
+
+
+/* POP'n WASH V7 — reading integrity. Never show "Sombr", "bpos" or
+   cut off text: responsive theme labels and wrapping FAQ summaries. */
+.theme-control[data-compact-labels="true"] .theme-slider-shell {
+  width:clamp(58px,6vw,74px)!important;
+  min-width:58px!important;
+}
+.theme-control[data-compact-labels="true"] .theme-option-label {
+  min-width:0!important;
+  gap:0!important;
+}
+.theme-control[data-compact-labels="true"] .theme-option-label span {
+  display:none!important;
+}
+.theme-control[data-compact-labels="true"] .theme-option-label svg {
+  width:clamp(17px,1.4vw,20px)!important;
+  height:clamp(17px,1.4vw,20px)!important;
+  flex:none!important;
+}
+.theme-control:not([data-compact-labels="true"]) .theme-option-label {
+  min-width:0!important;
+  padding-inline:4px!important;
+}
+.theme-control:not([data-compact-labels="true"]) .theme-option-label span {
+  white-space:nowrap!important;
+}
+.faq-item summary {
+  min-width:0!important;
+  height:auto!important;
+  min-height:58px;
+  overflow:visible!important;
+  align-items:center!important;
+}
+.faq-item summary>span:first-child {
+  flex:1 1 auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:break-word!important;
+  word-break:normal!important;
+  hyphens:manual!important;
+  line-height:1.35!important;
+}
+.faq-item summary>b:last-child {
+  flex:0 0 28px!important;
+  align-self:center!important;
+}
+.faq-item .faq-answer {
+  min-width:0!important;
+  overflow-wrap:break-word!important;
+}
+.faq-item .faq-answer :is(p,strong,span,a) {
+  overflow-wrap:break-word;
+  word-break:normal;
+  hyphens:manual;
+}
