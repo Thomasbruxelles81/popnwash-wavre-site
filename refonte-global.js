@@ -82,6 +82,14 @@ document.querySelectorAll(".rf-bonus-choices button").forEach(el=>el.addEventLis
  if(!(el.dataset.bonus in credits))return;chosen=el.dataset.bonus;
  document.querySelectorAll(".rf-bonus-choices button").forEach(b=>b.classList.toggle("is-active",b===el));render();
 }));
+/* Preserve meaningful hover feedback even when browser emulation lacks CSS
+   hover capability. Focus-visible is provided in CSS for keyboard users. */
+document.querySelectorAll('a.social-link.facebook').forEach(link=>{
+  link.addEventListener('pointerenter',()=>link.classList.add('rf-hover-active'));
+  link.addEventListener('mouseenter',()=>link.classList.add('rf-hover-active'));
+  link.addEventListener('pointerleave',()=>link.classList.remove('rf-hover-active'));
+  link.addEventListener('mouseleave',()=>link.classList.remove('rf-hover-active'));
+});
 new MutationObserver(render).observe(html,{attributes:true,attributeFilter:["lang"]});
 render();
 })();

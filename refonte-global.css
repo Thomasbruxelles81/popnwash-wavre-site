@@ -238,3 +238,28 @@ html[data-theme="dark"] .social-link.facebook:hover{
    width:calc((100% - 4*var(--rf-card-gap))/5)!important;
  }
 }
+
+/* Release review: readable logo without legacy hidden label crop at 1366px. */
+@media(min-width:1201px){
+ .site-header .brand-lockup{width:auto!important;min-width:0!important;max-width:none!important;flex:0 0 auto!important;gap:8px!important}
+ .site-header .brand-label{width:auto!important;min-width:clamp(158px,calc(153px * var(--display-scale)),310px)!important;
+   max-width:none!important;overflow:visible!important;flex:0 0 auto!important}
+ .site-header .brand-title{transform:none!important;overflow:visible!important;
+   max-width:none!important;text-overflow:clip!important;white-space:normal!important}
+ .site-header .brand-main{display:block!important;white-space:nowrap!important;letter-spacing:-.025em!important}
+ .site-header .brand-place{display:block!important}
+}
+@media(min-width:1360px){
+ .site-header .brand-lockup{max-width:none!important;width:auto!important}
+}
+/* The how-to panel needs enough width for entire words on mid-sized phones.
+   The *tariff cards* remain two per row as requested. */
+@media(max-width:500px){
+ .visit-card-grid,.refonte-extra-guides{grid-template-columns:1fr!important}
+}
+/* Always-visible hover / keyboard feedback for the real social link. */
+a.social-link.facebook:is(:hover,:focus-visible,.rf-hover-active){
+ background:#1673ed!important;background-color:#1673ed!important;background-image:none!important;
+ border-color:#b5d7ff!important;box-shadow:0 0 0 2px rgba(106,176,255,.3),0 14px 26px rgba(17,78,165,.34)!important;
+ color:white!important;filter:brightness(1.07)!important;
+}
