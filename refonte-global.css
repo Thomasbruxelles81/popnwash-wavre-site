@@ -209,3 +209,18 @@ html:is([data-display-scale="170"],[data-display-scale="180"],[data-display-scal
 
 /* Loyalty follows the tariff grid directly: no giant repeated fleet photo in between. */
 #machines>.refonte-loyalty{width:100%!important;max-width:100%!important;margin:clamp(16px,2.8cqw,34px) 0!important}
+
+/* Normal-sized 390px phones have room for two tariff cards, but the fuller
+   instructional titles need one column to avoid splitting at punctuation. */
+@media(max-width:410px){
+  .visit-card-grid,.refonte-extra-guides{grid-template-columns:1fr!important}
+}
+/* Clear social hover affordance in both modes, not only a subtle transform. */
+html[data-theme="light"] .social-link.facebook:hover{
+  background-color:#136cdb!important;background-image:none!important;
+  border-color:#8fc2ff!important;box-shadow:0 13px 27px #1777ee48!important
+}
+html[data-theme="dark"] .social-link.facebook:hover{
+  background-color:#2c83ed!important;background-image:none!important;
+  border-color:#a7cdff!important;box-shadow:0 0 0 2px #8fc2ff50,0 13px 27px #1777ee4d!important
+}
