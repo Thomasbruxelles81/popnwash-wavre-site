@@ -163,3 +163,20 @@
 @media (prefers-reduced-motion:reduce){
   .products-card .product-chips-v2 > span {transition:none!important}
 }
+
+/* Large lettering on very narrow phones needs the whole tile width:
+   icon above the word rather than stealing 35px alongside it. */
+@container pop-distributor (max-width:360px){
+  html:is([data-display-scale="160"],[data-display-scale="170"],
+    [data-display-scale="180"],[data-display-scale="190"],
+    [data-display-scale="200"]) .product-chips-v2 > span {
+    flex-direction:column!important;
+    justify-content:center!important;
+    text-align:center!important;
+  }
+  html:is([data-display-scale="160"],[data-display-scale="170"],
+    [data-display-scale="180"],[data-display-scale="190"],
+    [data-display-scale="200"]) .product-chips-v2 > span > strong {
+    text-align:center!important;
+  }
+}
