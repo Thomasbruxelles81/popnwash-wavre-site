@@ -609,3 +609,20 @@ html:has(body.pop-aaa-dragging) {overflow-anchor:none!important}
    display:none!important;
  }
 }
+
+
+/* V7.4 — do not leave an orphaned fifth card when the sixth
+   full-width detergent card occupies the final row at high text scale.
+   This produces a balanced 2 + 2 + 1 + 1 grid without a half-empty row. */
+@media(min-width:381px) and (max-width:520px) {
+ html:is([data-display-scale="140"],[data-display-scale="150"],
+  [data-display-scale="160"],[data-display-scale="170"],
+  [data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid>.tariff-card:nth-last-child(2) {
+   flex:0 0 100%!important;
+   width:100%!important;
+   max-width:100%!important;
+   min-height:125px!important;
+   justify-self:center!important;
+ }
+}
