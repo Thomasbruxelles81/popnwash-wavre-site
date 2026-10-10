@@ -20,8 +20,9 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
    return {hidden:dock?.hidden,header:getComputedStyle(header).visibility,headParent:header?.querySelector('.header-actions')!==null}
   });
   if(!top.hidden||top.header==='hidden'||!top.headParent)errors.push(id+' initial header/dock mismatch '+JSON.stringify(top));
-  await page.evaluate(()=>window.scrollTo(0,850));
-  await page.waitForTimeout(240);
+  await page.evaluate(()=>window.scrollTo({top:850,behavior:'instant'}));
+  await page.waitForFunction(()=>window.scrollY>300&&document.getElementById('popFloatingPreferences')?.hidden===false,{timeout:6000});
+  await page.waitForTimeout(60);
   let floating=await page.evaluate(()=>{
    const dock=document.getElementById('popFloatingPreferences'),bounds=dock?.getBoundingClientRect(),header=document.getElementById('top');
    const theme=document.getElementById('themeControl');
@@ -75,8 +76,9 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
        ||scale.panelBounds.left<0||scale.panelBounds.right>w+1||scale.scrollW>scale.clientW+2)
       errors.push(id+' AAA/130 interaction '+JSON.stringify(scale));
     await page.locator('#popFloatingPreferences #displaySizeButton').click({timeout:4500});
-    await page.evaluate(()=>window.scrollTo(0,0));
-    await page.waitForTimeout(220);
+    await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+    await page.waitForFunction(()=>window.scrollY<20&&document.getElementById('popFloatingPreferences')?.hidden===true,{timeout:6000});
+    await page.waitForTimeout(60);
     const reset=await page.evaluate(()=>({
       hidden:document.getElementById('popFloatingPreferences').hidden,
       original:document.getElementById('top').contains(document.querySelector('.header-actions')),
@@ -87,8 +89,9 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
     }));
     if(!reset.hidden||!reset.original||reset.visibility==='hidden'||reset.lang!=='de'||reset.zoom!=='130'||reset.theme!=='dark')
       errors.push(id+' header restoration/state '+JSON.stringify(reset));
-    await page.evaluate(()=>window.scrollTo(0,650));
-    await page.waitForTimeout(130);
+    await page.evaluate(()=>window.scrollTo({top:650,behavior:'instant'}));
+    await page.waitForFunction(()=>window.scrollY>250&&document.getElementById('popFloatingPreferences')?.hidden===false,{timeout:6000});
+    await page.waitForTimeout(60);
     if(await page.locator('#popFloatingPreferences').isHidden())errors.push(id+' floating did not reappear on downward scroll');
   }catch(e){errors.push(id+' interaction '+e.message.substring(0,550))}
   await page.close();
