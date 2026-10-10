@@ -626,3 +626,35 @@ html:has(body.pop-aaa-dragging) {overflow-anchor:none!important}
    justify-self:center!important;
  }
 }
+
+
+/* Very narrow displays cannot fit an unsplittable translated detergent
+   word beside another card, even at 80–110% zoom. A full-width product
+   tile avoids forced breaks without shrinking the accessibility font. */
+@media(max-width:340px) {
+ html[data-display-scale] .tariff-grid>.tariff-card:nth-last-child(-n+2) {
+   flex:0 0 100%!important;
+   width:100%!important;
+   max-width:100%!important;
+   min-width:0!important;
+   box-sizing:border-box!important;
+ }
+ html[data-display-scale] .tariff-grid>.tariff-card.refonte-tariff-product {
+   display:flex!important;
+   flex-direction:column!important;
+   align-items:center!important;
+   justify-content:center!important;
+   min-height:150px!important;
+   grid-template-columns:none!important;
+   gap:8px!important;
+   padding:13px!important;
+ }
+ html[data-display-scale] .tariff-grid>.tariff-card.refonte-tariff-product
+  :is(.tariff-copy,.tariff-price,.rf-tariff-cta) {
+   grid-column:auto!important;grid-row:auto!important;
+   width:100%!important;
+   justify-self:center!important;
+   align-items:center!important;
+   text-align:center!important;
+ }
+}
