@@ -77,6 +77,69 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
     }
     summaries.push({engine:engineName,format,lang,size,scheme,compact:state.compact});
   }
+
+  /* Real pointer interaction regression from customer screenshot:
+     moving the AAA slider at 130% must NOT move its dialog beneath the cursor. */
+  await page.evaluate(()=>{
+    document.querySelector('[data-lang="fr"]').click();
+    document.querySelector('[data-theme-choice="light"]').click();
+    let slider=document.getElementById('displaySizeRange');
+    slider.value='110';
+    slider.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+  await page.locator('#displaySizeButton').click();
+  const popup=page.locator('#displaySizePanel');
+  const slider=page.locator('#displaySizeRange');
+  if(!await popup.isVisible())errors.push(engineName+'/'+format+' AAA panel not visible after opening');
+  const initial=await popup.boundingBox();
+  const sliderPos=await slider.boundingBox();
+  if(!initial||!sliderPos)errors.push(engineName+'/'+format+' AAA panel or slider has no bounding box');
+  else{
+    if(initial.x<0||initial.y<0||initial.x+initial.width>w+2||initial.y+initial.height>h+2)
+      errors.push(engineName+'/'+format+' AAA panel extends beyond viewport '+JSON.stringify(initial));
+    // Using real pointer movement rather than setting the value programmatically.
+    await page.mouse.move(sliderPos.x+sliderPos.width*.25,sliderPos.y+sliderPos.height/2);
+    await page.mouse.down();
+    await page.mouse.move(sliderPos.x+sliderPos.width*.45,sliderPos.y+sliderPos.height/2,{steps:6});
+    await page.mouse.up();
+    const after130=Number(await page.locator('html').getAttribute('data-display-scale'));
+    const popup130=await popup.boundingBox();
+    if(!popup130||Math.abs(popup130.y-initial.y)>3)
+      errors.push(engineName+'/'+format+' AAA popup jumped after 130% drag '+JSON.stringify({initial,popup130}));
+    // The thumb must remain accessible after the first layout reflow.
+    const slider130=await slider.boundingBox();
+    if(slider130){
+      await page.mouse.move(slider130.x+slider130.width*.46,slider130.y+slider130.height/2);
+      await page.mouse.down();
+      await page.mouse.move(slider130.x+slider130.width*.75,slider130.y+slider130.height/2,{steps:6});
+      await page.mouse.up();
+    }
+    const afterContinue=Number(await page.locator('html').getAttribute('data-display-scale'));
+    if(afterContinue<=after130)
+      errors.push(engineName+'/'+format+' AAA slider cannot increase after reflow '+JSON.stringify({after130,afterContinue}));
+    if(!await popup.isVisible())
+      errors.push(engineName+'/'+format+' AAA popup closed while dragging');
+  }
+  await page.keyboard.press('Escape');
+  const layout=await page.evaluate(()=>{
+    let vending=document.querySelector('.refonte-tariff-product');
+    let box=vending?.getBoundingClientRect();
+    let textPieces=vending?[...vending.querySelectorAll('.tariff-copy strong,.tariff-copy small,.tariff-price b,.tariff-price span')]:[];
+    const clipped=textPieces.filter(n=>n.scrollWidth>n.clientWidth+3||n.getBoundingClientRect().right>box.right+3).map(n=>n.textContent?.trim());
+    const submit=document.querySelector('.contact-form-card .form-submit');
+    const form=submit?.closest('form')?.getBoundingClientRect();
+    const submitRect=submit?.getBoundingClientRect();
+    const social=[...document.querySelectorAll('.social-link.facebook,.social-link.instagram')].map(x=>({name:x.className,bg:getComputedStyle(x).backgroundColor,gradient:getComputedStyle(x).backgroundImage}));
+    return {vendingWidth:box?.width,clipped,formCenterOffset:form&&submitRect?Math.abs((form.left+form.right)/2-(submitRect.left+submitRect.right)/2):null,social};
+  });
+  if(layout.vendingWidth!=null&&layout.vendingWidth<Math.min(196,w-32))
+    errors.push(engineName+'/'+format+' vending card remains too narrow '+layout.vendingWidth);
+  if(layout.clipped.length)
+    errors.push(engineName+'/'+format+' vending card clipped text '+JSON.stringify(layout.clipped));
+  if(layout.formCenterOffset!=null&&layout.formCenterOffset>5)
+    errors.push(engineName+'/'+format+' submit not centered '+layout.formCenterOffset);
+  if(layout.social.some(x=>/24,\s*119,\s*242|131,\s*58,\s*180|253,\s*29,\s*29/.test(x.bg+' '+x.gradient)))
+    errors.push(engineName+'/'+format+' social colors are not POPn WASH brand '+JSON.stringify(layout.social));
   await page.close();
  }
  await browser.close();
