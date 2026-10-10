@@ -1,0 +1,139 @@
+/* POP'n WASH — compact floating preferences (only AAA / sun-moon / language).
+   The live header controls are MOVED here on scroll, never cloned. */
+.pop-floating-dock[hidden] {display:none!important}
+.pop-floating-dock {
+  position:fixed!important;
+  top:max(8px,env(safe-area-inset-top))!important;
+  right:max(8px,env(safe-area-inset-right))!important;
+  left:auto!important;bottom:auto!important;
+  z-index:10020!important;
+  display:flex!important;align-items:center!important;justify-content:flex-end!important;
+  width:max-content!important;max-width:calc(100vw - 16px - env(safe-area-inset-right))!important;
+  min-height:0!important;
+  padding:5px!important;
+  border-radius:17px!important;
+  border:1px solid rgba(6,75,48,.22)!important;
+  background:#ffe6bc!important;
+  box-shadow:0 8px 30px rgba(6,48,30,.22),0 1px 3px rgba(0,0,0,.07)!important;
+  backdrop-filter:blur(14px) saturate(145%);
+  -webkit-backdrop-filter:blur(14px) saturate(145%);
+  pointer-events:auto!important;
+  isolation:isolate;
+}
+@media(prefers-reduced-motion:no-preference) {
+  .pop-floating-dock {animation:pop-preferences-enter .22s cubic-bezier(.22,1,.36,1)}
+  @keyframes pop-preferences-enter {
+    from{opacity:.2;transform:translateY(-8px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+}
+/* Header still takes its natural height in document flow, so revealing the
+   floating dock cannot jump the page or disrupt a user's scroll position. */
+#top.site-header.pop-floating-replaced {
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  min-height:var(--pop-stable-header-height,60px)!important;
+  height:var(--pop-stable-header-height,60px)!important;
+  transition:none!important;
+}
+/* In floating mode the DOM contains just the three working preferences.
+   No hamburger, logo or duplicate navigation is displayed. */
+.pop-floating-dock>.header-actions {
+  display:flex!important;
+  flex:0 0 auto!important;
+  align-items:center!important;justify-content:flex-end!important;
+  gap:5px!important;
+  width:auto!important;max-width:100%!important;min-width:0!important;
+  padding:0!important;margin:0!important;
+  overflow:visible!important;
+}
+.pop-floating-dock .menu-button {display:none!important}
+.pop-floating-dock .display-size-control,
+.pop-floating-dock .lang-picker,
+.pop-floating-dock #themeControl {
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  flex:0 0 auto!important;min-width:0!important;position:relative!important;
+}
+.pop-floating-dock #displaySizeButton {
+  width:42px!important;height:40px!important;min-width:42px!important;
+  padding:3px!important;border-radius:12px!important;
+  background:#fffaf0!important;color:#142c1e!important;
+  border:1px solid rgba(6,75,48,.16)!important;
+}
+.pop-floating-dock #displaySizeButton img {width:34px!important;height:30px!important;object-fit:contain!important}
+.pop-floating-dock #themeControl .theme-slider-shell {
+  width:70px!important;height:40px!important;min-width:70px!important;max-width:70px!important;
+  background:#fffaf0!important;border-radius:12px!important;
+  border:1px solid rgba(6,75,48,.16)!important;overflow:hidden!important;
+}
+.pop-floating-dock #themeControl .theme-option-label {
+  min-width:0!important;gap:0!important;padding:0!important;
+}
+.pop-floating-dock #themeControl .theme-option-label span {
+  display:none!important;
+}
+.pop-floating-dock #themeControl .theme-option-label svg {
+  display:block!important;width:19px!important;height:19px!important;flex:0 0 19px!important;
+}
+.pop-floating-dock #themeControl .theme-knob {
+  height:calc(100% - 8px)!important;
+  width:calc(50% - 4px)!important;
+}
+.pop-floating-dock #themeControl .theme-choice-button {
+  position:absolute!important;
+  top:0!important;bottom:0!important;width:50%!important;
+}
+.pop-floating-dock #themeControl .theme-choice-light {left:0!important}
+.pop-floating-dock #themeControl .theme-choice-dark {left:50%!important}
+.pop-floating-dock .lang-button {
+  width:auto!important;min-width:58px!important;height:40px!important;
+  padding:0 7px!important;gap:4px!important;
+  border-radius:12px!important;
+  background:#fffaf0!important;color:#17231c!important;
+  border:1px solid rgba(6,75,48,.16)!important;
+  font-size:14px!important;
+}
+.pop-floating-dock #langCode,
+.pop-floating-dock #langFlag {color:#17231c!important}
+.pop-floating-dock #langFlag {font-size:18px!important}
+.pop-floating-dock .lang-button .chev {font-size:16px!important;color:#26372b!important}
+.pop-floating-dock .lang-menu {
+  position:absolute!important;right:0!important;left:auto!important;
+  top:calc(100% + 12px)!important;bottom:auto!important;
+  z-index:10025!important;
+  width:min(235px,calc(100vw - 18px))!important;
+  max-height:min(445px,calc(100dvh - 78px))!important;
+  overflow-y:auto!important;
+  background:#fffaf0!important;color:#17231c!important;
+  box-shadow:0 16px 40px rgba(5,36,19,.28)!important;
+}
+/* The AAA panel is already at body level. When floating, give it priority
+   over the high-z capsule; otherwise it could open behind its trigger. */
+body:has(.pop-floating-dock:not([hidden])) #displaySizePanel {
+  z-index:10040!important;
+  width:min(355px,calc(100vw - 20px))!important;
+  max-height:calc(100dvh - 76px)!important;
+  overflow-y:auto!important;
+}
+.pop-floating-dock :is(button,input):focus-visible {
+  outline:3px solid #e95060!important;outline-offset:2px!important;
+}
+/* Unreadably narrow devices show the flag alone but keep the full accessible
+   name of the currently selected language on the original button. */
+@media(max-width:470px){
+  .pop-floating-dock {padding:4px!important;gap:3px!important}
+  .pop-floating-dock>.header-actions {gap:4px!important}
+  .pop-floating-dock #displaySizeButton {
+    width:39px!important;min-width:39px!important;height:38px!important;
+  }
+  .pop-floating-dock #themeControl .theme-slider-shell {
+    width:64px!important;min-width:64px!important;max-width:64px!important;height:38px!important;
+  }
+  .pop-floating-dock .lang-button {
+    min-width:42px!important;width:42px!important;height:38px!important;
+    padding:0 4px!important;
+  }
+  .pop-floating-dock #langCode,.pop-floating-dock .lang-button .chev {display:none!important}
+}
+@media(prefers-reduced-motion:reduce){.pop-floating-dock{animation:none!important}}

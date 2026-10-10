@@ -266,3 +266,395 @@ html[data-theme="dark"] :where(a,button,input,summary,select,textarea):focus-vis
   }
   .popwash-ripple {display:none!important}
 }
+
+
+/* POP'n WASH V7 — reading integrity. Never show "Sombr", "bpos" or
+   cut off text: responsive theme labels and wrapping FAQ summaries. */
+.theme-control[data-compact-labels="true"] .theme-slider-shell {
+  width:clamp(58px,6vw,74px)!important;
+  min-width:58px!important;
+}
+.theme-control[data-compact-labels="true"] .theme-option-label {
+  min-width:0!important;
+  gap:0!important;
+}
+.theme-control[data-compact-labels="true"] .theme-option-label span {
+  display:none!important;
+}
+.theme-control[data-compact-labels="true"] .theme-option-label svg {
+  width:clamp(17px,1.4vw,20px)!important;
+  height:clamp(17px,1.4vw,20px)!important;
+  flex:none!important;
+}
+.theme-control:not([data-compact-labels="true"]) .theme-option-label {
+  min-width:0!important;
+  padding-inline:4px!important;
+}
+.theme-control:not([data-compact-labels="true"]) .theme-option-label span {
+  white-space:nowrap!important;
+}
+.faq-item summary {
+  min-width:0!important;
+  height:auto!important;
+  min-height:58px;
+  overflow:visible!important;
+  align-items:center!important;
+}
+.faq-item summary>span:first-child {
+  flex:1 1 auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:break-word!important;
+  word-break:normal!important;
+  hyphens:manual!important;
+  line-height:1.35!important;
+}
+.faq-item summary>b:last-child {
+  flex:0 0 28px!important;
+  align-self:center!important;
+}
+.faq-item .faq-answer {
+  min-width:0!important;
+  overflow-wrap:break-word!important;
+}
+.faq-item .faq-answer :is(p,strong,span,a) {
+  overflow-wrap:break-word;
+  word-break:normal;
+  hyphens:manual;
+}
+
+
+/* V7.1 — no cropped detergent-vending tariff card, even at 130–200% AAA.
+   Flexible basis intentionally lets the 6th product card wrap to a new
+   centered row when a narrower 6-across row would break text. */
+.tariff-grid>.tariff-card.refonte-tariff-product {
+  flex:1 1 clamp(205px,18vw,260px)!important;
+  min-width:min(100%,205px)!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  min-height:190px!important;
+  padding:clamp(13px,1.4vw,22px)!important;
+  overflow:visible!important;
+  gap:12px!important;
+}
+.tariff-grid>.tariff-card.refonte-tariff-product .tariff-copy,
+.tariff-grid>.tariff-card.refonte-tariff-product .tariff-price {
+  min-width:0!important;width:100%!important;
+  text-align:center!important;justify-items:center!important;
+}
+.tariff-grid>.tariff-card.refonte-tariff-product .tariff-copy :is(strong,small),
+.tariff-grid>.tariff-card.refonte-tariff-product .tariff-price :is(b,span),
+.tariff-grid>.tariff-card.refonte-tariff-product .rf-tariff-cta {
+  max-width:100%!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:break-word!important;
+  word-break:normal!important;
+  hyphens:manual!important;
+  line-height:1.3!important;
+}
+.tariff-grid>.tariff-card.refonte-tariff-product .tariff-copy strong {
+  font-size:clamp(15px,calc(13px * var(--display-scale)),26px)!important;
+  letter-spacing:-.025em!important;
+}
+.tariff-grid>.tariff-card.refonte-tariff-product .tariff-price b {
+  font-size:clamp(19px,calc(18px * var(--display-scale)),34px)!important;
+}
+.tariff-grid>.tariff-card.refonte-tariff-product .tariff-icon {
+  align-self:center!important;flex-shrink:0!important;
+}
+.tariff-grid>.tariff-card.refonte-tariff-product .rf-tariff-cta {
+  margin-inline:auto!important;text-align:center!important;
+}
+@media(max-width:480px){
+ .tariff-grid>.tariff-card.refonte-tariff-product {
+  flex:1 1 100%!important;min-width:0!important;
+ }
+}
+/* Keep the AAA dialog independent of sticky header / transformed images.
+   Actual dialog lives under <body> as a portal for fixed positioning. */
+body>.display-size-panel {
+  position:fixed!important;
+  z-index:5000!important;
+  top:var(--pop-size-dialog-top,80px)!important;
+  left:auto!important;right:clamp(10px,2vw,22px)!important;
+  width:min(355px,calc(100dvw - 20px))!important;
+  max-width:calc(100dvw - 20px)!important;
+  max-height:calc(100dvh - var(--pop-size-dialog-top,80px) - 12px)!important;
+  overflow-x:hidden!important;overflow-y:auto!important;
+  box-sizing:border-box!important;
+  overscroll-behavior:contain!important;
+  touch-action:pan-y;
+  isolation:isolate;
+  background:#fffaf0!important;color:#161c1b!important;
+}
+body>.display-size-panel[hidden]{display:none!important}
+body>.display-size-panel .display-size-range {
+  touch-action:none!important;
+  width:100%!important;
+  min-width:0!important;
+  position:relative!important;
+  z-index:2!important;
+  margin:0!important;
+}
+body>.display-size-panel .display-size-slider-caption {
+  min-width:0!important;grid-template-columns:1fr auto 1fr!important;
+}
+body>.display-size-panel .display-size-slider-caption>* {
+  min-width:0!important;
+}
+body>.display-size-panel .display-size-current {
+  white-space:nowrap!important;position:static!important;
+}
+body>.display-size-panel .display-size-range-limits {min-width:0!important}
+body>.display-size-panel .display-size-button img {
+  pointer-events:none!important;
+}
+/* Brand-specific buttons: still Facebook / Instagram links, but POP'n WASH
+   forest-green and coral instead of off-brand blue/purple gradients. */
+html[data-theme] .social-link.facebook {
+  background:#176738!important;
+  background-image:linear-gradient(125deg,#176738,#409020)!important;
+  border-color:rgba(163,232,152,.38)!important;color:#fff!important;
+}
+html[data-theme] .social-link.instagram {
+  background:#b62847!important;
+  background-image:linear-gradient(125deg,#b62847,#e95060)!important;
+  border-color:rgba(255,206,204,.44)!important;color:#fff!important;
+}
+html[data-theme] .social-link.facebook:is(:hover,:focus-visible) {
+  background:#409020!important;
+  background-image:linear-gradient(110deg,#409020,#064b30)!important;
+  border-color:#b1e9a6!important;
+  box-shadow:0 0 0 2px rgba(64,144,32,.22),0 15px 30px rgba(6,75,48,.24)!important;
+}
+html[data-theme] .social-link.instagram:is(:hover,:focus-visible) {
+  background:#e95060!important;
+  background-image:linear-gradient(110deg,#e95060,#064b30)!important;
+  border-color:#ffc8c8!important;
+  box-shadow:0 0 0 2px rgba(233,80,96,.2),0 15px 30px rgba(233,80,96,.2)!important;
+}
+/* Center the action in the contact card, keep success/error feedback separate. */
+.contact-form-card form>.form-submit {
+  justify-self:center!important;
+  width:max-content!important;
+  max-width:100%!important;
+  min-width:min(210px,100%)!important;
+  white-space:normal!important;
+  text-align:center!important;
+  justify-content:center!important;
+}
+.contact-form-card .form-status {text-align:center!important}
+
+
+/* Consistent dark-mode AAA overlay after detaching it from the header. */
+html[data-theme="dark"] body>.display-size-panel {
+  background:#192820!important;
+  color:#f9fbf6!important;
+  border-color:rgba(255,255,255,.22)!important;
+}
+html[data-theme="dark"] body>.display-size-panel :is(p,.display-size-hint,.display-size-slider-caption,.display-size-range-limits) {
+  color:#d2dfd6!important;
+}
+html[data-theme="dark"] body>.display-size-panel .display-size-current {color:#a4eca3!important}
+
+
+/* Keep the AAA slider stationary during live changes of the page layout.
+   Typography above the slider is frozen in JS until pointerup. */
+body.pop-aaa-dragging>.display-size-panel {
+  height:var(--pop-locked-dialog-height,auto)!important;
+  min-height:var(--pop-locked-dialog-height,0px)!important;
+  max-height:min(var(--pop-locked-dialog-height,100dvh),calc(100dvh - var(--pop-size-dialog-top,80px) - 12px))!important;
+  overflow-y:auto!important;
+  contain:layout!important;
+}
+body.pop-aaa-dragging>.display-size-panel .display-size-range {
+  touch-action:none!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+}
+body.pop-aaa-dragging {overscroll-behavior:contain}
+html:has(body.pop-aaa-dragging) {overflow-anchor:none!important}
+
+
+/* V7 final responsive review — text stays whole in all translated titles.
+   At high AAA use fewer columns rather than splitting individual words. */
+@media (max-width:700px) {
+  .products-card h3 {
+    font-size:clamp(24px,calc(20px * var(--display-scale)),34px)!important;
+    line-height:1.18!important;
+    letter-spacing:-.02em!important;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+    hyphens:none!important;
+  }
+}
+@media(max-width:500px) {
+  html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .products-card .product-chips-v2 {
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  .products-card .product-chips-v2>span {
+    min-width:0!important;max-width:100%!important;
+    padding:12px 14px!important;
+    height:auto!important;min-height:80px!important;
+  }
+  .products-card .product-chips-v2 strong{
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+    hyphens:none!important;
+    white-space:normal!important;
+  }
+}
+/* The full navigation is shown only when the available width AND font scale
+   can genuinely fit every label. Otherwise the accessible hamburger is used. */
+@media (max-width:1600px) {
+  html .site-header .desktop-nav {display:none!important}
+  html .site-header .menu-button {display:block!important}
+}
+@media (min-width:1601px) {
+  html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .site-header .desktop-nav {display:none!important}
+  html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .site-header .menu-button {display:block!important}
+}
+/* On the smallest phones, a scaled-up wordmark cannot compete with the
+   essential controls. Keep the REAL logo image; hide only redundant text. */
+@media(max-width:360px) {
+  html:is([data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"],
+  [data-display-scale="160"],[data-display-scale="170"],[data-display-scale="180"],
+  [data-display-scale="190"],[data-display-scale="200"]) .site-header .brand-label {
+    display:none!important;
+  }
+  html:is([data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"],
+  [data-display-scale="160"],[data-display-scale="170"],[data-display-scale="180"],
+  [data-display-scale="190"],[data-display-scale="200"]) .site-header .brand-lockup {
+    width:50px!important;min-width:50px!important;max-width:50px!important;
+    flex:0 0 50px!important;
+  }
+}
+/* The submit button must be centered relative to the *whole form* even
+   when the form's other content is longer or forces its intrinsic width. */
+.contact-form-card #contactForm {
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  justify-items:stretch!important;
+}
+.contact-form-card #contactForm>.form-submit {
+  grid-column:1 / -1!important;
+  justify-self:center!important;
+  margin-left:auto!important;margin-right:auto!important;
+  display:inline-flex!important;
+  width:fit-content!important;max-width:100%!important;
+  min-width:min(210px,100%)!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  justify-content:center!important;
+}
+
+
+/* V7.3 — A single long detergent title must never be forced into
+   the 90px centre cell of a compact icon | title | price tariff row. */
+@media(max-width:520px){
+ html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid>.tariff-card.refonte-tariff-product {
+   display:flex!important;
+   flex:0 0 100%!important;width:100%!important;max-width:100%!important;
+   min-height:155px!important;max-height:none!important;
+   flex-direction:column!important;align-items:center!important;
+   justify-content:center!important;
+   padding:14px!important;gap:8px!important;
+ }
+ html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid>.tariff-card.refonte-tariff-product .tariff-copy {
+   display:flex!important;flex-direction:column!important;align-items:center!important;
+   width:100%!important;max-width:100%!important;
+   grid-column:auto!important;grid-row:auto!important;
+ }
+ html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid>.tariff-card.refonte-tariff-product .tariff-price {
+   align-items:center!important;justify-self:center!important;text-align:center!important;
+   width:100%!important;grid-column:auto!important;grid-row:auto!important;
+ }
+ html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid>.tariff-card.refonte-tariff-product .rf-tariff-cta {
+   grid-column:auto!important;grid-row:auto!important;
+ }
+}
+/* Restore the real desktop navigation when French short labels fit.
+   For longer locales and large font scales the hamburger is safer. */
+@media(min-width:1360px) and (max-width:1600px){
+ html[lang="fr"]:is([data-display-scale="80"],[data-display-scale="90"],
+  [data-display-scale="100"],[data-display-scale="110"],[data-display-scale="120"])
+  .site-header:not(.nav-fit-compact) .desktop-nav {
+   display:flex!important;
+ }
+ html[lang="fr"]:is([data-display-scale="80"],[data-display-scale="90"],
+  [data-display-scale="100"],[data-display-scale="110"],[data-display-scale="120"])
+  .site-header:not(.nav-fit-compact) .menu-button {
+   display:none!important;
+ }
+}
+
+
+/* V7.4 — do not leave an orphaned fifth card when the sixth
+   full-width detergent card occupies the final row at high text scale.
+   This produces a balanced 2 + 2 + 1 + 1 grid without a half-empty row. */
+@media(min-width:381px) and (max-width:520px) {
+ html:is([data-display-scale="140"],[data-display-scale="150"],
+  [data-display-scale="160"],[data-display-scale="170"],
+  [data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid>.tariff-card:nth-last-child(2) {
+   flex:0 0 100%!important;
+   width:100%!important;
+   max-width:100%!important;
+   min-height:125px!important;
+   justify-self:center!important;
+ }
+}
+
+
+/* Very narrow displays cannot fit an unsplittable translated detergent
+   word beside another card, even at 80–110% zoom. A full-width product
+   tile avoids forced breaks without shrinking the accessibility font. */
+@media(max-width:340px) {
+ html[data-display-scale] .tariff-grid>.tariff-card:nth-last-child(-n+2) {
+   flex:0 0 100%!important;
+   width:100%!important;
+   max-width:100%!important;
+   min-width:0!important;
+   box-sizing:border-box!important;
+ }
+ html[data-display-scale] .tariff-grid>.tariff-card.refonte-tariff-product {
+   display:flex!important;
+   flex-direction:column!important;
+   align-items:center!important;
+   justify-content:center!important;
+   min-height:150px!important;
+   grid-template-columns:none!important;
+   gap:8px!important;
+   padding:13px!important;
+ }
+ html[data-display-scale] .tariff-grid>.tariff-card.refonte-tariff-product
+  :is(.tariff-copy,.tariff-price,.rf-tariff-cta) {
+   grid-column:auto!important;grid-row:auto!important;
+   width:100%!important;
+   justify-self:center!important;
+   align-items:center!important;
+   text-align:center!important;
+ }
+}

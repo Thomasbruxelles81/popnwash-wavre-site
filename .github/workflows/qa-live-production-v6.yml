@@ -30,7 +30,7 @@ jobs:
                 --output /tmp/popnwash-live.html; then
               if grep -q 'premium-popwash-v6.css' /tmp/popnwash-live.html && \
                  grep -q 'premium-popwash-v6.js' /tmp/popnwash-live.html && \
-                 grep -q 'Sélectionnez le code 77' /tmp/popnwash-live.html; then
+                 grep -q 'Sélectionnez le code 70' /tmp/popnwash-live.html; then
                  ok=1
                  echo "LIVE V6 homepage confirmed"
                  echo "::endgroup::"
@@ -50,11 +50,11 @@ jobs:
               --output /tmp/popnwash-asset
             test -s /tmp/popnwash-asset
             if [ "$asset" = "refonte-global.js" ]; then
-              test "$(grep -o '\b77\b' /tmp/popnwash-asset | wc -l)" -ge 11
-              if grep -Eiq '(code|codice|código|kod|код|codul) 70\b' /tmp/popnwash-asset; then
-                echo "Unexpected loyalty card code 70 in translated guidance" >&2
+              test "$(grep -o '\b70\b' /tmp/popnwash-asset | wc -l)" -ge 11
+              if grep -Eiq '(code|codice|código|kod|код|codul) 77\b' /tmp/popnwash-asset; then
+                echo "Unexpected loyalty card code 77 in translated guidance" >&2
                 exit 1
               fi
             fi
           done
-          echo "PASS: production homepage + V6 CSS/JS + original logo + code 77 in 11 locales."
+          echo "PASS: production homepage + V6 CSS/JS + original logo + code 70 in 11 locales."
