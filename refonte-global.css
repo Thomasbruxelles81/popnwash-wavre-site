@@ -273,3 +273,109 @@ a.social-link.facebook:is(:hover,:focus-visible,.rf-hover-active){
 }
 /* Never let a French punctuation mark be stranded by an ordinary space.
    JS progressively upgrades existing French text to a narrow no-break space. */
+
+/* V5B fluid-layout safeguards: responsive to available space and accessible text size.
+   Real reflow beats forcing cramped 2-up cards or hiding overflow. */
+:root{
+  --rf-content:3000px;
+  --rf-outer-gutter:clamp(20px,3vw,96px);
+  --rf-card-gap:clamp(10px,1.1vw,22px);
+}
+.section-shell{
+  width:min(var(--rf-content),calc(100% - var(--rf-outer-gutter)))!important;
+  min-width:0;
+}
+/* Align the utility/header with content on all wider viewports. Narrow phone
+   header spacing is still governed by its dedicated controls layout. */
+.refonte-utility{width:min(var(--rf-content),calc(100% - var(--rf-outer-gutter)))!important}
+@media(min-width:701px){
+  .site-header{width:min(var(--rf-content),calc(100% - var(--rf-outer-gutter)))!important}
+}
+/* Six tariffs always form balanced rows (6 / 3 / 2 / 1).
+   The section, rather than the device label, determines the layout. */
+.tariff-grid{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  justify-content:stretch!important;
+  align-items:stretch!important;
+  gap:var(--rf-card-gap)!important;
+}
+.tariff-grid>.tariff-card{
+  width:auto!important;
+  max-width:100%!important;
+  flex:initial!important;
+  min-width:0!important;
+  min-height:clamp(164px,10vw,216px)!important;
+  height:auto!important;
+  padding:clamp(14px,1.25vw,24px)!important;
+  overflow:visible!important;
+}
+.tariff-grid>.tariff-card :is(.tariff-copy,.tariff-price){
+  max-width:100%;
+  min-width:0!important;
+}
+.tariff-grid>.tariff-card :is(strong,small,span,b){
+  text-overflow:clip!important;
+  white-space:normal!important;
+}
+.tariff-grid>.tariff-card .tariff-price b{white-space:nowrap!important}
+/* At enlarged AAA settings the intrinsic text width must win over 6 columns. */
+html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+[data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+[data-display-scale="200"]) .tariff-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+@container(max-width:1590px){
+  .tariff-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@container(max-width:950px){
+  .tariff-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@container(max-width:520px){
+  .tariff-grid{grid-template-columns:minmax(0,1fr)!important}
+}
+@container(max-width:1050px){
+  html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@container(max-width:670px){
+  html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .tariff-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+/* Secondary cards follow their *own* available width, never a forced 2-up
+   arrangement when either the viewport or accessible text has grown. */
+.pro-grid,.parking-grid,.services-secondary-grid,.machine-grid{
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,max(270px,calc(230px * var(--display-scale)))),1fr))!important;
+}
+.pro-grid>*,.parking-grid>*,.services-secondary-grid>*,.machine-grid>*{
+  min-width:0!important;
+  max-width:100%;
+}
+@media(max-width:430px){
+  .pro-grid,.parking-grid,.services-secondary-grid,.machine-grid,
+  .visit-card-grid,.refonte-extra-guides{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+@media(max-width:360px){
+  .mobile-quick-links{grid-template-columns:minmax(0,1fr)!important}
+}
+/* Avoid arbitrary clipping and match natural card heights with readable copy. */
+:where(.pro-card,.parking-card,.machine-card,.service-feature,.visit-card,.refonte-loyalty){
+  min-width:0;
+  overflow-wrap:break-word;
+}
+:where(.pro-card,.parking-card,.machine-card,.service-feature) :is(h2,h3,p,small,strong){
+  max-width:100%;
+  text-overflow:clip;
+}
+@media(prefers-reduced-motion:reduce){
+  .tariff-grid>.tariff-card{transition:none!important}
+}
+
