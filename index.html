@@ -23,7 +23,7 @@
   </script>
   <script>
   /* Apply saved display size before first paint (never disable browser zoom). */
-  (()=>{let n=110;try{const saved=Number(localStorage.getItem('popnwash-display-size'));if([80,90,100,110,120,130,140,150].includes(saved))n=saved;}catch(e){}
+  (()=>{let n=110;try{const saved=Number(localStorage.getItem('popnwash-display-size'));if([80,90,100,110,120,130,140,150,160,170,180,190,200].includes(saved))n=saved;}catch(e){}
     document.documentElement.style.setProperty('--display-scale',String(n/100));
     document.documentElement.dataset.displayScale=String(n);
   })();
