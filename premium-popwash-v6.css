@@ -479,3 +479,85 @@ body.pop-aaa-dragging>.display-size-panel .display-size-range {
 }
 body.pop-aaa-dragging {overscroll-behavior:contain}
 html:has(body.pop-aaa-dragging) {overflow-anchor:none!important}
+
+
+/* V7 final responsive review — text stays whole in all translated titles.
+   At high AAA use fewer columns rather than splitting individual words. */
+@media (max-width:700px) {
+  .products-card h3 {
+    font-size:clamp(24px,calc(20px * var(--display-scale)),34px)!important;
+    line-height:1.18!important;
+    letter-spacing:-.02em!important;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+    hyphens:none!important;
+  }
+}
+@media(max-width:500px) {
+  html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .products-card .product-chips-v2 {
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  .products-card .product-chips-v2>span {
+    min-width:0!important;max-width:100%!important;
+    padding:12px 14px!important;
+    height:auto!important;min-height:80px!important;
+  }
+  .products-card .product-chips-v2 strong{
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+    hyphens:none!important;
+    white-space:normal!important;
+  }
+}
+/* The full navigation is shown only when the available width AND font scale
+   can genuinely fit every label. Otherwise the accessible hamburger is used. */
+@media (max-width:1600px) {
+  html .site-header .desktop-nav {display:none!important}
+  html .site-header .menu-button {display:block!important}
+}
+@media (min-width:1601px) {
+  html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .site-header .desktop-nav {display:none!important}
+  html:is([data-display-scale="140"],[data-display-scale="150"],[data-display-scale="160"],
+  [data-display-scale="170"],[data-display-scale="180"],[data-display-scale="190"],
+  [data-display-scale="200"]) .site-header .menu-button {display:block!important}
+}
+/* On the smallest phones, a scaled-up wordmark cannot compete with the
+   essential controls. Keep the REAL logo image; hide only redundant text. */
+@media(max-width:360px) {
+  html:is([data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"],
+  [data-display-scale="160"],[data-display-scale="170"],[data-display-scale="180"],
+  [data-display-scale="190"],[data-display-scale="200"]) .site-header .brand-label {
+    display:none!important;
+  }
+  html:is([data-display-scale="130"],[data-display-scale="140"],[data-display-scale="150"],
+  [data-display-scale="160"],[data-display-scale="170"],[data-display-scale="180"],
+  [data-display-scale="190"],[data-display-scale="200"]) .site-header .brand-lockup {
+    width:50px!important;min-width:50px!important;max-width:50px!important;
+    flex:0 0 50px!important;
+  }
+}
+/* The submit button must be centered relative to the *whole form* even
+   when the form's other content is longer or forces its intrinsic width. */
+.contact-form-card #contactForm {
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  justify-items:stretch!important;
+}
+.contact-form-card #contactForm>.form-submit {
+  grid-column:1 / -1!important;
+  justify-self:center!important;
+  margin-left:auto!important;margin-right:auto!important;
+  display:inline-flex!important;
+  width:fit-content!important;max-width:100%!important;
+  min-width:min(210px,100%)!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  justify-content:center!important;
+}
