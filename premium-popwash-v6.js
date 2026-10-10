@@ -62,7 +62,8 @@
   const overlap=!!(logo&&actions&&
     logo.getBoundingClientRect().right>actions.getBoundingClientRect().left+2);
   const compact=forcedHidden||!shellWidth||shellWidth<2*widest||overlap;
-  control.toggleAttribute('data-compact-labels',compact);
+  if(compact) control.setAttribute('data-compact-labels','true');
+  else control.removeAttribute('data-compact-labels');
   // Preserve clickable 50/50 zones and their accessible language labels.
   shell.setAttribute('data-words-fit',compact?'icons':'full');
  }
