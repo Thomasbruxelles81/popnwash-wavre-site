@@ -1,0 +1,60 @@
+name: QA production POP'n WASH V6 — live HTTP verification
+
+on:
+  workflow_run:
+    workflows: ["Deploy POP'n WASH to GitHub Pages"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-site:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Verify live custom domain, V6 assets, fidelity instructions and logo
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://popnwash.be"
+          ok=0
+          for attempt in $(seq 1 16); do
+            echo "::group::Live page attempt $attempt"
+            if curl --fail-with-body --silent --show-error --location \
+                --connect-timeout 10 --max-time 25 \
+                --header 'Cache-Control: no-cache' \
+                "$base/?v6-check=${GITHUB_RUN_ID}-$attempt" \
+                --output /tmp/popnwash-live.html; then
+              if grep -q 'premium-popwash-v6.css' /tmp/popnwash-live.html && \
+                 grep -q 'premium-popwash-v6.js' /tmp/popnwash-live.html && \
+                 grep -q 'Sélectionnez le code 77' /tmp/popnwash-live.html; then
+                 ok=1
+                 echo "LIVE V6 homepage confirmed"
+                 echo "::endgroup::"
+                 break
+              fi
+              echo "Page responds, but expected V6 marker(s) not visible yet."
+            fi
+            echo "::endgroup::"
+            sleep 12
+          done
+          test "$ok" -eq 1
+          for asset in premium-popwash-v6.css premium-popwash-v6.js refonte-global.css refonte-global.js assets/logo-popnwash-header.webp assets/logo-popnwash.webp; do
+            echo "Checking production asset: $asset"
+            curl --fail-with-body --silent --show-error --location \
+              --connect-timeout 10 --max-time 25 \
+              "$base/$asset?v6-check=${GITHUB_RUN_ID}" \
+              --output /tmp/popnwash-asset
+            test -s /tmp/popnwash-asset
+            if [ "$asset" = "refonte-global.js" ]; then
+              test "$(grep -o '\b77\b' /tmp/popnwash-asset | wc -l)" -ge 11
+              if grep -Eiq '(code|codice|código|kod|код|codul) 70\b' /tmp/popnwash-asset; then
+                echo "Unexpected loyalty card code 70 in translated guidance" >&2
+                exit 1
+              fi
+            fi
+          done
+          echo "PASS: production homepage + V6 CSS/JS + original logo + code 77 in 11 locales."
