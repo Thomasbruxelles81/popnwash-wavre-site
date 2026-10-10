@@ -727,9 +727,18 @@ html:has(body.pop-aaa-dragging) {overflow-anchor:none!important}
   html .site-header .theme-option-label span{
     display:none!important;
   }
+  /* The expanded flag + two-letter code + arrow was 98px wide in UK/80%.
+     A recognisable flag + arrow fits the same accessible 56px control. */
   html .site-header #langButton{
-    min-width:48px!important;
-    width:auto!important;
+    width:56px!important;
+    min-width:56px!important;
+    max-width:56px!important;
+    padding-inline:4px!important;
+    gap:2px!important;
+    justify-content:center!important;
+  }
+  html .site-header #langButton #langCode{
+    display:none!important;
   }
   html .site-header #menuButton{
     flex:0 0 auto!important;
