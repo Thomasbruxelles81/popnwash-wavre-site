@@ -213,5 +213,16 @@ html body #top.site-header .menu-button:focus-visible{
   html body #top.site-header .menu-button{width:50px!important;min-width:50px!important;flex-basis:50px!important}
   html body #top.site-header .menu-button > .menu-caption{font-size:9px!important}
 }
+/* Prevent even a single-frame overflow in WebKit while long translations
+   are being applied: the 130%-fixed menu cannot reliably fit at 1280 px.
+   The labelled Browse control is visible immediately, before JS has run. */
+@media(min-width:1025px) and (max-width:1359px){
+  html body #top.site-header:not(.pop-nav-measuring) .desktop-nav{
+    display:none!important;
+  }
+  html body #top.site-header .menu-button{
+    display:flex!important;
+  }
+}
 /* When the real header is hidden on scroll, the existing preferences dock
    keeps its own compact measurements from floating-preferences.css. */
