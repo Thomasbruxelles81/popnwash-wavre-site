@@ -325,9 +325,9 @@ html body #top.site-header .desktop-nav a{
   white-space:nowrap!important;
 }
 
-/* R14 tiny-screen Firefox guard: address/hours/phone must never enlarge
-   the document while fonts and responsive language layouts settle. */
-@media(max-width:340px){
+/* R15 tiny-screen Firefox guard: cover 320–380px incl. 344px Android.
+   Address, hours and phone must never enlarge the document during reflow. */
+@media(max-width:380px){
   html body .refonte-utility{
     display:flex!important;flex-direction:column!important;
     align-items:stretch!important;justify-content:center!important;
