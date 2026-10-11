@@ -61,8 +61,9 @@ const pageEvaluate=()=>{
      if(!box)return 999;
      const links=[...box.querySelectorAll('a')].map(el=>rect(el));
      if(links.length!==2)return 999;
-     const p=rect(box);
-     return Math.abs((links[0].x+links[1].right)/2-(p.x+p.right)/2);
+     const p=rect(box),ys=links.map(r=>r.y),lastY=Math.max(...ys);
+     const last=links.filter(r=>Math.abs(r.y-lastY)<5);
+     return Math.abs((Math.min(...last.map(r=>r.x))+Math.max(...last.map(r=>r.right)))/2-(p.x+p.right)/2);
    })(),
    facebookBlue:(()=>{
      const el=document.querySelector('#contact a.social-link.facebook');
