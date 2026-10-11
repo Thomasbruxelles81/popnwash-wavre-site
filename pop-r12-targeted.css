@@ -222,3 +222,13 @@ html body .first-visit-showcase .visit-summary-copy :is(strong,small){
   html body .products-card .products-guide-link{transition:none!important}
   html body .first-visit-showcase .visit-card:hover .visit-icon::before{transform:none!important}
 }
+
+/* Must outrank the R11 forced compact selector with :not(.pop-nav-measuring).
+   Otherwise the menu stays hidden at 1025–1600px even after JS verifies room. */
+html body #top.site-header.pop-nav-ready:not(.nav-fit-compact):not(.pop-nav-measuring) .desktop-nav{
+  display:flex!important;visibility:visible!important;position:relative!important;
+  left:auto!important;top:auto!important;pointer-events:auto!important;
+}
+html body #top.site-header.pop-nav-ready:not(.nav-fit-compact):not(.pop-nav-measuring) .menu-button{
+  display:none!important;
+}
