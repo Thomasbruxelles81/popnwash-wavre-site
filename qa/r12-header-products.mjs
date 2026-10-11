@@ -11,7 +11,7 @@ function issue(where,why){if(issues.length<140)issues.push(where+': '+why)}
 const pageEvaluate=()=>{
  const head=document.querySelector('#top'),bar=document.querySelector('.refonte-utility');
  const nav=head.querySelector('.desktop-nav'),brand=head.querySelector('.brand-lockup');
- const label=head.querySelector('.brand-label'),name=head.querySelector('.brand-main');
+ const label=head.querySelector('.brand-label'),name=head.querySelector('.brand-main'),place=head.querySelector('.brand-place');
  const actions=head.querySelector('.header-actions'),menu=head.querySelector('.menu-button');
  const panel=document.querySelector('.products-card'),chips=[...panel.querySelectorAll('.product-chips-v2>span')];
  const rect=e=>{let r=e.getBoundingClientRect();return {x:r.x,right:r.right,y:r.y,bottom:r.bottom,w:r.width,h:r.height}};
@@ -44,6 +44,8 @@ const pageEvaluate=()=>{
    overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth,
    headerOver:headerRect.right>innerWidth+2,
    nameOverlap:shown(label)&&nameRect.right>labelRect.right+3,
+   wordmarkCollision:shown(label)&&rect(place).y<nameRect.bottom-1,
+   wordmarkClipped:shown(label)&&(rect(place).right>labelRect.right+3||nameRect.right>labelRect.right+3),
    navOverlap:navShown&&rect(nav).right>actionsRect.x+2,
    navBrandOverlap:navShown&&rect(nav).x<brandRect.right-2
  };
@@ -64,7 +66,7 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
      if(!baseline.navShown&&!baseline.menuShown)issue(name,'no visible navigation');
      if(baseline.couldFit80)issue(name,'Browse shown despite full nav fitting at 80%');
      if(baseline.navOverlap||baseline.navBrandOverlap)issue(name,'full nav overlaps another header element');
-     if(baseline.nameOverlap)issue(name,'brand label/text clipped or overlapping');
+     if(baseline.nameOverlap||baseline.wordmarkCollision||baseline.wordmarkClipped)issue(name,'POP’n WASH and WAVRE wordmark overlap or clip');
      if(baseline.headerOver||baseline.overflow>2)issue(name,'horizontal overflow '+baseline.overflow);
      if(!baseline.productShown||!baseline.productLink||baseline.chips.length!==7)issue(name,'product card/link/chips missing');
      for(const x of baseline.chips){
@@ -87,7 +89,7 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
        if(cur.navShown!==baseline.navShown||Math.abs(cur.navSize-baseline.navSize)>.25||
           Math.abs(cur.utilitySize-baseline.utilitySize)>.25)
          issue(name,'AAA changed locked header at '+scale+'%');
-       if(cur.headerOver||cur.overflow>2||cur.nameOverlap||cur.navOverlap)
+       if(cur.headerOver||cur.overflow>2||cur.nameOverlap||cur.navOverlap||cur.wordmarkCollision||cur.wordmarkClipped)
          issue(name,'overflow or overlap at AAA '+scale+'%');
        if(!cur.productShown||cur.chips.length!==7)issue(name,'products gone at AAA '+scale+'%');
      }
