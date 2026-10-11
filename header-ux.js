@@ -84,6 +84,44 @@
     if(!fits)utility.classList.add('pop-utility-wrap');
   }
 
+
+  // R16: anchor Browse below the VISIBLE bottom of its actual button/header,
+  // never a guessed viewport top. The old fixed top hid "Tarifs" behind header.
+  const dropdown=document.getElementById('mobileMenu');
+  function positionDropdown(){
+    if(!dropdown||dropdown.hidden)return;
+    const br=button.getBoundingClientRect();
+    const hr=header.getBoundingClientRect();
+    const top=Math.max(6,Math.ceil(Math.max(br.bottom,hr.bottom)+8));
+    dropdown.style.setProperty('--pop-menu-top',top+'px');
+    dropdown.style.setProperty('--pop-menu-right',Math.max(9,Math.round(window.innerWidth-br.right))+'px');
+    dropdown.style.setProperty('--pop-menu-limit',Math.max(60,Math.floor(window.innerHeight-top-10))+'px');
+  }
+  if(dropdown){
+    // app.js opens the menu first, so this listener sees its settled hidden state.
+    document.addEventListener('click',event=>{
+      if(!button.contains(event.target)||dropdown.hidden)return;
+      dropdown.scrollTop=0;
+      positionDropdown();
+    });
+    // Handles programmatic opening as well, before the browser paints.
+    new MutationObserver(()=>{
+      if(dropdown.hidden)return;
+      dropdown.scrollTop=0;
+      positionDropdown();
+    }).observe(dropdown,{attributes:true,attributeFilter:['hidden']});
+    window.addEventListener('resize',positionDropdown,{passive:true});
+    window.addEventListener('scroll',positionDropdown,{passive:true});
+    window.visualViewport?.addEventListener('resize',positionDropdown,{passive:true});
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape'&&!dropdown.hidden){
+        dropdown.hidden=true;
+        button.setAttribute('aria-expanded','false');
+        button.focus();
+      }
+    });
+  }
+
   let queued=false;
   function schedule(){
     if(queued)return;
@@ -93,6 +131,7 @@
       localize();
       fitUtility();
       fitNavigation();
+      positionDropdown();
     });
   }
   new MutationObserver(schedule).observe(document.documentElement,{

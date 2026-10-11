@@ -13,7 +13,7 @@ const pageEvaluate=()=>{
  const nav=head.querySelector('.desktop-nav'),brand=head.querySelector('.brand-lockup');
  const label=head.querySelector('.brand-label'),name=head.querySelector('.brand-main'),place=head.querySelector('.brand-place');
  const actions=head.querySelector('.header-actions'),menu=head.querySelector('.menu-button');
- const panel=document.querySelector('.products-card'),chips=[...panel.querySelectorAll('.product-chips-v2>span')];
+ const panel=document.querySelector('.products-card'),chips=[...panel.querySelectorAll('.product-chips-v2>a.product-chip-link')];
  const rect=e=>{let r=e.getBoundingClientRect();return {x:r.x,right:r.right,y:r.y,bottom:r.bottom,w:r.width,h:r.height}};
  const shown=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0};
  const utilitySize=parseFloat(getComputedStyle(bar).fontSize),navSize=parseFloat(getComputedStyle(nav.querySelector('a')).fontSize);
@@ -39,8 +39,39 @@ const pageEvaluate=()=>{
    headerRect,brandRect,actionsRect,nameRect,labelRect,
    menuShown:shown(menu),productShown:shown(panel),productRect:rect(panel),
    chips:chips.map(e=>({box:rect(e),text:e.querySelector('strong')?.textContent||''})),
-   productLink:!!panel.querySelector('a[href="#first-visit"][data-guide-open="products"]'),
-   labels:['wifi','cowork','snacks','products-link'].map(key=>document.querySelector('[data-pop-r12="'+key+'"]')?.textContent||''),
+   productLastRowOffset:(()=>{
+     const items=chips.map(e=>rect(e));
+     if(!items.length)return 999;
+     const y=Math.max(...items.map(r=>r.y));
+     const last=items.filter(r=>Math.abs(r.y-y)<5);
+     const area=rect(panel.querySelector('.product-chips-v2'));
+     return Math.abs((Math.min(...last.map(r=>r.x))+Math.max(...last.map(r=>r.right)))/2-(area.x+area.right)/2);
+   })(),
+   proLinks:[...document.querySelectorAll('.refonte-pro-shortcuts>a')].map(e=>({href:e.getAttribute('href'),r:rect(e)})),
+   proCenterOffset:(()=>{
+     const es=[...document.querySelectorAll('.refonte-pro-shortcuts>a')];
+     if(!es.length)return 999;
+     const rs=es.map(e=>rect(e)),wrap=rect(es[0].parentElement);
+     const lastY=Math.max(...rs.map(r=>r.y));
+     const last=rs.filter(r=>Math.abs(r.y-lastY)<5);
+     return Math.abs((Math.min(...last.map(r=>r.x))+Math.max(...last.map(r=>r.right)))/2-(wrap.x+wrap.right)/2);
+   })(),
+   socialCenterOffset:(()=>{
+     const box=document.querySelector('#contact .social-links');
+     if(!box)return 999;
+     const links=[...box.querySelectorAll('a')].map(el=>rect(el));
+     if(links.length!==2)return 999;
+     const p=rect(box),ys=links.map(r=>r.y),lastY=Math.max(...ys);
+     const last=links.filter(r=>Math.abs(r.y-lastY)<5);
+     return Math.abs((Math.min(...last.map(r=>r.x))+Math.max(...last.map(r=>r.right)))/2-(p.x+p.right)/2);
+   })(),
+   facebookBlue:(()=>{
+     const el=document.querySelector('#contact a.social-link.facebook');
+     if(!el)return false;
+     return getComputedStyle(el).backgroundColor.replace(/\s/g,'')==='rgb(24,119,242)';
+   })(),
+   productLink:panel.querySelectorAll('a.product-chip-link[href="#first-visit"][data-guide-open="products"]').length===7,
+   labels:['wifi','cowork','snacks'].map(key=>document.querySelector('[data-pop-r12="'+key+'"]')?.textContent||''),
    overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth,
    headerOver:headerRect.right>innerWidth+2,
    nameOverlap:shown(label)&&nameRect.right>labelRect.right+3,
@@ -69,6 +100,16 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
      if(baseline.nameOverlap||baseline.wordmarkCollision||baseline.wordmarkClipped)issue(name,'POP’n WASH and WAVRE wordmark overlap or clip');
      if(baseline.headerOver||baseline.overflow>2)issue(name,'horizontal overflow '+baseline.overflow);
      if(!baseline.productShown||!baseline.productLink||baseline.chips.length!==7)issue(name,'product card/link/chips missing');
+     if(baseline.productLastRowOffset>6)issue(name,'last product row not centered: '+baseline.productLastRowOffset);
+     if(baseline.proCenterOffset>6||baseline.proLinks.length!==3)
+       issue(name,'Pro shortcuts not centered or missing: '+baseline.proCenterOffset);
+     if(baseline.proLinks.length===3&&(
+       !baseline.proLinks[0].href.includes('status.wi-line.fr')||
+       !baseline.proLinks[1].href.includes('status.wi-line.fr')||
+       baseline.proLinks[2].href!=='#fidelite'))
+       issue(name,'Pro shortcuts link destinations incorrect');
+     if(baseline.socialCenterOffset>6||!baseline.facebookBlue)
+       issue(name,'contact social links not centered or Facebook not blue');
      for(const x of baseline.chips){
        if(x.box.x<baseline.productRect.x-3||x.box.right>baseline.productRect.right+3)
          issue(name,'product pill escapes its card: '+x.text);
@@ -92,6 +133,9 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
        if(cur.headerOver||cur.overflow>2||cur.nameOverlap||cur.navOverlap||cur.wordmarkCollision||cur.wordmarkClipped)
          issue(name,'overflow or overlap at AAA '+scale+'%');
        if(!cur.productShown||cur.chips.length!==7)issue(name,'products gone at AAA '+scale+'%');
+       if(cur.productLastRowOffset>6||cur.proCenterOffset>6||cur.socialCenterOffset>6)
+         issue(name,'cards not centered at AAA '+scale+'%');
+       if(!cur.facebookBlue)issue(name,'Facebook blue missing at AAA '+scale+'%');
      }
      if(!baseline.navShown){
        await page.locator('#menuButton').click();
@@ -108,6 +152,78 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
    }catch(e){issue(name,String(e).slice(0,380))}
    await page.close();
  }
+
+ // R16: actual opening geometry in 11 languages, 80% and 200% AAA,
+ // 4 compact formats, Chromium/Firefox/WebKit. The first item must be visible
+ // immediately even after reopening a previously scrolled dropdown.
+ const testPage=await browser.newPage({viewport:{width:820,height:900}});
+ for(const [device,w,h] of [['mini',375,812],['split',820,900],['tablet',1024,768],['landscape',568,320]]){
+   await testPage.setViewportSize({width:w,height:h});
+   await testPage.goto(base,{waitUntil:'domcontentloaded'});
+   await testPage.waitForFunction(()=>document.querySelector('#top')?.classList.contains('pop-nav-ready'));
+   for(const lang of ['fr','nl','en','de','it','es','pt','ro','pl','uk','ru']){
+     for(const scale of [80,200]){
+       const key=engineName+'/'+device+'/'+lang+'/'+scale+'/dropdown';
+       await testPage.evaluate(({lang,scale})=>{
+         document.querySelector('[data-lang="'+lang+'"]').click();
+         const r=document.getElementById('displaySizeRange');r.value=String(scale);
+         r.dispatchEvent(new Event('input',{bubbles:true}));
+       },{lang,scale});
+       await testPage.waitForTimeout(180);
+       if(!await testPage.locator('#menuButton').isVisible()){
+         if(w<=820)issue(key,'Browse button missing');
+         continue;
+       }
+       const opened=await testPage.evaluate(()=>{
+         const btn=document.getElementById('menuButton');
+         if(getComputedStyle(btn).display==='none')return false;
+         btn.click();
+         return !document.getElementById('mobileMenu').hidden;
+       });
+       if(!opened){issue(key,'Browse did not open on compact header');continue;}
+       const state=await testPage.evaluate(()=>{
+         const menu=document.getElementById('mobileMenu');
+         const links=[...menu.querySelectorAll('a[href]')];
+         const panel=menu.getBoundingClientRect();
+         const first=links[0]?.getBoundingClientRect();
+         const anchor=document.getElementById('menuButton').getBoundingClientRect();
+         const header=document.getElementById('top').getBoundingClientRect();
+         const topLinkBefore=menu.scrollTop;
+         menu.scrollTop=menu.scrollHeight;
+         const last=links.at(-1)?.getBoundingClientRect();
+         return {
+           menuTop:panel.top,menuBottom:panel.bottom,
+           menuLeft:panel.left,menuRight:panel.right,
+           firstTop:first?.top,firstBottom:first?.bottom,
+           headerBottom:header.bottom,anchorBottom:anchor.bottom,
+           viewportHeight:innerHeight,viewportWidth:innerWidth,
+           links:links.length,firstHref:links[0]?.getAttribute('href'),
+           lastHref:links.at(-1)?.getAttribute('href'),
+           lastTop:last?.top,lastBottom:last?.bottom,
+           scrollBefore:topLinkBefore,
+           scrollAfter:menu.scrollTop,
+           maxScroll:menu.scrollHeight-menu.clientHeight
+         };
+       });
+       if(state.links!==8||state.firstHref!=='#machines'||state.lastHref!=='#contact')
+         issue(key,'menu link list incomplete: '+JSON.stringify(state));
+       if(state.menuTop<Math.max(state.headerBottom,state.anchorBottom)+4||
+          state.firstTop<state.menuTop+4||state.firstBottom>Math.min(state.menuBottom,state.viewportHeight)+2)
+         issue(key,'first Tarifs link hidden behind header: '+JSON.stringify(state));
+       if(state.scrollBefore>2)issue(key,'menu reopened partway down at '+state.scrollBefore);
+       if(state.menuLeft< -1||state.menuRight>state.viewportWidth+2||
+          state.menuBottom>state.viewportHeight+2)
+         issue(key,'menu escapes viewport: '+JSON.stringify(state));
+       if(state.lastBottom>Math.min(state.menuBottom,state.viewportHeight)+3)
+         issue(key,'Contact not reachable after scroll: '+JSON.stringify(state));
+       if(engineName==='chromium'&&lang==='fr'&&scale===80){
+         await testPage.screenshot({path:'qa-r12/menu-'+device+'.png'});
+       }
+       await testPage.evaluate(()=>document.getElementById('menuButton').click());
+     }
+   }
+ }
+ await testPage.close();
  await browser.close();
 }
 // Translation switch, actual product link, first-visit hover, light + dark checks.
@@ -124,13 +240,33 @@ for(const lang of ['fr','nl','en','de','it','es','pt','ro','pl','uk','ru']){
  }catch(e){issue('translation '+lang,String(e).slice(0,220))}
 }
 await page.evaluate(()=>document.querySelector('[data-lang="fr"]').click());
-await page.locator('.products-guide-link').click();
+// Verify real CSS hover before clicking the link, because opening the guide
+// starts a smooth scroll which otherwise cancels pointer hover mid-animation.
+await page.locator('.product-chip-link').first().hover();
+await page.waitForTimeout(100);
+const hoverState=await page.locator('.product-chip-link').first().evaluate(el=>({
+ hovered:el.matches(':hover'),
+ hoverSupported:matchMedia('(hover:hover) and (pointer:fine)').matches,
+ animation:getComputedStyle(el,'::before').animationName
+}));
+if(hoverState.hoverSupported&&(!hoverState.hovered||hoverState.animation!=='pop-bubble-a'))
+ issue('products','product card hover bubble not running: '+JSON.stringify(hoverState));
+await page.screenshot({path:'qa-r12/products-hover.png'});
+await page.locator('.product-chip-link').first().click();
 if(!(await page.locator('[data-guide-panel="products"]').evaluate(el=>el.open)))
  issue('products','CTA did not open Products first-visit instructions');
+// Allow the scripted scrollIntoView({behavior:"smooth"}) to settle before
+// testing the next hover target; never conflate moving scroll with hover CSS.
+await page.waitForTimeout(1100);
 await page.locator('.visit-washer summary').hover();
 await page.waitForTimeout(390);
-const bubble=await page.locator('.visit-washer .visit-icon').evaluate(el=>parseFloat(getComputedStyle(el,'::before').opacity));
-if(!(bubble>0.7))issue('first visit','hover bubble not visible: '+bubble);
+const visitBubble=await page.locator('.visit-washer .visit-icon').evaluate(el=>({
+ hovered:el.closest('.visit-card')?.matches(':hover'),
+ supported:matchMedia('(hover:hover)').matches,
+ opacity:parseFloat(getComputedStyle(el,'::before').opacity)
+}));
+if(visitBubble.supported&&(!visitBubble.hovered||visitBubble.opacity<0.7))
+ issue('first visit','hover bubble not visible: '+JSON.stringify(visitBubble));
 for(const mode of ['light','dark']){
  await page.locator('[data-theme-choice="'+mode+'"]').click();
  await page.screenshot({path:'qa-r12/visit-'+mode+'.png'});

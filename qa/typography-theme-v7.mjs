@@ -138,8 +138,12 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
     errors.push(engineName+'/'+format+' vending card clipped text '+JSON.stringify(layout.clipped));
   if(layout.formCenterOffset!=null&&layout.formCenterOffset>5)
     errors.push(engineName+'/'+format+' submit not centered '+layout.formCenterOffset);
-  if(layout.social.some(x=>/24,\s*119,\s*242|131,\s*58,\s*180|253,\s*29,\s*29/.test(x.bg+' '+x.gradient)))
-    errors.push(engineName+'/'+format+' social colors are not POPn WASH brand '+JSON.stringify(layout.social));
+  // The owner explicitly requested Facebook brand blue (#1877F2); Instagram remains POP'n WASH coral.
+  const facebook=layout.social.find(x=>x.name.includes('facebook'));
+  const instagram=layout.social.find(x=>x.name.includes('instagram'));
+  if(!facebook||!/^rgb\(24,\s*119,\s*242\)$/.test(facebook.bg)||
+     !instagram||!/rgb\(182,\s*40,\s*71\)/.test(instagram.bg))
+    errors.push(engineName+'/'+format+' incorrect Facebook blue or Instagram coral '+JSON.stringify(layout.social));
   await page.close();
  }
  await browser.close();
