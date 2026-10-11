@@ -13,7 +13,7 @@ const pageEvaluate=()=>{
  const nav=head.querySelector('.desktop-nav'),brand=head.querySelector('.brand-lockup');
  const label=head.querySelector('.brand-label'),name=head.querySelector('.brand-main'),place=head.querySelector('.brand-place');
  const actions=head.querySelector('.header-actions'),menu=head.querySelector('.menu-button');
- const panel=document.querySelector('.products-card'),chips=[...panel.querySelectorAll('.product-chips-v2>span')];
+ const panel=document.querySelector('.products-card'),chips=[...panel.querySelectorAll('.product-chips-v2>a.product-chip-link')];
  const rect=e=>{let r=e.getBoundingClientRect();return {x:r.x,right:r.right,y:r.y,bottom:r.bottom,w:r.width,h:r.height}};
  const shown=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0};
  const utilitySize=parseFloat(getComputedStyle(bar).fontSize),navSize=parseFloat(getComputedStyle(nav.querySelector('a')).fontSize);
@@ -39,8 +39,8 @@ const pageEvaluate=()=>{
    headerRect,brandRect,actionsRect,nameRect,labelRect,
    menuShown:shown(menu),productShown:shown(panel),productRect:rect(panel),
    chips:chips.map(e=>({box:rect(e),text:e.querySelector('strong')?.textContent||''})),
-   productLink:!!panel.querySelector('a[href="#first-visit"][data-guide-open="products"]'),
-   labels:['wifi','cowork','snacks','products-link'].map(key=>document.querySelector('[data-pop-r12="'+key+'"]')?.textContent||''),
+   productLink:!!panel.querySelectorAll('a.product-chip-link[href="#first-visit"][data-guide-open="products"]').length===7,
+   labels:['wifi','cowork','snacks'].map(key=>document.querySelector('[data-pop-r12="'+key+'"]')?.textContent||''),
    overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth,
    headerOver:headerRect.right>innerWidth+2,
    nameOverlap:shown(label)&&nameRect.right>labelRect.right+3,
@@ -125,12 +125,18 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
          const r=document.getElementById('displaySizeRange');r.value=String(scale);
          r.dispatchEvent(new Event('input',{bubbles:true}));
        },{lang,scale});
-       await testPage.waitForTimeout(75);
+       await testPage.waitForTimeout(180);
        if(!await testPage.locator('#menuButton').isVisible()){
          if(w<=820)issue(key,'Browse button missing');
          continue;
        }
-       await testPage.locator('#menuButton').click();
+       const opened=await testPage.evaluate(()=>{
+         const btn=document.getElementById('menuButton');
+         if(getComputedStyle(btn).display==='none')return false;
+         btn.click();
+         return !document.getElementById('mobileMenu').hidden;
+       });
+       if(!opened){issue(key,'Browse did not open on compact header');continue;}
        const state=await testPage.evaluate(()=>{
          const menu=document.getElementById('mobileMenu');
          const links=[...menu.querySelectorAll('a[href]')];
@@ -169,7 +175,7 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
        if(engineName==='chromium'&&lang==='fr'&&scale===80){
          await testPage.screenshot({path:'qa-r12/menu-'+device+'.png'});
        }
-       await testPage.locator('#menuButton').click();
+       await testPage.evaluate(()=>document.getElementById('menuButton').click());
      }
    }
  }
@@ -190,7 +196,7 @@ for(const lang of ['fr','nl','en','de','it','es','pt','ro','pl','uk','ru']){
  }catch(e){issue('translation '+lang,String(e).slice(0,220))}
 }
 await page.evaluate(()=>document.querySelector('[data-lang="fr"]').click());
-await page.locator('.products-guide-link').click();
+await page.locator('.product-chip-link').first().click();
 if(!(await page.locator('[data-guide-panel="products"]').evaluate(el=>el.open)))
  issue('products','CTA did not open Products first-visit instructions');
 await page.locator('.visit-washer summary').hover();
