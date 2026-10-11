@@ -248,3 +248,40 @@ html body .services-secondary-grid > .products-card .product-chips-v2 strong{
   white-space:normal!important;overflow-wrap:normal!important;
   word-break:normal!important;hyphens:none!important;
 }
+
+/* R12 logo-adjacent WORDMARK fix (11 Oct): the logo IMAGE is correct.
+   Prevent POP’n WASH and WAVRE text spans from colliding, at any AAA setting. */
+html body #top.site-header .brand-label .brand-title{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:max-content max-content!important;grid-auto-flow:row!important;
+  align-content:center!important;justify-items:start!important;align-items:start!important;
+  row-gap:4px!important;column-gap:0!important;
+  min-height:0!important;height:auto!important;
+  width:max-content!important;max-width:100%!important;
+  line-height:1!important;transform:none!important;text-align:left!important;
+}
+html body #top.site-header .brand-label .brand-title .brand-main,
+html body #top.site-header .brand-label .brand-title .brand-place{
+  display:block!important;position:static!important;float:none!important;
+  grid-column:1!important;width:auto!important;max-width:100%!important;
+  white-space:nowrap!important;transform:none!important;letter-spacing:normal!important;
+  margin:0!important;padding:0!important;text-indent:0!important;
+}
+html body #top.site-header .brand-label .brand-title .brand-main{
+  grid-row:1!important;font-size:17.5px!important;
+  font-weight:950!important;line-height:1.12!important;
+  letter-spacing:-.035em!important;
+}
+html body #top.site-header .brand-label .brand-title .brand-place{
+  grid-row:2!important;font-size:10.5px!important;
+  font-weight:850!important;line-height:1.15!important;
+  letter-spacing:.12em!important;
+}
+@media(max-width:1024px){
+  html body #top.site-header .brand-label .brand-title .brand-main{font-size:15px!important}
+  html body #top.site-header .brand-label .brand-title .brand-place{font-size:9.5px!important}
+}
+@media(max-width:600px){
+  html body #top.site-header .brand-label .brand-title .brand-main{font-size:12px!important}
+  html body #top.site-header .brand-label .brand-title .brand-place{font-size:9px!important}
+}
