@@ -240,17 +240,33 @@ for(const lang of ['fr','nl','en','de','it','es','pt','ro','pl','uk','ru']){
  }catch(e){issue('translation '+lang,String(e).slice(0,220))}
 }
 await page.evaluate(()=>document.querySelector('[data-lang="fr"]').click());
+// Verify real CSS hover before clicking the link, because opening the guide
+// starts a smooth scroll which otherwise cancels pointer hover mid-animation.
+await page.locator('.product-chip-link').first().hover();
+await page.waitForTimeout(100);
+const hoverState=await page.locator('.product-chip-link').first().evaluate(el=>({
+ hovered:el.matches(':hover'),
+ hoverSupported:matchMedia('(hover:hover) and (pointer:fine)').matches,
+ animation:getComputedStyle(el,'::before').animationName
+}));
+if(hoverState.hoverSupported&&(!hoverState.hovered||hoverState.animation!=='pop-bubble-a'))
+ issue('products','product card hover bubble not running: '+JSON.stringify(hoverState));
+await page.screenshot({path:'qa-r12/products-hover.png'});
 await page.locator('.product-chip-link').first().click();
 if(!(await page.locator('[data-guide-panel="products"]').evaluate(el=>el.open)))
  issue('products','CTA did not open Products first-visit instructions');
-await page.locator('.product-chip-link').first().hover();
-await page.waitForTimeout(280);
-const productBubble=await page.locator('.product-chip-link').first().evaluate(el=>getComputedStyle(el,'::before').animationName);
-if(productBubble!=='pop-bubble-a')issue('products','bubble animation absent: '+productBubble);
+// Allow the scripted scrollIntoView({behavior:"smooth"}) to settle before
+// testing the next hover target; never conflate moving scroll with hover CSS.
+await page.waitForTimeout(1100);
 await page.locator('.visit-washer summary').hover();
 await page.waitForTimeout(390);
-const bubble=await page.locator('.visit-washer .visit-icon').evaluate(el=>parseFloat(getComputedStyle(el,'::before').opacity));
-if(!(bubble>0.7))issue('first visit','hover bubble not visible: '+bubble);
+const visitBubble=await page.locator('.visit-washer .visit-icon').evaluate(el=>({
+ hovered:el.closest('.visit-card')?.matches(':hover'),
+ supported:matchMedia('(hover:hover)').matches,
+ opacity:parseFloat(getComputedStyle(el,'::before').opacity)
+}));
+if(visitBubble.supported&&(!visitBubble.hovered||visitBubble.opacity<0.7))
+ issue('first visit','hover bubble not visible: '+JSON.stringify(visitBubble));
 for(const mode of ['light','dark']){
  await page.locator('[data-theme-choice="'+mode+'"]').click();
  await page.screenshot({path:'qa-r12/visit-'+mode+'.png'});
