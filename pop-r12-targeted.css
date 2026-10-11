@@ -285,3 +285,42 @@ html body #top.site-header .brand-label .brand-title .brand-place{
   html body #top.site-header .brand-label .brand-title .brand-main{font-size:12px!important}
   html body #top.site-header .brand-label .brand-title .brand-place{font-size:9px!important}
 }
+
+/* R13 regression: preserve whole translated words in first-visit cards.
+   A readable full-width list is preferable to 2 cramped columns on split screens. */
+html body .first-visit-showcase .visit-summary-copy strong,
+html body .refonte-extra-guides .visit-summary-copy strong{
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  hyphens:none!important;
+  white-space:normal!important;
+}
+@media(max-width:920px){
+  html body .first-visit-showcase .visit-card-grid,
+  html body .refonte-extra-guides{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  html body .first-visit-showcase .visit-summary-copy strong,
+  html body .refonte-extra-guides .visit-summary-copy strong{
+    font-size:clamp(13px,min(calc(14px * var(--display-scale)),3.8vw),20px)!important;
+    line-height:1.3!important;
+  }
+}
+/* Full navigation must be measured at uncompressed intrinsic text widths,
+   especially for Dutch, German, Polish and Ukrainian labels. */
+html body #top.site-header .desktop-nav{
+  flex:0 0 auto!important;
+  width:max-content!important;
+  min-width:max-content!important;
+  max-width:none!important;
+  overflow:visible!important;
+}
+html body #top.site-header .desktop-nav a{
+  flex:0 0 auto!important;
+  min-width:max-content!important;
+  width:max-content!important;
+  max-width:none!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:nowrap!important;
+}

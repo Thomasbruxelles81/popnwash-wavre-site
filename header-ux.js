@@ -59,7 +59,7 @@
     let fit=false;
     for(let pct=125;pct>=80;pct-=5){
       header.style.setProperty('--pop-header-nav-factor',String(pct/100));
-      const wanted=nav.getBoundingClientRect().width;
+      const wanted=Math.max(nav.getBoundingClientRect().width,nav.scrollWidth);
       if(wanted<=available && available>0){fit=true;break;}
     }
     header.classList.toggle('nav-fit-compact',!fit);
@@ -101,6 +101,19 @@
   if(utility){
     new MutationObserver(schedule).observe(utility,{childList:true,subtree:true,characterData:true});
   }
+  // Collapse synchronously before any language handler changes the labels.
+  // Tests and customers must never see a stale, clipped translated menu.
+  document.addEventListener('click',event=>{
+    if(event.target.closest('[data-lang]')){
+      header.classList.add('nav-fit-compact');
+      schedule();
+    }
+  },true);
+  // The existing translation system may replace text without changing <html lang>.
+  // Remeasure after the actual labels change, not solely on viewport resize.
+  new MutationObserver(schedule).observe(nav,{
+    subtree:true,childList:true,characterData:true
+  });
   window.addEventListener('resize',schedule,{passive:true});
   window.addEventListener('orientationchange',schedule,{passive:true});
   window.addEventListener('pageshow',schedule);
