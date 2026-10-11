@@ -79,6 +79,11 @@ jobs:
                     const isPhone=width<=700||(height<=550&&width<=1000&&width>height);
                     return {
                       scrollWidth:Math.max(root.scrollWidth,document.body.scrollWidth),
+                      overflowAtMeasurement:[...document.body.querySelectorAll('*')]
+                        .filter(el=>{const r=el.getBoundingClientRect(),cs=getComputedStyle(el);
+                          return cs.display!=='none'&&r.width>1&&(r.right>width+2||r.left< -2);})
+                        .slice(0,12).map(el=>{const r=el.getBoundingClientRect();
+                          return [el.tagName.toLowerCase(),el.id,typeof el.className==='string'?el.className.slice(0,48):'',Math.round(r.left),Math.round(r.right)];}),
                       state:{lang:root.lang,size:root.dataset.displayScale,theme:root.dataset.theme},
                       isPhone,quicks,details,header:box('.site-header'),logo:box('.brand-lockup'),
                       aa:box('#displaySizeButton'),theme:box('.theme-slider-shell'),
@@ -91,7 +96,32 @@ jobs:
                     };
                   },{width,height});
                   result.tests++;
-                  if(report.scrollWidth>width+2)fail(k,'horizontal scroll '+report.scrollWidth+' > '+width);
+                  if(report.scrollWidth>width+2){
+                    const trace=await page.evaluate((viewportWidth)=>{
+                      const outer=(el)=>{
+                        const r=el.getBoundingClientRect(),style=getComputedStyle(el);
+                        return {name:el.tagName.toLowerCase()+(el.id?'#'+el.id:'')+(typeof el.className==='string'?'.'+el.className.split(/\s+/).slice(0,3).join('.'):''),
+                          x:Math.round(r.left),right:Math.round(r.right),w:Math.round(r.width),
+                          scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,
+                          position:style.position,display:style.display,overflowX:style.overflowX};
+                      };
+                      const beyond=[...document.body.querySelectorAll('*')]
+                        .filter(el=>{
+                          const r=el.getBoundingClientRect(),style=getComputedStyle(el);
+                          return style.display!=='none'&&r.width>1&&(r.right>viewportWidth+2||r.left< -2);
+                        }).map(outer).sort((a,b)=>b.right-a.right).slice(0,20);
+                      return {viewportWidth,rootScroll:document.documentElement.scrollWidth,
+                        bodyScroll:document.body.scrollWidth,
+                        header:outer(document.querySelector('.site-header')),
+                        nav:outer(document.querySelector('.desktop-nav')),
+                        actions:outer(document.querySelector('.header-actions')),
+                        brand:outer(document.querySelector('.brand-lockup')),
+                        menu:outer(document.querySelector('#menuButton')),beyond};
+                    },width);
+                    console.log('OVERFLOW-TRACE '+k+' '+JSON.stringify(trace));
+                    console.log('OVERFLOW-INSTANT '+k+' '+JSON.stringify(report.overflowAtMeasurement));
+                    fail(k,'horizontal scroll '+report.scrollWidth+' > '+width);
+                  }
                   if(report.headerOverlap)fail(k,'brand overlaps AAA');
                   if(report.firstBeforeHero)fail(k,'First visit shown before hero headline');
                   if(report.isPhone){

@@ -60,6 +60,12 @@ jobs:
                       lang:document.documentElement.lang,zoom:document.documentElement.dataset.displayScale,
                       scrollWidth:document.documentElement.scrollWidth,width:document.documentElement.clientWidth,
                       cards,nav:getComputedStyle(nav).display,
+                      navigationDetails:box(document.querySelector('.site-header')),
+                      navBox:box(nav),brandBox:box(document.querySelector('.brand-lockup')),
+                      actionsBox:box(document.querySelector('.header-actions')),
+                      aaaBox:box(document.querySelector('#displaySizeButton')),
+                      navLinks:[...nav.querySelectorAll('a')].map(a=>({text:a.textContent.trim(),width:a.getBoundingClientRect().width,scroll:a.scrollWidth})),
+                      navFitCompact:document.querySelector('.site-header').classList.contains('nav-fit-compact'),
                       grid:box(document.querySelector('.tariff-grid')),
                       columns:Number(document.querySelector('.tariff-grid').style.getPropertyValue('--rf-tariff-columns'))||0,
                       align:getComputedStyle(document.querySelector('.tariff-grid>.tariff-card')).textAlign,
@@ -92,7 +98,12 @@ jobs:
                     const left=last[0].x-metrics.grid.x,right=metrics.grid.right-last[last.length-1].right;
                     if(Math.abs(left-right)>9)errors.push(k+': last tariff row not centered; leftover whitespace '+left+'/'+right);
                   }
-                  if(width===1920&&scale===110&&metrics.nav==='none')errors.push(k+': desktop navigation must be on logo row');
+                  if(width===1920&&scale===110&&metrics.nav==='none'){
+                    console.log('NAV-TRACE '+k+' '+JSON.stringify({header:metrics.navigationDetails,
+                      nav:metrics.navBox,links:metrics.navLinks,brand:metrics.brandBox,
+                      actions:metrics.actionsBox,AAA:metrics.aaaBox,navFitCompact:metrics.navFitCompact}));
+                    errors.push(k+': desktop navigation must be on logo row');
+                  }
                   results.push(k);
                 }
               }

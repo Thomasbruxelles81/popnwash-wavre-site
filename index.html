@@ -1857,12 +1857,127 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
   }
 }
 
+
+/* === 2026-10-10 RESPONSIVE SERVICES/PRODUCTS GRID FIX === */
+/*
+  The loyalty card is moved by refonte-global.js into #refonteLoyaltyMount.
+  The products card consequently becomes the first child of the services
+  grid: it must span BOTH grid tracks, not leave a blank second column.
+*/
+.services-hub.section-shell{
+  width:calc(100% - clamp(20px,3vw,64px))!important;
+  max-width:none!important;
+}
+.services-hub .services-main-grid,
+.services-hub .services-secondary-grid{
+  display:grid!important;
+  width:100%!important;
+  min-width:0!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:clamp(12px,1.3vw,22px)!important;
+  align-items:stretch!important;
+}
+.services-hub .services-secondary-grid > .loyalty-card,
+.services-hub .services-secondary-grid > .products-card{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  min-height:0!important;
+  justify-self:stretch!important;
+}
+.services-hub .services-secondary-grid > .products-card:first-child{
+  grid-column:1 / -1!important;
+}
+.services-hub .services-secondary-grid > .parcel-service{
+  grid-column:1 / -1!important;
+  min-width:0!important;
+}
+.services-hub .products-card{
+  container-type:inline-size;
+  box-sizing:border-box;
+  padding:clamp(18px,2.5vw,30px)!important;
+}
+.services-hub .products-card h3,
+.services-hub .services-secondary-grid .loyalty-card h3,
+.services-hub .service-feature h3{
+  font-size:clamp(calc(22px * var(--display-scale)),2.4vw,calc(36px * var(--display-scale)))!important;
+  line-height:1.13!important;
+  overflow-wrap:normal;
+  word-break:normal;
+  text-wrap:balance;
+}
+.services-hub .products-card .product-chips,
+.services-hub .products-card .product-chips-v2{
+  width:100%!important;
+  min-width:0!important;
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:clamp(8px,1vw,14px)!important;
+  align-items:stretch!important;
+}
+.services-hub .products-card .product-chips > span{
+  min-width:0!important;
+  width:100%!important;
+  min-height:98px;
+  height:auto!important;
+  padding:12px 9px!important;
+  display:flex!important;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  text-align:center;
+}
+.services-hub .products-card .product-chips strong{
+  display:block;
+  max-width:100%;
+  min-width:0;
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:break-word;
+  hyphens:auto;
+  line-height:1.32!important;
+  text-wrap:balance;
+}
+/* Container queries follow the CARD's width, not the monitor or browser width. */
+@container (max-width:270px){
+  .services-hub .products-card .product-chips{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+@container (min-width:600px){
+  .services-hub .products-card .product-chips{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+@container (min-width:760px){
+  .services-hub .products-card .product-chips{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+}
+@container (min-width:1160px){
+  .services-hub .products-card .product-chips{
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+  }
+}
+/* A narrower viewport should stack the service cards rather than squeeze them. */
+@media(max-width:850px){
+  .services-hub .services-main-grid,
+  .services-hub .services-secondary-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  .services-hub .services-secondary-grid > :is(.loyalty-card,.products-card,.parcel-service){
+    grid-column:1 / -1!important;
+  }
+}
+
 </style>
   <link rel="stylesheet" href="display-scale.css?v=slider-20261009" />
   <link rel="stylesheet" href="mobile-landing.css?v=mobile-links-20261009" />
   <link rel="stylesheet" href="refonte-global.css?v=v5c-20261010" />
   <link rel="stylesheet" href="premium-popwash-v6.css?v=layout-fix-20261010" />
   <link rel="stylesheet" href="floating-preferences.css?v=20261010a" />
+  <link rel="stylesheet" href="header-ux.css?v=header-130-icons-20261010" />
 </head>
 <body>
   <div class="page-noise" aria-hidden="true"></div>
@@ -1950,7 +2065,7 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
           <button data-lang="ru">🇷🇺 <span>Русский</span></button>
         </div>
       </div>
-      <button class="menu-button" id="menuButton" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <button type="button" class="menu-button" id="menuButton" aria-controls="mobileMenu" aria-label="Parcourir les rubriques" aria-expanded="false"><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span><span class="menu-caption" aria-hidden="true">Parcourir</span></button>
     </div>
   </header>
 
@@ -2629,5 +2744,6 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
   <script src="refonte-global.js?v=proofread-20261010" defer></script>
   <script src="premium-popwash-v6.js?v=proofread-20261010" defer></script>
   <script src="floating-preferences.js?v=20261010b" defer></script>
+  <script src="header-ux.js?v=header-130-icons-20261010" defer></script>
 </body>
 </html>

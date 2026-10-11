@@ -138,14 +138,28 @@ jobs:
                     const themeLabelsWrap=[...document.querySelectorAll('.theme-option-label span')]
                       .filter(el=>getComputedStyle(el).display!=='none'&&el.getBoundingClientRect().height>25)
                       .map(el=>el.textContent.trim());
+                    const layoutDebug=()=>{
+                      const get=(selector)=>{
+                        const el=document.querySelector(selector);
+                        if(!el)return null;
+                        const r=el.getBoundingClientRect(),st=getComputedStyle(el);
+                        return {left:Math.round(r.left),right:Math.round(r.right),
+                          width:Math.round(r.width),display:st.display};
+                      };
+                      return {header:get('.site-header'),brand:get('.brand-lockup'),
+                        nav:get('.desktop-nav'),actions:get('.header-actions'),
+                        language:get('#langButton'),menu:get('#menuButton'),
+                        mode:document.querySelector('.site-header')?.className};
+                    };
                     return {lang:root.lang,scale:root.dataset.displayScale,
+                      layoutDebug:docWidth>width+2?layoutDebug():null,
                       theme:root.dataset.theme,docWidth,beyond,visibleAction,hero,
                       imgWidth:image.naturalWidth,navOverlap,brandClipped,brandOverlapsAa,themeLabelsWrap};
                   },{lang,scale,theme,width});
                   summary.checks++;
                   const id=name+' '+lang+' '+scale+'% '+theme;
                   if(found.lang!==lang||found.scale!==String(scale)||found.theme!==theme)errors.push(id+' state mismatch');
-                  if(found.docWidth>width+2)errors.push(id+' horizontal overflow '+found.docWidth+' > '+width);
+                  if(found.docWidth>width+2)errors.push(id+' horizontal overflow '+found.docWidth+' > '+width+' DETAILS '+JSON.stringify(found.layoutDebug));
                   if(found.beyond.length)errors.push(id+' elements clipped '+found.beyond.join(';'));
                   if(!found.visibleAction)errors.push(id+' display icon not reachable');
                   if(found.navOverlap)errors.push(id+' desktop navigation overlaps AAA control');
