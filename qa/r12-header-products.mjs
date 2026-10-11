@@ -68,9 +68,9 @@ const pageEvaluate=()=>{
    facebookBlue:(()=>{
      const el=document.querySelector('#contact a.social-link.facebook');
      if(!el)return false;
-     return getComputedStyle(el).backgroundColor.replace(/\\s/g,'')==='rgb(24,119,242)';
+     return getComputedStyle(el).backgroundColor.replace(/\s/g,'')==='rgb(24,119,242)';
    })(),
-   productLink:!!panel.querySelectorAll('a.product-chip-link[href="#first-visit"][data-guide-open="products"]').length===7,
+   productLink:panel.querySelectorAll('a.product-chip-link[href="#first-visit"][data-guide-open="products"]').length===7,
    labels:['wifi','cowork','snacks'].map(key=>document.querySelector('[data-pop-r12="'+key+'"]')?.textContent||''),
    overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth,
    headerOver:headerRect.right>innerWidth+2,
