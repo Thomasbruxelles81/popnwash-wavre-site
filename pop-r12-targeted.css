@@ -7,7 +7,7 @@ html body .refonte-utility{
   font-size:var(--pop-utility-font,19.2px)!important;
   line-height:1.36!important;min-width:0!important;
   gap:5px clamp(8px,1.4vw,22px)!important;
-  flex-direction:row!important;flex-wrap:nowrap;
+  flex-direction:row!important;flex-wrap:wrap!important;
   width:calc(100% - 28px)!important;max-width:1800px!important;
 }
 html body .refonte-utility > *{
