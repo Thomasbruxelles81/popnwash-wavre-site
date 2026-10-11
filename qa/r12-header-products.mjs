@@ -108,6 +108,72 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
    }catch(e){issue(name,String(e).slice(0,380))}
    await page.close();
  }
+
+ // R16: actual opening geometry in 11 languages, 80% and 200% AAA,
+ // 4 compact formats, Chromium/Firefox/WebKit. The first item must be visible
+ // immediately even after reopening a previously scrolled dropdown.
+ const testPage=await browser.newPage({viewport:{width:820,height:900}});
+ for(const [device,w,h] of [['mini',375,812],['split',820,900],['tablet',1024,768],['landscape',568,320]]){
+   await testPage.setViewportSize({width:w,height:h});
+   await testPage.goto(base,{waitUntil:'domcontentloaded'});
+   await testPage.waitForFunction(()=>document.querySelector('#top')?.classList.contains('pop-nav-ready'));
+   for(const lang of ['fr','nl','en','de','it','es','pt','ro','pl','uk','ru']){
+     for(const scale of [80,200]){
+       const key=engineName+'/'+device+'/'+lang+'/'+scale+'/dropdown';
+       await testPage.evaluate(({lang,scale})=>{
+         document.querySelector('[data-lang="'+lang+'"]').click();
+         const r=document.getElementById('displaySizeRange');r.value=String(scale);
+         r.dispatchEvent(new Event('input',{bubbles:true}));
+       },{lang,scale});
+       await testPage.waitForTimeout(75);
+       if(!await testPage.locator('#menuButton').isVisible()){
+         if(w<=820)issue(key,'Browse button missing');
+         continue;
+       }
+       await testPage.locator('#menuButton').click();
+       const state=await testPage.evaluate(()=>{
+         const menu=document.getElementById('mobileMenu');
+         const links=[...menu.querySelectorAll('a[href]')];
+         const panel=menu.getBoundingClientRect();
+         const first=links[0]?.getBoundingClientRect();
+         const anchor=document.getElementById('menuButton').getBoundingClientRect();
+         const header=document.getElementById('top').getBoundingClientRect();
+         const topLinkBefore=menu.scrollTop;
+         menu.scrollTop=menu.scrollHeight;
+         const last=links.at(-1)?.getBoundingClientRect();
+         return {
+           menuTop:panel.top,menuBottom:panel.bottom,
+           menuLeft:panel.left,menuRight:panel.right,
+           firstTop:first?.top,firstBottom:first?.bottom,
+           headerBottom:header.bottom,anchorBottom:anchor.bottom,
+           viewportHeight:innerHeight,viewportWidth:innerWidth,
+           links:links.length,firstHref:links[0]?.getAttribute('href'),
+           lastHref:links.at(-1)?.getAttribute('href'),
+           lastTop:last?.top,lastBottom:last?.bottom,
+           scrollBefore:topLinkBefore,
+           scrollAfter:menu.scrollTop,
+           maxScroll:menu.scrollHeight-menu.clientHeight
+         };
+       });
+       if(state.links!==8||state.firstHref!=='#machines'||state.lastHref!=='#contact')
+         issue(key,'menu link list incomplete: '+JSON.stringify(state));
+       if(state.menuTop<Math.max(state.headerBottom,state.anchorBottom)+4||
+          state.firstTop<state.menuTop+4||state.firstBottom>Math.min(state.menuBottom,state.viewportHeight)+2)
+         issue(key,'first Tarifs link hidden behind header: '+JSON.stringify(state));
+       if(state.scrollBefore>2)issue(key,'menu reopened partway down at '+state.scrollBefore);
+       if(state.menuLeft< -1||state.menuRight>state.viewportWidth+2||
+          state.menuBottom>state.viewportHeight+2)
+         issue(key,'menu escapes viewport: '+JSON.stringify(state));
+       if(state.lastBottom>Math.min(state.menuBottom,state.viewportHeight)+3)
+         issue(key,'Contact not reachable after scroll: '+JSON.stringify(state));
+       if(engineName==='chromium'&&lang==='fr'&&scale===80){
+         await testPage.screenshot({path:'qa-r12/menu-'+device+'.png'});
+       }
+       await testPage.locator('#menuButton').click();
+     }
+   }
+ }
+ await testPage.close();
  await browser.close();
 }
 // Translation switch, actual product link, first-visit hover, light + dark checks.

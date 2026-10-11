@@ -343,3 +343,48 @@ html body #top.site-header .desktop-nav a{
   }
   html body .refonte-utility > * > span{white-space:normal!important}
 }
+
+
+/* R16 — Browse popup must begin BELOW the whole current header, not behind it.
+   The actual pixel top/right/height are measured by header-ux.js each opening. */
+html body #mobileMenu.mobile-menu:not([hidden]){
+  position:fixed!important;
+  top:var(--pop-menu-top,105px)!important;
+  bottom:auto!important;
+  right:var(--pop-menu-right,9px)!important;
+  left:auto!important;
+  z-index:10030!important;
+  width:min(440px,calc(100vw - 18px))!important;
+  max-width:440px!important;
+  max-height:min(var(--pop-menu-limit,calc(100dvh - 115px)),650px)!important;
+  margin:0!important;
+  padding:10px!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-auto-flow:row!important;
+  align-content:start!important;
+  gap:2px!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain!important;
+  scroll-behavior:auto!important;
+}
+html body #mobileMenu.mobile-menu[hidden]{display:none!important}
+html body #mobileMenu.mobile-menu:not([hidden]) > a{
+  min-width:0!important;
+  padding:8px 12px!important;
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:break-word!important;
+  hyphens:none!important;
+}
+@media(max-height:520px) and (min-width:520px){
+  html body #mobileMenu.mobile-menu:not([hidden]){
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  html body #mobileMenu.mobile-menu:not([hidden]) > a{
+    min-height:36px!important;
+    font-size:clamp(13px,2.1vw,16px)!important;
+    padding:6px 9px!important;
+  }
+}
