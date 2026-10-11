@@ -76,7 +76,20 @@ function stateChecks({lang,size,theme,width,height,deep}){
  const mobile=width<=700||(width<=1000&&width>height&&height<=550);
  const errs=[],smallFonts=[];
  const scroll=Math.max(root.scrollWidth,document.body.scrollWidth);
- if(scroll>width+2)errs.push('page overflows '+(scroll-width)+'px');
+ if(scroll>width+2){
+  // Include the culprit geometry in the failure report; avoid another blind CSS patch.
+  const offenders=[...document.querySelectorAll('body *')].filter(el=>{
+    const r=el.getBoundingClientRect(),s=getComputedStyle(el);
+    return s.display!=='none'&&s.visibility!=='hidden'&&
+      r.width>1&&(r.right>width+2||r.left< -2)&&
+      !el.closest('.pop-nav-measuring')&&s.position!=='fixed';
+  }).slice(0,8).map(el=>{
+    const r=el.getBoundingClientRect();
+    return el.tagName.toLowerCase()+(el.className&&typeof el.className==='string'?'.'+el.className.trim().split(/\\s+/).slice(0,2).join('.'):'')+
+    '['+Math.round(r.left)+','+Math.round(r.right)+']';
+  });
+  errs.push('page overflows '+(scroll-width)+'px elements '+offenders.join(';'));
+}
  if(root.lang!==lang||root.dataset.displayScale!==String(size)||root.dataset.theme!==theme)errs.push('state incorrect');
  if(brand.right>label.right+3)errs.push('brand cropped');
  if(brand.right>button.x-2)errs.push('brand overlaps AAA');
