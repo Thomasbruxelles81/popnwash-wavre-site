@@ -39,6 +39,36 @@ const pageEvaluate=()=>{
    headerRect,brandRect,actionsRect,nameRect,labelRect,
    menuShown:shown(menu),productShown:shown(panel),productRect:rect(panel),
    chips:chips.map(e=>({box:rect(e),text:e.querySelector('strong')?.textContent||''})),
+   productLastRowOffset:(()=>{
+     const items=chips.map(e=>rect(e));
+     if(!items.length)return 999;
+     const y=Math.max(...items.map(r=>r.y));
+     const last=items.filter(r=>Math.abs(r.y-y)<5);
+     const area=rect(panel.querySelector('.product-chips-v2'));
+     return Math.abs((Math.min(...last.map(r=>r.x))+Math.max(...last.map(r=>r.right)))/2-(area.x+area.right)/2);
+   })(),
+   proLinks:[...document.querySelectorAll('.refonte-pro-shortcuts>a')].map(e=>({href:e.getAttribute('href'),r:rect(e)})),
+   proCenterOffset:(()=>{
+     const es=[...document.querySelectorAll('.refonte-pro-shortcuts>a')];
+     if(!es.length)return 999;
+     const rs=es.map(e=>rect(e)),wrap=rect(es[0].parentElement);
+     const lastY=Math.max(...rs.map(r=>r.y));
+     const last=rs.filter(r=>Math.abs(r.y-lastY)<5);
+     return Math.abs((Math.min(...last.map(r=>r.x))+Math.max(...last.map(r=>r.right)))/2-(wrap.x+wrap.right)/2);
+   })(),
+   socialCenterOffset:(()=>{
+     const box=document.querySelector('#contact .social-links');
+     if(!box)return 999;
+     const links=[...box.querySelectorAll('a')].map(el=>rect(el));
+     if(links.length!==2)return 999;
+     const p=rect(box);
+     return Math.abs((links[0].x+links[1].right)/2-(p.x+p.right)/2);
+   })(),
+   facebookBlue:(()=>{
+     const el=document.querySelector('#contact a.social-link.facebook');
+     if(!el)return false;
+     return getComputedStyle(el).backgroundColor.replace(/\\s/g,'')==='rgb(24,119,242)';
+   })(),
    productLink:!!panel.querySelectorAll('a.product-chip-link[href="#first-visit"][data-guide-open="products"]').length===7,
    labels:['wifi','cowork','snacks'].map(key=>document.querySelector('[data-pop-r12="'+key+'"]')?.textContent||''),
    overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth,
@@ -69,6 +99,16 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
      if(baseline.nameOverlap||baseline.wordmarkCollision||baseline.wordmarkClipped)issue(name,'POP’n WASH and WAVRE wordmark overlap or clip');
      if(baseline.headerOver||baseline.overflow>2)issue(name,'horizontal overflow '+baseline.overflow);
      if(!baseline.productShown||!baseline.productLink||baseline.chips.length!==7)issue(name,'product card/link/chips missing');
+     if(baseline.productLastRowOffset>6)issue(name,'last product row not centered: '+baseline.productLastRowOffset);
+     if(baseline.proCenterOffset>6||baseline.proLinks.length!==3)
+       issue(name,'Pro shortcuts not centered or missing: '+baseline.proCenterOffset);
+     if(baseline.proLinks.length===3&&(
+       !baseline.proLinks[0].href.includes('status.wi-line.fr')||
+       !baseline.proLinks[1].href.includes('status.wi-line.fr')||
+       baseline.proLinks[2].href!=='#fidelite'))
+       issue(name,'Pro shortcuts link destinations incorrect');
+     if(baseline.socialCenterOffset>6||!baseline.facebookBlue)
+       issue(name,'contact social links not centered or Facebook not blue');
      for(const x of baseline.chips){
        if(x.box.x<baseline.productRect.x-3||x.box.right>baseline.productRect.right+3)
          issue(name,'product pill escapes its card: '+x.text);
@@ -92,6 +132,9 @@ for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
        if(cur.headerOver||cur.overflow>2||cur.nameOverlap||cur.navOverlap||cur.wordmarkCollision||cur.wordmarkClipped)
          issue(name,'overflow or overlap at AAA '+scale+'%');
        if(!cur.productShown||cur.chips.length!==7)issue(name,'products gone at AAA '+scale+'%');
+       if(cur.productLastRowOffset>6||cur.proCenterOffset>6||cur.socialCenterOffset>6)
+         issue(name,'cards not centered at AAA '+scale+'%');
+       if(!cur.facebookBlue)issue(name,'Facebook blue missing at AAA '+scale+'%');
      }
      if(!baseline.navShown){
        await page.locator('#menuButton').click();
@@ -199,6 +242,10 @@ await page.evaluate(()=>document.querySelector('[data-lang="fr"]').click());
 await page.locator('.product-chip-link').first().click();
 if(!(await page.locator('[data-guide-panel="products"]').evaluate(el=>el.open)))
  issue('products','CTA did not open Products first-visit instructions');
+await page.locator('.product-chip-link').first().hover();
+await page.waitForTimeout(280);
+const productBubble=await page.locator('.product-chip-link').first().evaluate(el=>getComputedStyle(el,'::before').animationName);
+if(productBubble!=='pop-bubble-a')issue('products','bubble animation absent: '+productBubble);
 await page.locator('.visit-washer summary').hover();
 await page.waitForTimeout(390);
 const bubble=await page.locator('.visit-washer .visit-icon').evaluate(el=>parseFloat(getComputedStyle(el,'::before').opacity));
