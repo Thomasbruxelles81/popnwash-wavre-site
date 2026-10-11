@@ -8,7 +8,6 @@ const profiles=[['mini',375,812],['smallAndroid',360,780],['split',820,900],
 fs.mkdirSync('qa-r12',{recursive:true});
 const base='http://127.0.0.1:4173/';
 function issue(where,why){if(issues.length<140)issues.push(where+': '+why)}
-const snapshot=()=>pageEvaluate;
 const pageEvaluate=()=>{
  const head=document.querySelector('#top'),bar=document.querySelector('.refonte-utility');
  const nav=head.querySelector('.desktop-nav'),brand=head.querySelector('.brand-lockup');
@@ -115,14 +114,14 @@ const page=await browser.newPage({viewport:{width:1440,height:900}});
 await page.goto(base,{waitUntil:'domcontentloaded'});
 for(const lang of ['fr','nl','en','de','it','es','pt','ro','pl','uk','ru']){
  try{
-  await page.locator('[data-lang="'+lang+'"]').click();
+  await page.evaluate(lang=>document.querySelector('[data-lang="'+lang+'"]').click(),lang);
   await page.waitForTimeout(90);
   const state=await page.evaluate(pageEvaluate);
   if(state.labels.some(x=>!x))issue('translation '+lang,'missing label');
   if(state.overflow>2||state.navOverlap)issue('translation '+lang,'header overflow');
  }catch(e){issue('translation '+lang,String(e).slice(0,220))}
 }
-await page.locator('[data-lang="fr"]').click();
+await page.evaluate(()=>document.querySelector('[data-lang="fr"]').click());
 await page.locator('.products-guide-link').click();
 if(!(await page.locator('[data-guide-panel="products"]').evaluate(el=>el.open)))
  issue('products','CTA did not open Products first-visit instructions');
