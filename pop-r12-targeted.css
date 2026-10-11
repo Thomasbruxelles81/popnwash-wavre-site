@@ -324,3 +324,22 @@ html body #top.site-header .desktop-nav a{
   text-overflow:clip!important;
   white-space:nowrap!important;
 }
+
+/* R14 tiny-screen Firefox guard: address/hours/phone must never enlarge
+   the document while fonts and responsive language layouts settle. */
+@media(max-width:340px){
+  html body .refonte-utility{
+    display:flex!important;flex-direction:column!important;
+    align-items:stretch!important;justify-content:center!important;
+    flex-wrap:nowrap!important;gap:3px!important;
+    width:calc(100% - 12px)!important;max-width:calc(100% - 12px)!important;
+    min-width:0!important;padding:6px 8px!important;
+  }
+  html body .refonte-utility > *{
+    flex:0 1 auto!important;display:block!important;
+    width:100%!important;min-width:0!important;max-width:100%!important;
+    white-space:normal!important;overflow-wrap:normal!important;
+    word-break:normal!important;text-align:center!important;
+  }
+  html body .refonte-utility > * > span{white-space:normal!important}
+}
