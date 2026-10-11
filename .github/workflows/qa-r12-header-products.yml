@@ -1,0 +1,31 @@
+name: QA R12 fixed header and products
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  header-and-products:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install real browser engines
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium firefox webkit >/dev/null
+      - name: Serve the exact PR snapshot
+        run: |
+          python3 -m http.server 4173 >/tmp/r12-preview-http.log 2>&1 &
+          sleep 2
+      - name: Verify adaptive navigation, utility bar, logo, products and first visit
+        run: node qa/r12-header-products.mjs
+      - name: Save visual evidence and test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r12-header-products-evidence
+          path: qa-r12/
+          retention-days: 14
