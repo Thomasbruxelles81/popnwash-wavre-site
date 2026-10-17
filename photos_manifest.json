@@ -1,0 +1,262 @@
+{
+  "date": "2026-10-17",
+  "unique_images": 23,
+  "duplicates_removed": [
+    [
+      2,
+      8
+    ],
+    [
+      3,
+      9
+    ],
+    [
+      4,
+      10
+    ],
+    [
+      5,
+      11
+    ],
+    [
+      6,
+      12
+    ],
+    [
+      7,
+      13
+    ]
+  ],
+  "images": [
+    {
+      "original_position": 1,
+      "image": "assets/photos/facade-laverie-popnwash-wavre.webp",
+      "alt": "Façade et entrée de la laverie POP’n WASH à Wavre",
+      "category": "Facade",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 232698,
+      "source_name": "Devanture lumineuse du lavoir Pop’n Wash Wavre(1).png"
+    },
+    {
+      "original_position": 2,
+      "image": "assets/photos/sechoirs-professionnels-et-casiers-vinted.webp",
+      "alt": "Allée des séchoirs professionnels et casiers Vinted Go à Wavre",
+      "category": "Sechage",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 224740,
+      "source_name": "Image ChatGPT 17 oct. 2026, 13_21_47-1(1).png"
+    },
+    {
+      "original_position": 3,
+      "image": "assets/photos/machines-a-laver-vue-panoramique.webp",
+      "alt": "Rangée de lave-linge de la laverie automatique POP’n WASH Wavre",
+      "category": "Lavage",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 207936,
+      "source_name": "Image ChatGPT 17 oct. 2026, 13_21_48-2(1).png"
+    },
+    {
+      "original_position": 4,
+      "image": "assets/photos/espace-services-paiement-produits-colis.webp",
+      "alt": "Espace services avec centrale de paiement, lessive et consignes à Wavre",
+      "category": "Services",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 169234,
+      "source_name": "Image ChatGPT 17 oct. 2026, 13_21_49-3(1).png"
+    },
+    {
+      "original_position": 5,
+      "image": "assets/photos/calandre-professionnelle-grande-largeur.webp",
+      "alt": "Calandre professionnelle de repassage grande largeur à POP’n WASH Wavre",
+      "category": "Calandre",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 123126,
+      "source_name": "Image ChatGPT 17 oct. 2026, 13_21_51-4(1).png"
+    },
+    {
+      "original_position": 6,
+      "image": "assets/photos/machines-dediees-linge-animaux-7kg.webp",
+      "alt": "Lave-linge réservés au linge des animaux 7 kg à Wavre",
+      "category": "Animaux",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 183520,
+      "source_name": "Image ChatGPT 17 oct. 2026, 13_21_52-5(1).png"
+    },
+    {
+      "original_position": 7,
+      "image": "assets/photos/allee-lave-linge-et-colis.webp",
+      "alt": "Allée des lave-linge depuis les casiers de colis POP’n WASH Wavre",
+      "category": "Lavage",
+      "width": 1600,
+      "height": 1040,
+      "bytes": 199098,
+      "source_name": "Image ChatGPT 17 oct. 2026, 13_21_53-6(1).png"
+    },
+    {
+      "original_position": 14,
+      "image": "assets/photos/casiers-bpost-bbox-wavre.webp",
+      "alt": "Consignes à colis bpost bbox dans la laverie POP’n WASH Wavre",
+      "category": "Colis",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 159832,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_10_55-1(1).png"
+    },
+    {
+      "original_position": 15,
+      "image": "assets/photos/espace-coworking-perspective.webp",
+      "alt": "Bureau coworking à côté des séchoirs de la laverie Wavre",
+      "category": "Coworking",
+      "width": 1600,
+      "height": 2133,
+      "bytes": 245508,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_10_56-2(1).png"
+    },
+    {
+      "original_position": 16,
+      "image": "assets/photos/affiche-espace-coworking.webp",
+      "alt": "Signalétique de l’espace coworking POP’n WASH",
+      "category": "Coworking",
+      "width": 1600,
+      "height": 2133,
+      "bytes": 316934,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_10_57-3(1).png"
+    },
+    {
+      "original_position": 17,
+      "image": "assets/photos/coworking-comptoir-chaises.webp",
+      "alt": "Grand comptoir de travail et chaises dans la laverie POP’n WASH",
+      "category": "Coworking",
+      "width": 1600,
+      "height": 2133,
+      "bytes": 167620,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_10_58-4(1).png"
+    },
+    {
+      "original_position": 18,
+      "image": "assets/photos/casiers-vinted-go-wavre.webp",
+      "alt": "Consignes automatiques Vinted Go à POP’n WASH Wavre",
+      "category": "Colis",
+      "width": 1600,
+      "height": 2133,
+      "bytes": 198066,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_10_59-5(1).png"
+    },
+    {
+      "original_position": 19,
+      "image": "assets/photos/sechoirs-professionnels-ipso.webp",
+      "alt": "Rangée de séchoirs professionnels IPSO à POP’n WASH Wavre",
+      "category": "Sechage",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 197830,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_11_00-6(1).png"
+    },
+    {
+      "original_position": 20,
+      "image": "assets/photos/espace-coworking-vue-frontale.webp",
+      "alt": "Espace coworking équipé de prises et places assises à Wavre",
+      "category": "Coworking",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 111968,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_11_01-7(1).png"
+    },
+    {
+      "original_position": 21,
+      "image": "assets/photos/boite-a-idees-popnwash.webp",
+      "alt": "Boîte à idées des clients de la laverie POP’n WASH Wavre",
+      "category": "Services",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 103102,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_48_12-1.png"
+    },
+    {
+      "original_position": 22,
+      "image": "assets/photos/sechoirs-espace-table-travail.webp",
+      "alt": "Séchoirs et espace de travail dans la laverie Wavre",
+      "category": "Sechage",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 208248,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_48_12-2.png"
+    },
+    {
+      "original_position": 23,
+      "image": "assets/photos/machine-animaux-14kg.webp",
+      "alt": "Lave-linge de 14 kg réservé au linge des animaux POP’n WASH",
+      "category": "Animaux",
+      "width": 1600,
+      "height": 2133,
+      "bytes": 172090,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_48_13-3.png"
+    },
+    {
+      "original_position": 24,
+      "image": "assets/photos/machine-a-laver-20kg.webp",
+      "alt": "Lave-linge grande capacité 20 kg pour couettes à Wavre",
+      "category": "Lavage",
+      "width": 1600,
+      "height": 2133,
+      "bytes": 228556,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_48_14-4.png"
+    },
+    {
+      "original_position": 25,
+      "image": "assets/photos/lave-linge-20kg-allee.webp",
+      "alt": "Grandes machines à laver et espace lavage à POP’n WASH Wavre",
+      "category": "Lavage",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 176072,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_48_14-5.png"
+    },
+    {
+      "original_position": 26,
+      "image": "assets/photos/espace-attente-bpost.webp",
+      "alt": "Espace d’attente avec assises et consignes colis bpost à Wavre",
+      "category": "Services",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 167446,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_48_15-6.png"
+    },
+    {
+      "original_position": 27,
+      "image": "assets/photos/distributeur-lessive-et-produits.webp",
+      "alt": "Distributeur de lessive et de produits de lavage POP’n WASH Wavre",
+      "category": "Produits",
+      "width": 1600,
+      "height": 2133,
+      "bytes": 207884,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_48_16-7.png"
+    },
+    {
+      "original_position": 28,
+      "image": "assets/photos/centrale-paiement-wiline.webp",
+      "alt": "Centrale de paiement Wi-Line de la laverie POP’n WASH",
+      "category": "Paiement",
+      "width": 1600,
+      "height": 2133,
+      "bytes": 165456,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_48_17-8.png"
+    },
+    {
+      "original_position": 29,
+      "image": "assets/photos/laverie-wavre-vue-generale.webp",
+      "alt": "Vue générale des lave-linge et de la laverie POP’n WASH Wavre",
+      "category": "Accueil",
+      "width": 1600,
+      "height": 1200,
+      "bytes": 230138,
+      "source_name": "Image ChatGPT 17 oct. 2026, 15_48_17-9.png"
+    }
+  ]
+}
