@@ -21,7 +21,7 @@ jobs:
           set -euo pipefail
           mkdir -p _pnw_unpack
           for f in .pnw-transfer/*.zip; do unzip -oq "$f" -d _pnw_unpack; done
-          cat _pnw_unpack/part_{00..04}.bin > _pnw_unpack/photos.zip
+          cat _pnw_unpack/part{00..04}.bin > _pnw_unpack/photos.zip
           echo '4c666a536ec58516c643790a62a7d5dabfb107aa6181b4b83469395e6f9b55eb  _pnw_unpack/photos.zip' | sha256sum -c -
           unzip -oq _pnw_unpack/photos.zip -d .
           python3 scripts/apply_popnwash_photos.py
