@@ -1984,7 +1984,7 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
 .pn-gallery-heading{margin:0 0 24px}.pn-gallery-heading h2{font-size:clamp(30px,3.5vw,48px);letter-spacing:-.04em;margin:8px 0 0}
 .pn-gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .pn-gallery-item{margin:0;position:relative;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--card);box-shadow:0 8px 26px rgba(0,0,0,.09)}
-.pn-gallery-item img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .35s ease}
+.pn-gallery-item img{width:100%;height:100%;display:block;object-fit:contain;background:#eee8da;transition:transform .35s ease}
 .pn-gallery-item:hover img{transform:scale(1.035)}
 .pn-gallery-item figcaption{position:absolute;left:12px;bottom:12px;padding:6px 11px;background:rgba(255,255,255,.92);color:#26302b;font-size:12px;font-weight:800;border-radius:8px}
 .pn-gallery-more{margin-top:22px}.pn-gallery-more summary{cursor:pointer;display:block;max-width:max-content;margin:0 auto 22px;padding:12px 22px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-weight:800;text-align:center;color:var(--ink)}
@@ -2000,6 +2000,20 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
   <link rel="stylesheet" href="floating-preferences.css?v=20261010a" />
   <link rel="stylesheet" href="header-ux.css?v=header-130-icons-20261010" />
   <link rel="stylesheet" href="pop-r12-targeted.css?v=products-animations-centering-20261011" />
+
+  <!-- Keep every machine number, locker inscription, and portrait fully visible -->
+  <style id="pnw-photos-no-crop">
+    .pn-gallery-item img,
+    .service-feature-media img[src*="centrale-paiement-wiline.webp"],
+    .parcel-photos img[src*="casiers-vinted-go-wavre.webp"]{
+      object-fit:contain!important;
+      object-position:center center!important;
+      background:#eee8da;
+    }
+    html[data-theme="dark"] .pn-gallery-item img,
+    html[data-theme="dark"] .service-feature-media img[src*="centrale-paiement-wiline.webp"],
+    html[data-theme="dark"] .parcel-photos img[src*="casiers-vinted-go-wavre.webp"]{background:#292d2a}
+  </style>
 </head>
 <body>
   <div class="page-noise" aria-hidden="true"></div>
