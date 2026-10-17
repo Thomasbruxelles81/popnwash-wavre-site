@@ -1,0 +1,58 @@
+name: Installer les photos POPn WASH
+on:
+  push:
+    branches:
+      - photos-popnwash-20261017
+    paths:
+      - '.pnw-transfer/**'
+      - '.github/workflows/photo-refresh-20261017.yml'
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Extraire le nouveau lot d'images
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _pnw_unpack
+          for f in .pnw-transfer/*.zip; do unzip -oq "$f" -d _pnw_unpack; done
+          cat _pnw_unpack/part_{00..04}.bin > _pnw_unpack/photos.zip
+          echo '4c666a536ec58516c643790a62a7d5dabfb107aa6181b4b83469395e6f9b55eb  _pnw_unpack/photos.zip' | sha256sum -c -
+          unzip -oq _pnw_unpack/photos.zip -d .
+          python3 scripts/apply_popnwash_photos.py
+      - name: Valider les médias et l'index
+        run: |
+          python3 - <<'PY'
+          import json,re
+          from pathlib import Path
+          m=json.loads(Path('photos_manifest.json').read_text(encoding='utf-8'))
+          assert len(m['images'])==23
+          for x in m['images']:
+              p=Path(x['image'])
+              assert p.is_file() and p.stat().st_size>10_000,p
+              assert x['width']>=1600 and x['height']>=1040,x
+          h=Path('index.html').read_text(encoding='utf-8')
+          assert 'id="pn-photo-gallery"' in h
+          assert h.count('class="hero-photo ') == 1
+          assert h.count('class="hero-photo"')==3
+          assert 'assets/photos/casiers-bpost-bbox-wavre.webp' in h
+          assert 'assets/photos/casiers-vinted-go-wavre.webp' in h
+          assert 'assets/photos/espace-coworking-vue-frontale.webp' in h
+          print('Validation OK : 23 photos, carrousel, services, galerie et SEO')
+          PY
+      - name: Enregistrer le site actualise sur cette branche
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf _pnw_unpack
+          git rm -r .pnw-transfer
+          git rm .github/workflows/photo-refresh-20261017.yml
+          rm -f LIRE-AVANT-PUBLICATION.txt
+          git add index.html assets/photos photos_manifest.json scripts/apply_popnwash_photos.py
+          git -c user.name='POPnWASH Photo Bot' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Photos 2026 : galerie optimisée, images classées par service'
+          git push origin HEAD:photos-popnwash-20261017
