@@ -2013,7 +2013,16 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
     html[data-theme="dark"] .pn-gallery-item img,
     html[data-theme="dark"] .service-feature-media img[src*="centrale-paiement-wiline.webp"],
     html[data-theme="dark"] .parcel-photos img[src*="casiers-vinted-go-wavre.webp"]{background:#292d2a}
-  </style>
+  
+/* Private maintenance shortcut — stage only until the protected app is live. */
+.maintenance-link{display:inline-flex;align-items:center;justify-content:center;flex:0 0 34px;width:34px;height:34px;border-radius:11px;border:1px solid rgba(22,28,27,.12);color:#33443b;background:rgba(255,255,255,.65);text-decoration:none;transition:background .2s ease,box-shadow .2s ease}
+.maintenance-link:hover{background:#fff;box-shadow:0 4px 15px rgba(22,28,27,.12)}
+.maintenance-link:focus-visible{outline:3px solid #239452;outline-offset:3px}
+.maintenance-link svg{display:block;width:17px;height:17px}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:600px){.maintenance-link{flex-basis:30px;width:30px;height:30px;border-radius:9px}.maintenance-link svg{width:15px;height:15px}}
+@media(prefers-reduced-motion:reduce){.maintenance-link{transition:none}}
+</style>
 </head>
 <body>
   <div class="page-noise" aria-hidden="true"></div>
@@ -2102,6 +2111,7 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
         </div>
       </div>
       <button type="button" class="menu-button" id="menuButton" aria-controls="mobileMenu" aria-label="Parcourir les rubriques" aria-expanded="false"><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span><span class="menu-caption" aria-hidden="true">Parcourir</span></button>
+      <a class="maintenance-link" href="https://maintenance.popnwash.be/" aria-label="Maintenance POP’n WASH — espace privé" title="Maintenance · Accès privé"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1a7 7 0 0 0-1.8-1L14.4 3h-4.8l-.3 3.1a7 7 0 0 0-1.8 1l-2.4-1-2 3.4 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.4-1a7 7 0 0 0 1.8 1L9.6 21h4.8l.3-3.1a7 7 0 0 0 1.8-1l2.4 1 2-3.4-2-1.5a7 7 0 0 0 .1-1z"/></svg><span class="visually-hidden">Maintenance</span></a>
     </div>
   </header>
 
