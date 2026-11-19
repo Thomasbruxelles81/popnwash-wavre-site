@@ -2826,7 +2826,13 @@ html[data-theme="dark"] .lang-menu button[aria-current="true"]{outline:1px solid
       const target = document.getElementById(id);
       if (!target) return;
       const heading = headingFor(target);
-      const top = Math.max(0, window.scrollY + heading.getBoundingClientRect().top - headerClearance());
+      // Use layout offsets rather than the animated .reveal transform:
+      // the title stays correctly aligned even after its entrance animation.
+      let layoutTop = 0;
+      for (let node = heading; node; node = node.offsetParent) {
+        layoutTop += node.offsetTop || 0;
+      }
+      const top = Math.max(0, layoutTop - headerClearance());
       window.scrollTo({top,behavior:'instant'});
     }
     function go(hash, fromClick) {
